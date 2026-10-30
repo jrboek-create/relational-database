@@ -10,3 +10,4 @@ loader/__pycache__/
 # Added before GitHub upload
 imports_hold/
 node_modules/
+_to_delete/

@@ -1,7 +1,0 @@
-﻿FAIL|GATE6_1_DEPARTMENT_HEADER_DIAGNOSTIC
-source=C:\Directus\relational-repository\imports_hold\ER_SR_1CAT_UNIV_MASTER_DETAIL_618456250.xls
-sha256_after_failure=A0D1F5830672D86B8314495774FA0DD740B4FB826EFF0E8F525248C59E8D4296
-error=Excel COM was unavailable or failed, and no read-only local OLE DB provider succeeded. Microsoft.ACE.OLEDB.16.0: Expected 52 columns; observed 32. | Microsoft.ACE.OLEDB.12.0: Expected 52 columns; observed 32. | Microsoft.Jet.OLEDB.4.0: Exception calling "Open" with "0" argument(s): "The 'Microsoft.Jet.OLEDB.4.0' provider is not registered on the local machine."
-runtime_mutated=false
-department_reconciliation_performed=false
-department_filtering_enabled=false

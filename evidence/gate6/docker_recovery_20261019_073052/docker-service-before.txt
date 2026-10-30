@@ -1,9 +1,0 @@
-
-
-Name      : com.docker.service
-Status    : Stopped
-StartType : Manual
-
-
-
-

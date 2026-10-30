@@ -1,2 +1,0 @@
-﻿API_PROBE|course_current_catalog_api|HTTP=200|COUNT=966
-API_PROBE|course_catalog_detail|HTTP=403|COUNT=NOT_RETURNED

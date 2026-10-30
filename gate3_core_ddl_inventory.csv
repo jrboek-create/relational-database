@@ -1,2 +1,0 @@
-﻿"status","file_name","full_path","file_bytes","last_write_utc","sha256","exact_approved_filename","contains_core_schema","contains_source_system","contains_import_batch","contains_course_table","contains_instructor_assignment","core_table_create_count","contains_begin_commit"
-"FOUND","phase1-baseline.sql","C:\Directus\relational-repository\backups\phase1-baseline.sql","156178","2026-09-21T13:30:05.8746690Z","40f7059874e0aa67b942d0bd219c3b41b1a3d17bc93a103af4564f0dda4e8636","False","False","False","False","False","False","0","False"

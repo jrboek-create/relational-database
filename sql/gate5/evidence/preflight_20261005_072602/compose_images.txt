@@ -1,4 +1,0 @@
-CONTAINER                          REPOSITORY          TAG                 PLATFORM            IMAGE ID            SIZE                CREATED
-relational-repository-cache-1      redis               7                   linux/amd64         c6eabf748fc7        43.6MB              2 weeks ago
-relational-repository-database-1   postgis/postgis     17-3.5              linux/amd64         01a6a70e41e6        218MB               5 weeks ago
-relational-repository-directus-1   directus/directus   12.3.1              linux/amd64         8978edf633ae        212MB               5 weeks ago

@@ -1,4 +1,0 @@
-NAME                               IMAGE                      COMMAND                  SERVICE    CREATED       STATUS                    PORTS
-relational-repository-cache-1      redis:7                    "docker-entrypoint.sGǪ"   cache      13 days ago   Up 25 minutes (healthy)   6379/tcp
-relational-repository-database-1   postgis/postgis:17-3.5     "docker-entrypoint.sGǪ"   database   13 days ago   Up 25 minutes (healthy)   5432/tcp
-relational-repository-directus-1   directus/directus:12.3.1   "docker-entrypoint.sGǪ"   directus   4 days ago    Up 24 minutes (healthy)   127.0.0.1:8066->8055/tcp

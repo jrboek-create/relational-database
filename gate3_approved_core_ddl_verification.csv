@@ -1,2 +1,0 @@
-﻿"verification_result","file","file_bytes","sha256","core_tables","missing_tables","unexpected_tables","missing_course_columns","destructive_statements","pgcrypto","core_schema","begin","commit"
-"PASS_NOT_EXECUTED","C:\Directus\relational-repository\Directus_Core_Relational_Model_Draft.sql","20016","e30583acf59716d61f56a3045cbce0a370d5b871e7469ceded9ddcbae50774c4","15","","","","0","True","True","True","True"

@@ -1,7 +1,0 @@
-﻿"record_type","expected_outcome","univ_course_id","course_code","original_title","new_title","notes"
-"SUMMARY","","","","","","output_file=catalog-WW-2026-09-28-GATE3-TEST.csv; sha256=c28dfafdcf5ec41e4f3a0fc2992f90ebac8c8bbdf75c55526d8a6a14cccc65f9; rows=966; columns=11; INSERT=2; UPDATE=3; UNCHANGED=961; other_field_changes=0; validation=PASS"
-"DETAIL","UPDATE","200001","AASI 605","Aviation and Aerospace Sustainable Organizations","Aviation and Aerospace Sustainable Organizations [GATE3 UPDATE TEST]","Only Title changed; selected by lowest numeric Univ Course ID with nonblank Title."
-"DETAIL","UPDATE","200002","AASI 607","Airport Sustainability Operations","Airport Sustainability Operations [GATE3 UPDATE TEST]","Only Title changed; selected by lowest numeric Univ Course ID with nonblank Title."
-"DETAIL","UPDATE","200003","AASI 611","Sustainable Aviation Fuels and Carbon Offsetting","Sustainable Aviation Fuels and Carbon Offsetting [GATE3 UPDATE TEST]","Only Title changed; selected by lowest numeric Univ Course ID with nonblank Title."
-"DETAIL","INSERT","999999","TSTG 900","","CONTROLLED GATE 3 TEST COURSE 1","Clearly marked synthetic test record; no real institutional facts asserted."
-"DETAIL","INSERT","999998","TSTG 901","","CONTROLLED GATE 3 TEST COURSE 2","Clearly marked synthetic test record; no real institutional facts asserted."

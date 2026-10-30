@@ -1,4 +1,0 @@
-﻿ALL_SERVICES
-cache,database,directus,middleware,ui
-RUNNING_SERVICES
-cache,database,directus,middleware,ui

@@ -1,8 +1,0 @@
-CACHE_ENABLED=true
-DB_CLIENT=pg
-DB_DATABASE=directus_repository
-DB_HOST=database
-DB_PORT=5432
-DB_USER=directus_repository
-NODE_ENV=production
-PUBLIC_URL=http://localhost:8066
