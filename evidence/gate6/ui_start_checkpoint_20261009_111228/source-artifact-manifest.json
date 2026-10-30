@@ -1,0 +1,37 @@
+[
+    {
+        "path":  "evidence\\gate5\\closure_20261006_075904\\gate5-closure.json",
+        "bytes":  1623,
+        "sha256":  "513F939BB76BC6F478B1CB6130DE139861640A49E074CB9956FE3B73A1B9779C"
+    },
+    {
+        "path":  "middleware\\contracts\\api-courses-v1.json",
+        "bytes":  3839,
+        "sha256":  "68A2D51409AD1D75E7FA516A3C9ACE60CFDA0A715D0F99DAA1F5F4A845624C87"
+    },
+    {
+        "path":  "middleware\\src\\server.js",
+        "bytes":  5682,
+        "sha256":  "91500B12BBDE850C703DE9C46BC6E81AC200665527323BCD67165DDC1BDF1FA8"
+    },
+    {
+        "path":  "middleware\\Dockerfile",
+        "bytes":  157,
+        "sha256":  "A6128BC24DE30090933626080D5F78B949D98B7454294454C9C923743DB6C13E"
+    },
+    {
+        "path":  "middleware\\package.json",
+        "bytes":  400,
+        "sha256":  "EE931350F24594CE288BEC205FE86FBB7C4753E84408FF88413EA5BE2C7967DF"
+    },
+    {
+        "path":  "middleware\\package-lock.json",
+        "bytes":  37529,
+        "sha256":  "16987CCF140CEDCCD4C029790B2ABA94B11F7B42C69DADC4BFA9E34618CA24A6"
+    },
+    {
+        "path":  "compose.yaml",
+        "bytes":  2796,
+        "sha256":  "B127282832137C13E50287758ABC97F643124EFA93F1854D512CBB50BE07A52F"
+    }
+]

@@ -1,0 +1,28 @@
+﻿{
+    "gate":  "Gate 5",
+    "status":  "PASS/CLOSED",
+    "closed_utc":  "2026-10-06T11:54:58Z",
+    "service_identity":  "wwairml@erau.edu",
+    "api_collection":  "course_current_catalog_api",
+    "rows":  966,
+    "approved_fields":  7,
+    "database_owner":  "air_repository_owner",
+    "runtime_identity":  "directus_runtime",
+    "runtime_select":  true,
+    "runtime_write":  false,
+    "service_login":  "PASS",
+    "approved_read":  "PASS",
+    "aggregate_count":  "PASS",
+    "pagination_sort":  "PASS",
+    "csv_export":  "PASS",
+    "admin_endpoint_denial":  "PASS",
+    "staging_denial":  "PASS",
+    "internal_collection_denial":  "PASS",
+    "write_denial":  "PASS",
+    "database_boundary":  "PASS",
+    "final_state":  "PASS",
+    "supersedes":  [
+                       "evidence\\gate5\\api_acceptance_20261005_100412\\acceptance-results.json",
+                       "evidence\\gate5\\final_20261005_105157\\gate5-results.json"
+                   ]
+}

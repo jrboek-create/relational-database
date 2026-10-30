@@ -1,0 +1,168 @@
+Pager usage is off.
+Null display is "(null)".
+=== GATE 5.0 READ-ONLY PREFLIGHT ===
+BEGIN
+SET
+    database_name    |   connected_user    |        postgres_version        | transaction_read_only |        observed_at_utc        
+---------------------+---------------------+--------------------------------+-----------------------+-------------------------------
+ directus_repository | directus_repository | 17.5 (Debian 17.5-1.pgdg110+1) | on                    | 2026-09-30 11:42:32.283847+00
+(1 row)
+
+=== APPROVED OBJECT INVENTORY ===
+ schema_name |         object_name         | object_type |        owner        
+-------------+-----------------------------+-------------+---------------------
+ core        | course                      | TABLE       | directus_repository
+ core        | course_integration          | TABLE       | directus_repository
+ core        | course_offering_section     | TABLE       | directus_repository
+ core        | faculty_observation         | TABLE       | directus_repository
+ core        | feedback_evaluation         | TABLE       | directus_repository
+ core        | grade                       | TABLE       | directus_repository
+ core        | import_batch                | TABLE       | directus_repository
+ core        | instructor_assignment       | TABLE       | directus_repository
+ core        | lookup_reference_value      | TABLE       | directus_repository
+ core        | organization                | TABLE       | directus_repository
+ core        | person_instructor           | TABLE       | directus_repository
+ core        | production_activity         | TABLE       | directus_repository
+ core        | redeveloped_course_response | TABLE       | directus_repository
+ core        | source_system               | TABLE       | directus_repository
+ core        | term                        | TABLE       | directus_repository
+ reporting   | course_current_catalog      | TABLE       | directus_repository
+ reporting   | projection_refresh_run      | TABLE       | directus_repository
+(17 rows)
+
+=== PRIMARY KEYS AND FOREIGN KEYS ===
+ schema_name |         table_name          |                       conname                       | constraint_type |                                                              definition                                                              
+-------------+-----------------------------+-----------------------------------------------------+-----------------+--------------------------------------------------------------------------------------------------------------------------------------
+ core        | course                      | course_import_batch_id_fkey                         | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | course                      | course_organization_id_fkey                         | FOREIGN KEY     | FOREIGN KEY (organization_id) REFERENCES core.organization(organization_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course                      | course_pkey                                         | PRIMARY KEY     | PRIMARY KEY (course_id)
+ core        | course_integration          | course_integration_assigned_person_id_fkey          | FOREIGN KEY     | FOREIGN KEY (assigned_person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_course_id_fkey                   | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_course_offering_id_fkey          | FOREIGN KEY     | FOREIGN KEY (course_offering_id) REFERENCES core.course_offering_section(course_offering_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_import_batch_id_fkey             | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | course_integration          | course_integration_organization_id_fkey             | FOREIGN KEY     | FOREIGN KEY (organization_id) REFERENCES core.organization(organization_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_requestor_person_id_fkey         | FOREIGN KEY     | FOREIGN KEY (requestor_person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_status_value_id_fkey             | FOREIGN KEY     | FOREIGN KEY (status_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_term_id_fkey                     | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_integration          | course_integration_pkey                             | PRIMARY KEY     | PRIMARY KEY (course_integration_id)
+ core        | course_offering_section     | course_offering_section_course_id_fkey              | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | course_offering_section     | course_offering_section_import_batch_id_fkey        | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | course_offering_section     | course_offering_section_modality_value_id_fkey      | FOREIGN KEY     | FOREIGN KEY (modality_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_offering_section     | course_offering_section_term_id_fkey                | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | course_offering_section     | course_offering_section_pkey                        | PRIMARY KEY     | PRIMARY KEY (course_offering_id)
+ core        | faculty_observation         | faculty_observation_course_id_fkey                  | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | faculty_observation         | faculty_observation_course_offering_id_fkey         | FOREIGN KEY     | FOREIGN KEY (course_offering_id) REFERENCES core.course_offering_section(course_offering_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | faculty_observation         | faculty_observation_import_batch_id_fkey            | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | faculty_observation         | faculty_observation_instructor_person_id_fkey       | FOREIGN KEY     | FOREIGN KEY (instructor_person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | faculty_observation         | faculty_observation_modality_value_id_fkey          | FOREIGN KEY     | FOREIGN KEY (modality_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | faculty_observation         | faculty_observation_observer_person_id_fkey         | FOREIGN KEY     | FOREIGN KEY (observer_person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | faculty_observation         | faculty_observation_term_id_fkey                    | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | faculty_observation         | faculty_observation_pkey                            | PRIMARY KEY     | PRIMARY KEY (faculty_observation_id)
+ core        | feedback_evaluation         | feedback_evaluation_course_id_fkey                  | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | feedback_evaluation         | feedback_evaluation_course_offering_id_fkey         | FOREIGN KEY     | FOREIGN KEY (course_offering_id) REFERENCES core.course_offering_section(course_offering_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | feedback_evaluation         | feedback_evaluation_import_batch_id_fkey            | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | feedback_evaluation         | feedback_evaluation_instructor_person_id_fkey       | FOREIGN KEY     | FOREIGN KEY (instructor_person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | feedback_evaluation         | feedback_evaluation_organization_id_fkey            | FOREIGN KEY     | FOREIGN KEY (organization_id) REFERENCES core.organization(organization_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | feedback_evaluation         | feedback_evaluation_term_id_fkey                    | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | feedback_evaluation         | feedback_evaluation_pkey                            | PRIMARY KEY     | PRIMARY KEY (feedback_evaluation_id)
+ core        | grade                       | grade_course_id_fkey                                | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | grade                       | grade_course_offering_id_fkey                       | FOREIGN KEY     | FOREIGN KEY (course_offering_id) REFERENCES core.course_offering_section(course_offering_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | grade                       | grade_import_batch_id_fkey                          | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | grade                       | grade_term_id_fkey                                  | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | grade                       | grade_pkey                                          | PRIMARY KEY     | PRIMARY KEY (grade_id)
+ core        | import_batch                | import_batch_source_system_id_fkey                  | FOREIGN KEY     | FOREIGN KEY (source_system_id) REFERENCES core.source_system(source_system_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | import_batch                | import_batch_pkey                                   | PRIMARY KEY     | PRIMARY KEY (import_batch_id)
+ core        | instructor_assignment       | instructor_assignment_assignment_role_value_id_fkey | FOREIGN KEY     | FOREIGN KEY (assignment_role_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | instructor_assignment       | instructor_assignment_course_offering_id_fkey       | FOREIGN KEY     | FOREIGN KEY (course_offering_id) REFERENCES core.course_offering_section(course_offering_id) ON UPDATE RESTRICT ON DELETE CASCADE
+ core        | instructor_assignment       | instructor_assignment_import_batch_id_fkey          | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | instructor_assignment       | instructor_assignment_person_id_fkey                | FOREIGN KEY     | FOREIGN KEY (person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | instructor_assignment       | instructor_assignment_pkey                          | PRIMARY KEY     | PRIMARY KEY (instructor_assignment_id)
+ core        | lookup_reference_value      | lookup_reference_value_import_batch_id_fkey         | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | lookup_reference_value      | lookup_reference_value_pkey                         | PRIMARY KEY     | PRIMARY KEY (lookup_value_id)
+ core        | organization                | organization_import_batch_id_fkey                   | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | organization                | organization_parent_organization_id_fkey            | FOREIGN KEY     | FOREIGN KEY (parent_organization_id) REFERENCES core.organization(organization_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | organization                | organization_pkey                                   | PRIMARY KEY     | PRIMARY KEY (organization_id)
+ core        | person_instructor           | person_instructor_import_batch_id_fkey              | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | person_instructor           | person_instructor_organization_id_fkey              | FOREIGN KEY     | FOREIGN KEY (organization_id) REFERENCES core.organization(organization_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | person_instructor           | person_instructor_person_type_value_id_fkey         | FOREIGN KEY     | FOREIGN KEY (person_type_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | person_instructor           | person_instructor_pkey                              | PRIMARY KEY     | PRIMARY KEY (person_id)
+ core        | production_activity         | production_activity_activity_type_value_id_fkey     | FOREIGN KEY     | FOREIGN KEY (activity_type_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | production_activity         | production_activity_assigned_person_id_fkey         | FOREIGN KEY     | FOREIGN KEY (assigned_person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | production_activity         | production_activity_course_id_fkey                  | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | production_activity         | production_activity_import_batch_id_fkey            | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | production_activity         | production_activity_organization_id_fkey            | FOREIGN KEY     | FOREIGN KEY (organization_id) REFERENCES core.organization(organization_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | production_activity         | production_activity_status_value_id_fkey            | FOREIGN KEY     | FOREIGN KEY (status_value_id) REFERENCES core.lookup_reference_value(lookup_value_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | production_activity         | production_activity_term_id_fkey                    | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | production_activity         | production_activity_pkey                            | PRIMARY KEY     | PRIMARY KEY (production_activity_id)
+ core        | redeveloped_course_response | redeveloped_course_response_course_id_fkey          | FOREIGN KEY     | FOREIGN KEY (course_id) REFERENCES core.course(course_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | redeveloped_course_response | redeveloped_course_response_course_offering_id_fkey | FOREIGN KEY     | FOREIGN KEY (course_offering_id) REFERENCES core.course_offering_section(course_offering_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | redeveloped_course_response | redeveloped_course_response_import_batch_id_fkey    | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | redeveloped_course_response | redeveloped_course_response_person_id_fkey          | FOREIGN KEY     | FOREIGN KEY (person_id) REFERENCES core.person_instructor(person_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | redeveloped_course_response | redeveloped_course_response_term_id_fkey            | FOREIGN KEY     | FOREIGN KEY (term_id) REFERENCES core.term(term_id) ON UPDATE RESTRICT ON DELETE SET NULL
+ core        | redeveloped_course_response | redeveloped_course_response_pkey                    | PRIMARY KEY     | PRIMARY KEY (redeveloped_response_id)
+ core        | source_system               | source_system_pkey                                  | PRIMARY KEY     | PRIMARY KEY (source_system_id)
+ core        | term                        | term_import_batch_id_fkey                           | FOREIGN KEY     | FOREIGN KEY (import_batch_id) REFERENCES core.import_batch(import_batch_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ core        | term                        | term_pkey                                           | PRIMARY KEY     | PRIMARY KEY (term_id)
+ reporting   | course_current_catalog      | course_current_catalog_refresh_run_fkey             | FOREIGN KEY     | FOREIGN KEY (report_refresh_run_id) REFERENCES reporting.projection_refresh_run(run_id) ON UPDATE RESTRICT ON DELETE RESTRICT
+ reporting   | course_current_catalog      | course_current_catalog_pkey                         | PRIMARY KEY     | PRIMARY KEY (course_id)
+ reporting   | projection_refresh_run      | projection_refresh_run_pkey                         | PRIMARY KEY     | PRIMARY KEY (run_id)
+(73 rows)
+
+=== DIRECTUS DATABASE ROLE VISIBILITY ===
+ configured_directus_db_user | rolconfig | core_usage | reporting_usage | core_course_select | report_select 
+-----------------------------+-----------+------------+-----------------+--------------------+---------------
+ directus_repository         | (null)    | t          | t               | t                  | t
+(1 row)
+
+=== TARGET NAME COLLISIONS ACROSS SCHEMAS ===
+   relname    |       schemas        | occurrence_count 
+--------------+----------------------+------------------
+ import_batch | core, phase2_staging |                2
+(1 row)
+
+=== FROZEN GATE 4 BASELINE ===
+ projection_rows | distinct_course_ids | distinct_projection_run_ids | distinct_report_as_of_values | candidate_rows | distinct_candidate_course_ids | candidate_missing_from_projection | projection_missing_from_candidate | candidate_projection_business_differences | rows_not_on_accepted_run 
+-----------------+---------------------+-----------------------------+------------------------------+----------------+-------------------------------+-----------------------------------+-----------------------------------+-------------------------------------------+--------------------------
+             966 |                 966 |                           1 |                            1 |            966 |                           966 |                                 0 |                                 0 |                                         0 |                        0
+(1 row)
+
+                run_id                |    projection_name     |  status   |          started_at           |         completed_at         | source_row_count | rows_inserted | rows_updated | rows_deleted | rows_unchanged |        business_checksum         | checksum_matches_frozen 
+--------------------------------------+------------------------+-----------+-------------------------------+------------------------------+------------------+---------------+--------------+--------------+----------------+----------------------------------+-------------------------
+ 8eec3469-f834-4e90-b695-bb2384cc51e0 | course_current_catalog | COMPLETED | 2026-09-29 17:37:18.630887+00 | 2026-09-29 17:37:18.74571+00 |              966 |             0 |            0 |            0 |            966 | 666d67d56d4c492ea0cdd7a63a7f85fd | t
+(1 row)
+
+=== UNAUTHORIZED REPORTING OBJECT ASSERTIONS ===
+ unauthorized_relations | reporting_routines | user_triggers | row_policies | standalone_indexes 
+------------------------+--------------------+---------------+--------------+--------------------
+                      0 |                  0 |             0 |            0 |                  0
+(1 row)
+
+=== EXISTING DIRECTUS SYSTEM METADATA ===
+ table_schema | physical_tables | tables_with_directus_metadata 
+--------------+-----------------+-------------------------------
+ core         |              15 |                             0
+ reporting    |               2 |                             0
+ staging      |              39 |                             0
+(3 rows)
+
+ collection | hidden | accountability | note 
+------------+--------+----------------+------
+(0 rows)
+
+ principal_id | collection | action | fields | row_scope 
+--------------+------------+--------+--------+-----------
+(0 rows)
+
+                  id                  |      name       | admin_access | app_access 
+--------------------------------------+-----------------+--------------+------------
+ abf8a154-5b1c-4a46-ac9c-7300570f4f17 | $t:public_label | f            | f
+ 24eb0bbf-0c73-43e1-a17a-6a0e1692852c | Administrator   | t            | t
+(2 rows)
+
+ status |            legacy_role_id            | user_count | users_with_static_token | service_identity_name_candidates 
+--------+--------------------------------------+------------+-------------------------+----------------------------------
+ active | 9ab767dd-e788-4465-b3f0-92d8c2154eda |          1 |                       0 |                                0
+(1 row)
+
+ROLLBACK
+=== END: NO DATABASE CHANGE COMMITTED ===

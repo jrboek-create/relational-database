@@ -1,0 +1,8 @@
+﻿"disposition","row_count","total_classified","expected_rows","current_core_course_rows","reconciliation_result"
+"INSERT","2","966","966","964","PASS"
+"UPDATE","3","966","966","964","PASS"
+"UNCHANGED","961","966","966","964","PASS"
+"CROSSWALK_REVIEW","0","966","966","964","PASS"
+"IDENTITY_CONFLICT","0","966","966","964","PASS"
+"DUPLICATE","0","966","966","964","PASS"
+"EXCEPTION","0","966","966","964","PASS"

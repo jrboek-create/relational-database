@@ -1,0 +1,11 @@
+ObservedUTC=2026-09-30T11:42:30.7010285Z
+DirectusContainer=relational-repository-directus-1
+DirectusImage=directus/directus:12.3.1
+DirectusImageId=sha256:8978edf633ae28aa31464bb71c55300c94d8bc771ff3727b5fac485173283869
+DirectusState=running
+DirectusHealth=unhealthy
+PostgreSQLContainer=relational-repository-database-1
+PostgreSQLImage=postgis/postgis:17-3.5
+PostgreSQLImageId=sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6
+PostgreSQLState=running
+PostgreSQLHealth=healthy

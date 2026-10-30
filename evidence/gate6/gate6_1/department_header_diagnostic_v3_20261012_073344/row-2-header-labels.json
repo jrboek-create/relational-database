@@ -1,0 +1,522 @@
+﻿[
+    {
+        "column_number":  1,
+        "column_letter":  "A",
+        "cell_address":  "A2",
+        "actual_label":  "Univ Course ID",
+        "normalized_label":  "university course id",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  2,
+        "column_letter":  "B",
+        "cell_address":  "B2",
+        "actual_label":  "Eff Date",
+        "normalized_label":  "effective date",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  3,
+        "column_letter":  "C",
+        "cell_address":  "C2",
+        "actual_label":  "Univ Subject",
+        "normalized_label":  "university subject",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  4,
+        "column_letter":  "D",
+        "cell_address":  "D2",
+        "actual_label":  "Univ Catalog Nbr",
+        "normalized_label":  "university catalog number",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  5,
+        "column_letter":  "E",
+        "cell_address":  "E2",
+        "actual_label":  "Univ Course Title",
+        "normalized_label":  "university course title",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  6,
+        "column_letter":  "F",
+        "cell_address":  "F2",
+        "actual_label":  "Campuses Offering This Course",
+        "normalized_label":  "campuses offering this course",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  7,
+        "column_letter":  "G",
+        "cell_address":  "G2",
+        "actual_label":  "DB Course(s)",
+        "normalized_label":  "db course s",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  8,
+        "column_letter":  "H",
+        "cell_address":  "H2",
+        "actual_label":  "PC Course(s)",
+        "normalized_label":  "pc course s",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  9,
+        "column_letter":  "I",
+        "cell_address":  "I2",
+        "actual_label":  "WW Course(s)",
+        "normalized_label":  "worldwide course s",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  10,
+        "column_letter":  "J",
+        "cell_address":  "J2",
+        "actual_label":  "Long Title",
+        "normalized_label":  "long title",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  11,
+        "column_letter":  "K",
+        "cell_address":  "K2",
+        "actual_label":  "Course Description",
+        "normalized_label":  "course description",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  12,
+        "column_letter":  "L",
+        "cell_address":  "L2",
+        "actual_label":  "Min Units",
+        "normalized_label":  "min units",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  13,
+        "column_letter":  "M",
+        "cell_address":  "M2",
+        "actual_label":  "Max Units",
+        "normalized_label":  "max units",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  14,
+        "column_letter":  "N",
+        "cell_address":  "N2",
+        "actual_label":  "Grading Basis",
+        "normalized_label":  "grading basis",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  15,
+        "column_letter":  "O",
+        "cell_address":  "O2",
+        "actual_label":  "Repeat for Credit",
+        "normalized_label":  "repeat for credit",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  16,
+        "column_letter":  "P",
+        "cell_address":  "P2",
+        "actual_label":  "Total Units Allowed",
+        "normalized_label":  "total units allowed",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  17,
+        "column_letter":  "Q",
+        "cell_address":  "Q2",
+        "actual_label":  "Total Completions Allowed",
+        "normalized_label":  "total completions allowed",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  18,
+        "column_letter":  "R",
+        "cell_address":  "R2",
+        "actual_label":  "Drop Consent",
+        "normalized_label":  "drop consent",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  19,
+        "column_letter":  "S",
+        "cell_address":  "S2",
+        "actual_label":  "Equivalent Course Group",
+        "normalized_label":  "equivalent course group",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  20,
+        "column_letter":  "T",
+        "cell_address":  "T2",
+        "actual_label":  "Equivalent Course Group Descr",
+        "normalized_label":  "equivalent course group description",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  21,
+        "column_letter":  "U",
+        "cell_address":  "U2",
+        "actual_label":  "Academic Group",
+        "normalized_label":  "academic group",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  22,
+        "column_letter":  "V",
+        "cell_address":  "V2",
+        "actual_label":  "Academic Organization",
+        "normalized_label":  "academic organization",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  23,
+        "column_letter":  "W",
+        "cell_address":  "W2",
+        "actual_label":  "Academic Career",
+        "normalized_label":  "academic career",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  24,
+        "column_letter":  "X",
+        "cell_address":  "X2",
+        "actual_label":  "Course Approved",
+        "normalized_label":  "course approved",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  25,
+        "column_letter":  "Y",
+        "cell_address":  "Y2",
+        "actual_label":  "Allow Course to be Scheduled",
+        "normalized_label":  "allow course to be scheduled",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  26,
+        "column_letter":  "Z",
+        "cell_address":  "Z2",
+        "actual_label":  "Catalog Print",
+        "normalized_label":  "catalog print",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  27,
+        "column_letter":  "AA",
+        "cell_address":  "AA2",
+        "actual_label":  "Print Instructor in Schedule",
+        "normalized_label":  "print instructor in schedule",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  28,
+        "column_letter":  "AB",
+        "cell_address":  "AB2",
+        "actual_label":  "Schedule Print",
+        "normalized_label":  "schedule print",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  29,
+        "column_letter":  "AC",
+        "cell_address":  "AC2",
+        "actual_label":  "Schedule Term Roll",
+        "normalized_label":  "schedule term roll",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  30,
+        "column_letter":  "AD",
+        "cell_address":  "AD2",
+        "actual_label":  "Split Ownership",
+        "normalized_label":  "split ownership",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  31,
+        "column_letter":  "AE",
+        "cell_address":  "AE2",
+        "actual_label":  "Requirement Group",
+        "normalized_label":  "requirement group",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  32,
+        "column_letter":  "AF",
+        "cell_address":  "AF2",
+        "actual_label":  "Req Group Long Descr",
+        "normalized_label":  "req group long description",
+        "read_status":  "VALUE_READ",
+        "provider_field_count":  1,
+        "provider_error":  null
+    },
+    {
+        "column_number":  33,
+        "column_letter":  "AG",
+        "cell_address":  "AG2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  34,
+        "column_letter":  "AH",
+        "cell_address":  "AH2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  35,
+        "column_letter":  "AI",
+        "cell_address":  "AI2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  36,
+        "column_letter":  "AJ",
+        "cell_address":  "AJ2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  37,
+        "column_letter":  "AK",
+        "cell_address":  "AK2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  38,
+        "column_letter":  "AL",
+        "cell_address":  "AL2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  39,
+        "column_letter":  "AM",
+        "cell_address":  "AM2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  40,
+        "column_letter":  "AN",
+        "cell_address":  "AN2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  41,
+        "column_letter":  "AO",
+        "cell_address":  "AO2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  42,
+        "column_letter":  "AP",
+        "cell_address":  "AP2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  43,
+        "column_letter":  "AQ",
+        "cell_address":  "AQ2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  44,
+        "column_letter":  "AR",
+        "cell_address":  "AR2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  45,
+        "column_letter":  "AS",
+        "cell_address":  "AS2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  46,
+        "column_letter":  "AT",
+        "cell_address":  "AT2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  47,
+        "column_letter":  "AU",
+        "cell_address":  "AU2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  48,
+        "column_letter":  "AV",
+        "cell_address":  "AV2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  49,
+        "column_letter":  "AW",
+        "cell_address":  "AW2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  50,
+        "column_letter":  "AX",
+        "cell_address":  "AX2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  51,
+        "column_letter":  "AY",
+        "cell_address":  "AY2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    },
+    {
+        "column_number":  52,
+        "column_letter":  "AZ",
+        "cell_address":  "AZ2",
+        "actual_label":  "",
+        "normalized_label":  "",
+        "read_status":  "QUERY_ERROR_NOT_EXPOSED",
+        "provider_field_count":  0,
+        "provider_error":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"This table contains cells that are outside the range of cells defined in this spreadsheet.\""
+    }
+]

@@ -1,0 +1,1185 @@
+EXTENSION_FUNCTION|pg_catalog|plpgsql_call_handler()|directus_repository|NULL
+EXTENSION_FUNCTION|pg_catalog|plpgsql_inline_handler(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|pg_catalog|plpgsql_validator(oid)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_deprecate(oldname text, newname text, version text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_index_extent(tbl regclass, col text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_join_selectivity(regclass, text, regclass, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_pgsql_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_scripts_pgsql_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_selectivity(tbl regclass, att_name text, geom geometry, mode text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_postgis_stats(tbl regclass, att_name text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_3ddfullywithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_3ddwithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_3dintersects(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_asgml(integer, geometry, integer, integer, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_asx3d(integer, geometry, integer, integer, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_bestsrid(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_bestsrid(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_concavehull(param_inputgeom geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_contains(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_containsproperly(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_coveredby(geog1 geography, geog2 geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_coveredby(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_covers(geog1 geography, geog2 geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_covers(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_crosses(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_dfullywithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_distancetree(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_distancetree(geography, geography, double precision, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_distanceuncached(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_distanceuncached(geography, geography, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_distanceuncached(geography, geography, double precision, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_dwithin(geog1 geography, geog2 geography, tolerance double precision, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_dwithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_dwithinuncached(geography, geography, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_dwithinuncached(geography, geography, double precision, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_equals(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_expand(geography, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_geomfromgml(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_intersects(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_linecrossingdirection(line1 geometry, line2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_longestline(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_maxdistance(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_orderingequals(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_overlaps(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_pointoutside(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_sortablehash(geom geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_touches(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_voronoi(g1 geometry, clip geometry, tolerance double precision, return_polygons boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|_st_within(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|addgeometrycolumn(catalog_name character varying, schema_name character varying, table_name character varying, column_name character varying, new_srid_in integer, new_type character varying, new_dim integer, use_typmod boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|addgeometrycolumn(schema_name character varying, table_name character varying, column_name character varying, new_srid integer, new_type character varying, new_dim integer, use_typmod boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|addgeometrycolumn(table_name character varying, column_name character varying, new_srid integer, new_type character varying, new_dim integer, use_typmod boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|armor(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|armor(bytea, text[], text[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|box(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box2d(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box2d(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box2d_in(cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box2d_out(box2d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box2df_in(cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box2df_out(box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box3d(box2d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box3d(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box3d_in(cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box3d_out(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|box3dtobox(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|bytea(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|bytea(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|contains_2d(box2df, box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|contains_2d(box2df, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|contains_2d(geometry, box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|crypt(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|daitch_mokotoff(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dearmor(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|decrypt(bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|decrypt_iv(bytea, bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|difference(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|digest(bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|digest(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dmetaphone(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dmetaphone_alt(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dropgeometrycolumn(catalog_name character varying, schema_name character varying, table_name character varying, column_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dropgeometrycolumn(schema_name character varying, table_name character varying, column_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dropgeometrycolumn(table_name character varying, column_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dropgeometrytable(catalog_name character varying, schema_name character varying, table_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dropgeometrytable(schema_name character varying, table_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|dropgeometrytable(table_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|encrypt(bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|encrypt_iv(bytea, bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|equals(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|find_srid(character varying, character varying, character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gen_random_bytes(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gen_random_uuid()|directus_repository|NULL
+EXTENSION_FUNCTION|public|gen_salt(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gen_salt(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geog_brin_inclusion_add_value(internal, internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geog_brin_inclusion_merge(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography(geography, integer, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_analyze(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_cmp(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_distance_knn(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_eq(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_ge(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_compress(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_consistent(internal, geography, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_decompress(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_distance(internal, geography, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_penalty(internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_picksplit(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_same(box2d, box2d, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gist_union(bytea, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_gt(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_in(cstring, oid, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_le(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_lt(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_out(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_overlaps(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_recv(internal, oid, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_send(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_spgist_choose_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_spgist_compress_nd(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_spgist_config_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_spgist_inner_consistent_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_spgist_leaf_consistent_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_spgist_picksplit_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_typmod_in(cstring[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|geography_typmod_out(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geom2d_brin_inclusion_add_value(internal, internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geom2d_brin_inclusion_merge(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geom3d_brin_inclusion_add_value(internal, internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geom3d_brin_inclusion_merge(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geom4d_brin_inclusion_add_value(internal, internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geom4d_brin_inclusion_merge(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(box2d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(geometry, integer, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(path)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(point)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(polygon)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_above(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_analyze(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_below(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_cmp(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_contained_3d(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_contains(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_contains_3d(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_contains_nd(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_distance_box(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_distance_centroid(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_distance_centroid_nd(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_distance_cpa(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_eq(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_ge(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_compress_2d(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_compress_nd(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_consistent_2d(internal, geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_consistent_nd(internal, geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_decompress_2d(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_decompress_nd(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_distance_2d(internal, geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_distance_nd(internal, geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_penalty_2d(internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_penalty_nd(internal, internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_picksplit_2d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_picksplit_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_same_2d(geom1 geometry, geom2 geometry, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_same_nd(geometry, geometry, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_sortsupport_2d(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_union_2d(bytea, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gist_union_nd(bytea, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_gt(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_hash(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_in(cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_le(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_left(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_lt(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_neq(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_out(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overabove(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overbelow(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overlaps(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overlaps_3d(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overlaps_nd(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overleft(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_overright(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_recv(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_right(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_same(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_same_3d(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_same_nd(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_send(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_sortsupport(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_choose_2d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_choose_3d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_choose_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_compress_2d(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_compress_3d(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_compress_nd(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_config_2d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_config_3d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_config_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_inner_consistent_2d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_inner_consistent_3d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_inner_consistent_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_leaf_consistent_2d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_leaf_consistent_3d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_leaf_consistent_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_picksplit_2d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_picksplit_3d(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_spgist_picksplit_nd(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_typmod_in(cstring[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_typmod_out(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_within(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometry_within_nd(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometrytype(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geometrytype(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geomfromewkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|geomfromewkt(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|get_proj4_from_srid(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gidx_in(cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gidx_out(gidx)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gserialized_gist_joinsel_2d(internal, oid, internal, smallint)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gserialized_gist_joinsel_nd(internal, oid, internal, smallint)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gserialized_gist_sel_2d(internal, oid, internal, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|gserialized_gist_sel_nd(internal, oid, internal, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|hmac(bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|hmac(text, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|is_contained_2d(box2df, box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|is_contained_2d(box2df, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|is_contained_2d(geometry, box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|json(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|jsonb(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|levenshtein(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|levenshtein(text, text, integer, integer, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|levenshtein_less_equal(text, text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|levenshtein_less_equal(text, text, integer, integer, integer, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|metaphone(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_2d(box2df, box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_2d(box2df, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_2d(geometry, box2df)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_geog(geography, gidx)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_geog(gidx, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_geog(gidx, gidx)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_nd(geometry, gidx)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_nd(gidx, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|overlaps_nd(gidx, gidx)|directus_repository|NULL
+EXTENSION_FUNCTION|public|path(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asflatgeobuf_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asflatgeobuf_transfn(internal, anyelement)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asflatgeobuf_transfn(internal, anyelement, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asflatgeobuf_transfn(internal, anyelement, boolean, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asgeobuf_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asgeobuf_transfn(internal, anyelement)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asgeobuf_transfn(internal, anyelement, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_combinefn(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_deserialfn(bytea, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_serialfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_transfn(internal, anyelement)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_transfn(internal, anyelement, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_transfn(internal, anyelement, text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_transfn(internal, anyelement, text, integer, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_asmvt_transfn(internal, anyelement, text, integer, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_accum_transfn(internal, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_accum_transfn(internal, geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_accum_transfn(internal, geometry, double precision, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_clusterintersecting_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_clusterwithin_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_collect_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_coverageunion_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_makeline_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_polygonize_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_union_parallel_combinefn(internal, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_union_parallel_deserialfn(bytea, internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_union_parallel_finalfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_union_parallel_serialfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_union_parallel_transfn(internal, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgis_geometry_union_parallel_transfn(internal, geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_armor_headers(text, OUT key text, OUT value text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_key_id(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_decrypt(bytea, bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_decrypt(bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_decrypt(bytea, bytea, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_decrypt_bytea(bytea, bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_decrypt_bytea(bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_decrypt_bytea(bytea, bytea, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_encrypt(text, bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_encrypt(text, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_encrypt_bytea(bytea, bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_pub_encrypt_bytea(bytea, bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_decrypt(bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_decrypt(bytea, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_decrypt_bytea(bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_decrypt_bytea(bytea, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_encrypt(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_encrypt(text, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_encrypt_bytea(bytea, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|pgp_sym_encrypt_bytea(bytea, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|point(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|polygon(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|populate_geometry_columns(tbl_oid oid, use_typmod boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|populate_geometry_columns(use_typmod boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_addbbox(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_cache_bbox()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_constraint_dims(geomschema text, geomtable text, geomcolumn text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_constraint_srid(geomschema text, geomtable text, geomcolumn text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_constraint_type(geomschema text, geomtable text, geomcolumn text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_dropbbox(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_extensions_upgrade(target_version text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_full_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_geos_compiled_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_geos_noop(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_geos_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_getbbox(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_hasbbox(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_index_supportfn(internal)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_lib_build_date()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_lib_revision()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_lib_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_libjson_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_liblwgeom_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_libprotobuf_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_libxml_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_noop(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_proj_compiled_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_proj_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_scripts_build_date()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_scripts_installed()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_scripts_released()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_srs(auth_name text, auth_srid text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_srs_all()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_srs_codes(auth_name text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_srs_search(bounds geometry, authname text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_svn_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_transform_geometry(geom geometry, text, text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_transform_pipeline_geometry(geom geometry, pipeline text, forward boolean, to_srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_type_name(geomname character varying, coord_dimension integer, use_new_name boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_typmod_dims(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_typmod_srid(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_typmod_type(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|postgis_wagyu_version()|directus_repository|NULL
+EXTENSION_FUNCTION|public|soundex(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|spheroid_in(cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|spheroid_out(spheroid)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dclosestpoint(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3ddfullywithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3ddistance(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3ddwithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dextent(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dintersects(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dlength(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dlineinterpolatepoint(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dlongestline(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dmakebox(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dmaxdistance(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dperimeter(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_3dshortestline(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_addmeasure(geometry, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_addpoint(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_addpoint(geom1 geometry, geom2 geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_affine(geometry, double precision, double precision, double precision, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_affine(geometry, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_angle(line1 geometry, line2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_angle(pt1 geometry, pt2 geometry, pt3 geometry, pt4 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_area(geog geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_area(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_area(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_area2d(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asbinary(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asbinary(geography, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asbinary(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asbinary(geometry, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asencodedpolyline(geom geometry, nprecision integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkb(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkb(geometry, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkt(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkt(geography, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkt(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkt(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asewkt(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asflatgeobuf(anyelement)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asflatgeobuf(anyelement, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asflatgeobuf(anyelement, boolean, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgeobuf(anyelement)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgeobuf(anyelement, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgeojson(geog geography, maxdecimaldigits integer, options integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgeojson(geom geometry, maxdecimaldigits integer, options integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgeojson(r record, geom_column text, maxdecimaldigits integer, pretty_bool boolean, id_column text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgeojson(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgml(geog geography, maxdecimaldigits integer, options integer, nprefix text, id text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgml(geom geometry, maxdecimaldigits integer, options integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgml(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgml(version integer, geog geography, maxdecimaldigits integer, options integer, nprefix text, id text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asgml(version integer, geom geometry, maxdecimaldigits integer, options integer, nprefix text, id text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ashexewkb(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ashexewkb(geometry, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_askml(geog geography, maxdecimaldigits integer, nprefix text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_askml(geom geometry, maxdecimaldigits integer, nprefix text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_askml(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_aslatlontext(geom geometry, tmpl text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmarc21(geom geometry, format text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmvt(anyelement)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmvt(anyelement, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmvt(anyelement, text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmvt(anyelement, text, integer, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmvt(anyelement, text, integer, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asmvtgeom(geom geometry, bounds box2d, extent integer, buffer integer, clip_geom boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_assvg(geog geography, rel integer, maxdecimaldigits integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_assvg(geom geometry, rel integer, maxdecimaldigits integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_assvg(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astext(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astext(geography, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astext(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astext(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astwkb(geom geometry, prec integer, prec_z integer, prec_m integer, with_sizes boolean, with_boxes boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_astwkb(geom geometry[], ids bigint[], prec integer, prec_z integer, prec_m integer, with_sizes boolean, with_boxes boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_asx3d(geom geometry, maxdecimaldigits integer, options integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_azimuth(geog1 geography, geog2 geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_azimuth(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_bdmpolyfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_bdpolyfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_boundary(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_boundingdiagonal(geom geometry, fits boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_box2dfromgeohash(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(geography, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(geography, double precision, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(geography, double precision, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(geom geometry, radius double precision, options text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(geom geometry, radius double precision, quadsegs integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(text, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(text, double precision, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buffer(text, double precision, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_buildarea(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_centroid(geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_centroid(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_centroid(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_chaikinsmoothing(geometry, integer, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_cleangeometry(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clipbybox2d(geom geometry, box box2d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_closestpoint(geography, geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_closestpoint(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_closestpoint(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_closestpointofapproach(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterdbscan(geometry, eps double precision, minpoints integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterintersecting(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterintersecting(geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterintersectingwin(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterkmeans(geom geometry, k integer, max_radius double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterwithin(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterwithin(geometry[], double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_clusterwithinwin(geometry, distance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_collect(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_collect(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_collect(geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_collectionextract(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_collectionextract(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_collectionhomogenize(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_combinebbox(box2d, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_combinebbox(box3d, box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_combinebbox(box3d, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_concavehull(param_geom geometry, param_pctconvex double precision, param_allow_holes boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_contains(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_containsproperly(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_convexhull(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coorddim(geometry geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coverageinvalidedges(geom geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coveragesimplify(geom geometry, tolerance double precision, simplifyboundary boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coverageunion(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coverageunion(geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coveredby(geog1 geography, geog2 geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coveredby(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_coveredby(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_covers(geog1 geography, geog2 geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_covers(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_covers(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_cpawithin(geometry, geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_crosses(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_curven(geometry geometry, i integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_curvetoline(geom geometry, tol double precision, toltype integer, flags integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_delaunaytriangles(g1 geometry, tolerance double precision, flags integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dfullywithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_difference(geom1 geometry, geom2 geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dimension(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_disjoint(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distance(geog1 geography, geog2 geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distance(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distance(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distancecpa(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distancesphere(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distancesphere(geom1 geometry, geom2 geometry, radius double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distancespheroid(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_distancespheroid(geom1 geometry, geom2 geometry, spheroid)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dump(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dumppoints(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dumprings(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dumpsegments(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dwithin(geog1 geography, geog2 geography, tolerance double precision, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dwithin(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_dwithin(text, text, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_endpoint(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_envelope(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_equals(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_estimatedextent(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_estimatedextent(text, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_estimatedextent(text, text, text, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_expand(box box2d, dx double precision, dy double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_expand(box box3d, dx double precision, dy double precision, dz double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_expand(box2d, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_expand(box3d, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_expand(geom geometry, dx double precision, dy double precision, dz double precision, dm double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_expand(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_extent(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_exteriorring(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_filterbym(geometry, double precision, double precision, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_findextent(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_findextent(text, text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_flipcoordinates(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_force2d(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_force3d(geom geometry, zvalue double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_force3dm(geom geometry, mvalue double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_force3dz(geom geometry, zvalue double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_force4d(geom geometry, zvalue double precision, mvalue double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcecollection(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcecurve(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcepolygonccw(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcepolygoncw(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcerhr(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcesfs(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_forcesfs(geometry, version text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_frechetdistance(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_fromflatgeobuf(anyelement, bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_fromflatgeobuftotable(text, text, bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_generatepoints(area geometry, npoints integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_generatepoints(area geometry, npoints integer, seed integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geogfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geogfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geographyfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geohash(geog geography, maxchars integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geohash(geom geometry, maxchars integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomcollfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomcollfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomcollfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomcollfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geometricmedian(g geometry, tolerance double precision, max_iter integer, fail_if_not_converged boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geometryfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geometryfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geometryn(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geometrytype(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromewkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromewkt(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromgeohash(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromgeojson(json)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromgeojson(jsonb)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromgeojson(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromgml(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromgml(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromkml(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfrommarc21(marc21xml text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromtwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_geomfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_gmltosql(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_gmltosql(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hasarc(geometry geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hasm(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hasz(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hausdorffdistance(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hausdorffdistance(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hexagon(size double precision, cell_i integer, cell_j integer, origin geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_hexagongrid(size double precision, bounds geometry, OUT geom geometry, OUT i integer, OUT j integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_interiorringn(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_interpolatepoint(line geometry, point geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_intersection(geography, geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_intersection(geom1 geometry, geom2 geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_intersection(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_intersects(geog1 geography, geog2 geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_intersects(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_intersects(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_inversetransformpipeline(geom geometry, pipeline text, to_srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isclosed(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_iscollection(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isempty(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ispolygonccw(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ispolygoncw(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isring(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_issimple(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isvalid(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isvalid(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isvaliddetail(geom geometry, flags integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isvalidreason(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isvalidreason(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_isvalidtrajectory(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_largestemptycircle(geom geometry, tolerance double precision, boundary geometry, OUT center geometry, OUT nearest geometry, OUT radius double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_length(geog geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_length(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_length(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_length2d(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_length2dspheroid(geometry, spheroid)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lengthspheroid(geometry, spheroid)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_letters(letters text, font json)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linecrossingdirection(line1 geometry, line2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineextend(geom geometry, distance_forward double precision, distance_backward double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linefromencodedpolyline(txtin text, nprecision integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linefrommultipoint(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linefromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linefromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linefromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linefromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineinterpolatepoint(geography, double precision, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineinterpolatepoint(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineinterpolatepoint(text, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineinterpolatepoints(geography, double precision, use_spheroid boolean, repeat boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineinterpolatepoints(geometry, double precision, repeat boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_lineinterpolatepoints(text, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linelocatepoint(geography, geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linelocatepoint(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linelocatepoint(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linemerge(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linemerge(geometry, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linestringfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linestringfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linesubstring(geography, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linesubstring(geometry, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linesubstring(text, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_linetocurve(geometry geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_locatealong(geometry geometry, measure double precision, leftrightoffset double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_locatebetween(geometry geometry, frommeasure double precision, tomeasure double precision, leftrightoffset double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_locatebetweenelevations(geometry geometry, fromelevation double precision, toelevation double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_longestline(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_m(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makebox2d(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makeenvelope(double precision, double precision, double precision, double precision, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makeline(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makeline(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makeline(geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makepoint(double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makepoint(double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makepoint(double precision, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makepointm(double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makepolygon(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makepolygon(geometry, geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makevalid(geom geometry, params text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_makevalid(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_maxdistance(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_maximuminscribedcircle(geometry, OUT center geometry, OUT nearest geometry, OUT radius double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_memcollect(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_memsize(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_memunion(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_minimumboundingcircle(inputgeom geometry, segs_per_quarter integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_minimumboundingradius(geometry, OUT center geometry, OUT radius double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_minimumclearance(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_minimumclearanceline(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mlinefromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mlinefromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mlinefromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mlinefromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpointfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpointfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpointfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpointfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpolyfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpolyfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpolyfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_mpolyfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multi(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multilinefromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multilinestringfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multilinestringfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipointfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipointfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipointfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipolyfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipolyfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipolygonfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_multipolygonfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ndims(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_node(g geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_normalize(geom geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_npoints(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_nrings(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_numcurves(geometry geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_numgeometries(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_numinteriorring(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_numinteriorrings(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_numpatches(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_numpoints(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_offsetcurve(line geometry, distance double precision, params text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_orderingequals(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_orientedenvelope(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_overlaps(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_patchn(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_perimeter(geog geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_perimeter(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_perimeter2d(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_point(double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_point(double precision, double precision, srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointfromgeohash(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointinsidecircle(geometry, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointm(xcoordinate double precision, ycoordinate double precision, mcoordinate double precision, srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointn(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointonsurface(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_points(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointz(xcoordinate double precision, ycoordinate double precision, zcoordinate double precision, srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_pointzm(xcoordinate double precision, ycoordinate double precision, zcoordinate double precision, mcoordinate double precision, srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polyfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polyfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polyfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polyfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygon(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygonfromtext(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygonfromtext(text, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygonfromwkb(bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygonfromwkb(bytea, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygonize(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_polygonize(geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_project(geog geography, distance double precision, azimuth double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_project(geog_from geography, geog_to geography, distance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_project(geom1 geometry, distance double precision, azimuth double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_project(geom1 geometry, geom2 geometry, distance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_quantizecoordinates(g geometry, prec_x integer, prec_y integer, prec_z integer, prec_m integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_reduceprecision(geom geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_relate(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_relate(geom1 geometry, geom2 geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_relate(geom1 geometry, geom2 geometry, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_relatematch(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_removeirrelevantpointsforview(geometry, box2d, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_removepoint(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_removerepeatedpoints(geom geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_removesmallparts(geometry, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_reverse(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_rotate(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_rotate(geometry, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_rotate(geometry, double precision, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_rotatex(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_rotatey(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_rotatez(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_scale(geometry, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_scale(geometry, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_scale(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_scale(geometry, geometry, origin geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_scroll(geometry, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_segmentize(geog geography, max_segment_length double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_segmentize(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_seteffectivearea(geometry, double precision, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_setpoint(geometry, integer, geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_setsrid(geog geography, srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_setsrid(geom geometry, srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_sharedpaths(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_shiftlongitude(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_shortestline(geography, geography, use_spheroid boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_shortestline(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_shortestline(text, text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_simplify(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_simplify(geometry, double precision, boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_simplifypolygonhull(geom geometry, vertex_fraction double precision, is_outer boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_simplifypreservetopology(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_simplifyvw(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_snap(geom1 geometry, geom2 geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_snaptogrid(geom1 geometry, geom2 geometry, double precision, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_snaptogrid(geometry, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_snaptogrid(geometry, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_snaptogrid(geometry, double precision, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_split(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_square(size double precision, cell_i integer, cell_j integer, origin geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_squaregrid(size double precision, bounds geometry, OUT geom geometry, OUT i integer, OUT j integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_srid(geog geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_srid(geom geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_startpoint(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_subdivide(geom geometry, maxvertices integer, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_summary(geography)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_summary(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_swapordinates(geom geometry, ords cstring)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_symdifference(geom1 geometry, geom2 geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_symmetricdifference(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_tileenvelope(zoom integer, x integer, y integer, bounds geometry, margin double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_touches(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_transform(geom geometry, from_proj text, to_proj text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_transform(geom geometry, from_proj text, to_srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_transform(geom geometry, to_proj text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_transform(geometry, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_transformpipeline(geom geometry, pipeline text, to_srid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_translate(geometry, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_translate(geometry, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_transscale(geometry, double precision, double precision, double precision, double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_triangulatepolygon(g1 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_unaryunion(geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_union(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_union(geom1 geometry, geom2 geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_union(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_union(geometry, gridsize double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_union(geometry[])|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_voronoilines(g1 geometry, tolerance double precision, extend_to geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_voronoipolygons(g1 geometry, tolerance double precision, extend_to geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_within(geom1 geometry, geom2 geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_wkbtosql(wkb bytea)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_wkttosql(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_wrapx(geom geometry, wrap double precision, move double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_x(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_xmax(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_xmin(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_y(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ymax(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_ymin(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_z(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_zmax(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_zmflag(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|st_zmin(box3d)|directus_repository|NULL
+EXTENSION_FUNCTION|public|text(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|public|text_soundex(text)|directus_repository|NULL
+EXTENSION_FUNCTION|public|updategeometrysrid(catalogn_name character varying, schema_name character varying, table_name character varying, column_name character varying, new_srid_in integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|updategeometrysrid(character varying, character varying, character varying, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|public|updategeometrysrid(character varying, character varying, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|count_words(character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|create_census_base_tables()|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|cull_null(character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|diff_zip(zip1 character varying, zip2 character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|drop_dupe_featnames_generate_script()|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|drop_indexes_generate_script(tiger_data_schema text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|drop_nation_tables_generate_script(param_schema text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|drop_state_tables_generate_script(param_state text, param_schema text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|end_soundex(character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|geocode(in_addy norm_addy, max_results integer, restrict_geom geometry, OUT addy norm_addy, OUT geomout geometry, OUT rating integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|geocode(input character varying, max_results integer, restrict_geom geometry, OUT addy norm_addy, OUT geomout geometry, OUT rating integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|geocode_address(parsed norm_addy, max_results integer, restrict_geom geometry, OUT addy norm_addy, OUT geomout geometry, OUT rating integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|geocode_intersection(roadway1 text, roadway2 text, in_state text, in_city text, in_zip text, num_results integer, OUT addy norm_addy, OUT geomout geometry, OUT rating integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|geocode_location(parsed norm_addy, restrict_geom geometry, OUT addy norm_addy, OUT geomout geometry, OUT rating integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|get_geocode_setting(setting_name text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|get_last_words(inputstring character varying, count integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|get_tract(loc_geom geometry, output_field text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|greatest_hn(fromhn character varying, tohn character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|includes_address(given_address integer, addr1 integer, addr2 integer, addr3 integer, addr4 integer)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|install_geocode_settings()|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|install_missing_indexes()|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|install_pagc_tables()|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|interpolate_from_address(given_address integer, in_addr1 character varying, in_addr2 character varying, in_road geometry, in_side character varying, in_offset_m double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|is_pretype(text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|least_hn(fromhn character varying, tohn character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|levenshtein_ignore_case(character varying, character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|loader_generate_census_script(param_states text[], os text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|loader_generate_nation_script(os text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|loader_generate_script(param_states text[], os text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|loader_load_staged_data(param_staging_table text, param_target_table text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|loader_load_staged_data(param_staging_table text, param_target_table text, param_columns_exclude text[])|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|loader_macro_replace(param_input text, param_keys text[], param_values text[])|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|location_extract(fullstreet character varying, stateabbrev character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|location_extract_countysub_exact(fullstreet character varying, stateabbrev character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|location_extract_countysub_fuzzy(fullstreet character varying, stateabbrev character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|location_extract_place_exact(fullstreet character varying, stateabbrev character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|location_extract_place_fuzzy(fullstreet character varying, stateabbrev character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|missing_indexes_generate_script()|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|normalize_address(in_rawinput character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|nullable_levenshtein(character varying, character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|numeric_streets_equal(input_street character varying, output_street character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|pagc_normalize_address(in_rawinput character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|pprint_addy(input norm_addy)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|rate_attributes(dirpa character varying, dirpb character varying, streetnamea character varying, streetnameb character varying, streettypea character varying, streettypeb character varying, dirsa character varying, dirsb character varying, locationa character varying, locationb character varying, prequalabr character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|rate_attributes(dirpa character varying, dirpb character varying, streetnamea character varying, streetnameb character varying, streettypea character varying, streettypeb character varying, dirsa character varying, dirsb character varying, prequalabr character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|reverse_geocode(pt geometry, include_strnum_range boolean, OUT intpt geometry[], OUT addy norm_addy[], OUT street character varying[])|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|set_geocode_setting(setting_name text, setting_value text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|setsearchpathforinstall(a_schema_name text)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|state_extract(rawinput character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|topology_load_tiger(toponame character varying, region_type character varying, region_id character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|utmzone(geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|tiger|zip_range(zip text, range_start integer, range_end integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_asgmledge(edge_id integer, start_node integer, end_node integer, line geometry, visitedtable regclass, nsprefix_in text, prec integer, options integer, idprefix text, gmlver integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_asgmlface(toponame text, face_id integer, visitedtable regclass, nsprefix_in text, prec integer, options integer, idprefix text, gmlver integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_asgmlnode(id integer, point geometry, nsprefix_in text, prec integer, options integer, idprefix text, gmlver integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_checkedgelinking(curedge_edge_id integer, prevedge_edge_id integer, prevedge_next_left_edge integer, prevedge_next_right_edge integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_registermissingfaces(atopology character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_st_adjacentedges(atopology character varying, anode integer, anedge integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_st_mintolerance(ageom geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_st_mintolerance(atopology character varying, ageom geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_topogeo_addlinestringnoface(atopology character varying, aline geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_validatetopologyedgelinking(bbox geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_validatetopologygetfaceshellmaximaledgering(atopology character varying, aface integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_validatetopologygetringedges(starting_edge integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|_validatetopologyrings(bbox geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|addedge(atopology character varying, aline geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|addface(atopology character varying, apoly geometry, force_new boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|addnode(atopology character varying, apoint geometry, allowedgesplitting boolean, setcontainingface boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|addtopogeometrycolumn(character varying, character varying, character varying, character varying, character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|addtopogeometrycolumn(toponame character varying, schema character varying, tbl character varying, col character varying, ltype character varying, child integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|addtosearchpath(a_schema_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, nsprefix text)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, nsprefix text, prec integer, options integer, vis regclass)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, nsprefix text, prec integer, options integer, visitedtable regclass, idprefix text)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, nsprefix text, prec integer, opts integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, nsprefix_in text, precision_in integer, options_in integer, visitedtable regclass, idprefix text, gmlver integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, visitedtable regclass)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|asgml(tg topogeometry, visitedtable regclass, nsprefix text)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|astopojson(tg topogeometry, edgemaptable regclass)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|cleartopogeom(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|copytopology(atopology character varying, newtopo character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|createtopogeom(toponame character varying, tg_type integer, layer_id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|createtopogeom(toponame character varying, tg_type integer, layer_id integer, tg_objs topoelementarray)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|createtopology(atopology character varying, srid integer, prec double precision, hasz boolean)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|createtopology(character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|createtopology(character varying, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|createtopology(toponame character varying, srid integer, prec double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|droptopogeometrycolumn(schema character varying, tbl character varying, col character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|droptopology(atopology character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|equals(tg1 topogeometry, tg2 topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findlayer(layer_table regclass, feature_column name)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findlayer(schema_name name, table_name name, feature_column name)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findlayer(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findlayer(topology_id integer, layer_id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findtopology(integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findtopology(name, name, name)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findtopology(regclass, name)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findtopology(text)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|findtopology(topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|geometry(topogeom topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|geometrytype(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|getedgebypoint(atopology character varying, apoint geometry, tol1 double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|getfacebypoint(atopology character varying, apoint geometry, tol1 double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|getfacecontainingpoint(atopology text, apoint geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|getnodebypoint(atopology character varying, apoint geometry, tol1 double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|getnodeedges(atopology character varying, anode integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|getringedges(atopology character varying, anedge integer, maxedges integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopogeomelementarray(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopogeomelementarray(toponame character varying, layer_id integer, tgid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopogeomelements(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopogeomelements(toponame character varying, layerid integer, tgid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopologyid(toponame character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopologyname(topoid integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|gettopologysrid(toponame character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|intersects(tg1 topogeometry, tg2 topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|layertrigger()|directus_repository|NULL
+EXTENSION_FUNCTION|topology|polygonize(toponame character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|populate_topology_layer()|directus_repository|NULL
+EXTENSION_FUNCTION|topology|postgis_topology_scripts_installed()|directus_repository|NULL
+EXTENSION_FUNCTION|topology|relationtrigger()|directus_repository|NULL
+EXTENSION_FUNCTION|topology|removeunusedprimitives(atopology text, bbox geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|renametopogeometrycolumn(layer_table regclass, feature_column name, new_name name)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|renametopology(old_name character varying, new_name character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_addedgemodface(atopology character varying, anode integer, anothernode integer, acurve geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_addedgenewfaces(atopology character varying, anode integer, anothernode integer, acurve geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_addisoedge(atopology character varying, anode integer, anothernode integer, acurve geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_addisonode(atopology character varying, aface integer, apoint geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_changeedgegeom(atopology character varying, anedge integer, acurve geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_createtopogeo(atopology character varying, acollection geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_geometrytype(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_getfaceedges(toponame character varying, face_id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_getfacegeometry(toponame character varying, aface integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_inittopogeo(atopology character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_modedgeheal(toponame character varying, e1id integer, e2id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_modedgesplit(atopology character varying, anedge integer, apoint geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_moveisonode(atopology character varying, anode integer, apoint geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_newedgeheal(toponame character varying, e1id integer, e2id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_newedgessplit(atopology character varying, anedge integer, apoint geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_remedgemodface(toponame character varying, e1id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_remedgenewface(toponame character varying, e1id integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_remisonode(character varying, integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_removeisoedge(atopology character varying, anedge integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_removeisonode(atopology character varying, anode integer)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_simplify(tg topogeometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|st_srid(tg topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topoelement(topo topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topoelementarray_agg(topoelement)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topoelementarray_append(topoelementarray, topoelement)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeo_addgeometry(atopology character varying, ageom geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeo_addlinestring(atopology character varying, aline geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeo_addpoint(atopology character varying, apoint geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeo_addpolygon(atopology character varying, apoly geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeo_loadgeometry(atopology character varying, ageom geometry, tolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeom_addelement(tg topogeometry, el topoelement)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeom_addtopogeom(tgt topogeometry, src topogeometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topogeom_remelement(tg topogeometry, el topoelement)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|topologysummary(atopology character varying)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|totopogeom(ageom geometry, atopology character varying, alayer integer, atolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|totopogeom(ageom geometry, tg topogeometry, atolerance double precision)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|validatetopology(toponame character varying, bbox geometry)|directus_repository|NULL
+EXTENSION_FUNCTION|topology|validatetopologyrelation(toponame character varying)|directus_repository|NULL
+EXTENSION_RELATION|public|geography_columns|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|public|geometry_columns|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|public|spatial_ref_sys|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|addr_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|addrfeat_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|addrfeat|directus_repository|NULL
+EXTENSION_RELATION|tiger|addr|directus_repository|NULL
+EXTENSION_RELATION|tiger|bg_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|bg|directus_repository|NULL
+EXTENSION_RELATION|tiger|county_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|county_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|countysub_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|county|directus_repository|NULL
+EXTENSION_RELATION|tiger|cousub_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|cousub|directus_repository|NULL
+EXTENSION_RELATION|tiger|direction_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|edges_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|edges|directus_repository|NULL
+EXTENSION_RELATION|tiger|faces_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|faces|directus_repository|NULL
+EXTENSION_RELATION|tiger|featnames_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|featnames|directus_repository|NULL
+EXTENSION_RELATION|tiger|geocode_settings_default|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|geocode_settings|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|loader_lookuptables|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|loader_platform|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|loader_variables|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|pagc_gaz_id_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|pagc_gaz|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|pagc_lex_id_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|pagc_lex|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|pagc_rules_id_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|pagc_rules|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|tiger|place_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|place_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|place|directus_repository|NULL
+EXTENSION_RELATION|tiger|secondary_unit_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|state_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|state_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|state|directus_repository|NULL
+EXTENSION_RELATION|tiger|street_type_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|tabblock20|directus_repository|NULL
+EXTENSION_RELATION|tiger|tabblock_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|tabblock|directus_repository|NULL
+EXTENSION_RELATION|tiger|tract_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|tract|directus_repository|NULL
+EXTENSION_RELATION|tiger|zcta5_gid_seq|directus_repository|NULL
+EXTENSION_RELATION|tiger|zcta5|directus_repository|NULL
+EXTENSION_RELATION|tiger|zip_lookup_all|directus_repository|NULL
+EXTENSION_RELATION|tiger|zip_lookup_base|directus_repository|NULL
+EXTENSION_RELATION|tiger|zip_lookup|directus_repository|NULL
+EXTENSION_RELATION|tiger|zip_state_loc|directus_repository|NULL
+EXTENSION_RELATION|tiger|zip_state|directus_repository|NULL
+EXTENSION_RELATION|topology|layer|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|topology|topology_id_seq|directus_repository|{directus_repository=rwU/directus_repository,=r/directus_repository}
+EXTENSION_RELATION|topology|topology|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+EXTENSION|fuzzystrmatch|directus_repository
+EXTENSION|pgcrypto|directus_repository
+EXTENSION|plpgsql|directus_repository
+EXTENSION|postgis_tiger_geocoder|directus_repository
+EXTENSION|postgis_topology|directus_repository
+EXTENSION|postgis|directus_repository
+RELATION|public|r|spatial_ref_sys|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|S|addr_gid_seq|directus_repository|NULL
+RELATION|tiger|S|addrfeat_gid_seq|directus_repository|NULL
+RELATION|tiger|S|bg_gid_seq|directus_repository|NULL
+RELATION|tiger|S|county_gid_seq|directus_repository|NULL
+RELATION|tiger|S|cousub_gid_seq|directus_repository|NULL
+RELATION|tiger|S|edges_gid_seq|directus_repository|NULL
+RELATION|tiger|S|faces_gid_seq|directus_repository|NULL
+RELATION|tiger|S|featnames_gid_seq|directus_repository|NULL
+RELATION|tiger|S|pagc_gaz_id_seq|directus_repository|NULL
+RELATION|tiger|S|pagc_lex_id_seq|directus_repository|NULL
+RELATION|tiger|S|pagc_rules_id_seq|directus_repository|NULL
+RELATION|tiger|S|place_gid_seq|directus_repository|NULL
+RELATION|tiger|S|state_gid_seq|directus_repository|NULL
+RELATION|tiger|S|tabblock_gid_seq|directus_repository|NULL
+RELATION|tiger|S|tract_gid_seq|directus_repository|NULL
+RELATION|tiger|S|zcta5_gid_seq|directus_repository|NULL
+RELATION|tiger|c|norm_addy|directus_repository|NULL
+RELATION|tiger|i|addr_pkey|directus_repository|NULL
+RELATION|tiger|i|addrfeat_pkey|directus_repository|NULL
+RELATION|tiger|i|bg_pkey|directus_repository|NULL
+RELATION|tiger|i|county_lookup_name_idx|directus_repository|NULL
+RELATION|tiger|i|county_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|county_lookup_state_idx|directus_repository|NULL
+RELATION|tiger|i|countysub_lookup_name_idx|directus_repository|NULL
+RELATION|tiger|i|countysub_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|countysub_lookup_state_idx|directus_repository|NULL
+RELATION|tiger|i|cousub_pkey|directus_repository|NULL
+RELATION|tiger|i|direction_lookup_abbrev_idx|directus_repository|NULL
+RELATION|tiger|i|direction_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|edges_pkey|directus_repository|NULL
+RELATION|tiger|i|faces_pkey|directus_repository|NULL
+RELATION|tiger|i|featnames_pkey|directus_repository|NULL
+RELATION|tiger|i|geocode_settings_default_pkey|directus_repository|NULL
+RELATION|tiger|i|geocode_settings_pkey|directus_repository|NULL
+RELATION|tiger|i|idx_addrfeat_geom_gist|directus_repository|NULL
+RELATION|tiger|i|idx_addrfeat_tlid|directus_repository|NULL
+RELATION|tiger|i|idx_addrfeat_zipl|directus_repository|NULL
+RELATION|tiger|i|idx_addrfeat_zipr|directus_repository|NULL
+RELATION|tiger|i|idx_edges_tlid|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_addr_tlid_statefp|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_addr_zip|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_county|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_edges_countyfp|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_edges_the_geom_gist|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_faces_countyfp|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_faces_tfid|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_featnames_lname|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_featnames_snd_name|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_featnames_tlid_statefp|directus_repository|NULL
+RELATION|tiger|i|idx_tiger_state_the_geom_gist|directus_repository|NULL
+RELATION|tiger|i|loader_lookuptables_pkey|directus_repository|NULL
+RELATION|tiger|i|loader_platform_pkey|directus_repository|NULL
+RELATION|tiger|i|loader_variables_pkey|directus_repository|NULL
+RELATION|tiger|i|pagc_gaz_pkey|directus_repository|NULL
+RELATION|tiger|i|pagc_lex_pkey|directus_repository|NULL
+RELATION|tiger|i|pagc_rules_pkey|directus_repository|NULL
+RELATION|tiger|i|pk_tabblock20|directus_repository|NULL
+RELATION|tiger|i|pk_tiger_county|directus_repository|NULL
+RELATION|tiger|i|pk_tiger_state|directus_repository|NULL
+RELATION|tiger|i|pk_tiger_zcta5_zcta5ce|directus_repository|NULL
+RELATION|tiger|i|place_lookup_name_idx|directus_repository|NULL
+RELATION|tiger|i|place_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|place_lookup_state_idx|directus_repository|NULL
+RELATION|tiger|i|place_pkey|directus_repository|NULL
+RELATION|tiger|i|secondary_unit_lookup_abbrev_idx|directus_repository|NULL
+RELATION|tiger|i|secondary_unit_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|state_lookup_abbrev_key|directus_repository|NULL
+RELATION|tiger|i|state_lookup_name_key|directus_repository|NULL
+RELATION|tiger|i|state_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|state_lookup_statefp_key|directus_repository|NULL
+RELATION|tiger|i|street_type_lookup_abbrev_idx|directus_repository|NULL
+RELATION|tiger|i|street_type_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|tabblock_pkey|directus_repository|NULL
+RELATION|tiger|i|tige_cousub_the_geom_gist|directus_repository|NULL
+RELATION|tiger|i|tiger_faces_the_geom_gist|directus_repository|NULL
+RELATION|tiger|i|tiger_place_the_geom_gist|directus_repository|NULL
+RELATION|tiger|i|tract_pkey|directus_repository|NULL
+RELATION|tiger|i|uidx_county_gid|directus_repository|NULL
+RELATION|tiger|i|uidx_cousub_gid|directus_repository|NULL
+RELATION|tiger|i|uidx_tiger_place_gid|directus_repository|NULL
+RELATION|tiger|i|uidx_tiger_state_gid|directus_repository|NULL
+RELATION|tiger|i|uidx_tiger_state_stusps|directus_repository|NULL
+RELATION|tiger|i|uidx_tiger_zcta5_gid|directus_repository|NULL
+RELATION|tiger|i|zip_lookup_base_pkey|directus_repository|NULL
+RELATION|tiger|i|zip_lookup_pkey|directus_repository|NULL
+RELATION|tiger|i|zip_state_loc_pkey|directus_repository|NULL
+RELATION|tiger|i|zip_state_pkey|directus_repository|NULL
+RELATION|tiger|r|addrfeat|directus_repository|NULL
+RELATION|tiger|r|addr|directus_repository|NULL
+RELATION|tiger|r|bg|directus_repository|NULL
+RELATION|tiger|r|county_lookup|directus_repository|NULL
+RELATION|tiger|r|countysub_lookup|directus_repository|NULL
+RELATION|tiger|r|county|directus_repository|NULL
+RELATION|tiger|r|cousub|directus_repository|NULL
+RELATION|tiger|r|direction_lookup|directus_repository|NULL
+RELATION|tiger|r|edges|directus_repository|NULL
+RELATION|tiger|r|faces|directus_repository|NULL
+RELATION|tiger|r|featnames|directus_repository|NULL
+RELATION|tiger|r|geocode_settings_default|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|geocode_settings|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|loader_lookuptables|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|loader_platform|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|loader_variables|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|pagc_gaz|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|pagc_lex|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|pagc_rules|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|tiger|r|place_lookup|directus_repository|NULL
+RELATION|tiger|r|place|directus_repository|NULL
+RELATION|tiger|r|secondary_unit_lookup|directus_repository|NULL
+RELATION|tiger|r|state_lookup|directus_repository|NULL
+RELATION|tiger|r|state|directus_repository|NULL
+RELATION|tiger|r|street_type_lookup|directus_repository|NULL
+RELATION|tiger|r|tabblock20|directus_repository|NULL
+RELATION|tiger|r|tabblock|directus_repository|NULL
+RELATION|tiger|r|tract|directus_repository|NULL
+RELATION|tiger|r|zcta5|directus_repository|NULL
+RELATION|tiger|r|zip_lookup_all|directus_repository|NULL
+RELATION|tiger|r|zip_lookup_base|directus_repository|NULL
+RELATION|tiger|r|zip_lookup|directus_repository|NULL
+RELATION|tiger|r|zip_state_loc|directus_repository|NULL
+RELATION|tiger|r|zip_state|directus_repository|NULL
+RELATION|topology|S|topology_id_seq|directus_repository|{directus_repository=rwU/directus_repository,=r/directus_repository}
+RELATION|topology|c|getfaceedges_returntype|directus_repository|NULL
+RELATION|topology|c|topogeometry|directus_repository|NULL
+RELATION|topology|c|validatetopology_returntype|directus_repository|NULL
+RELATION|topology|i|layer_pkey|directus_repository|NULL
+RELATION|topology|i|layer_schema_name_table_name_feature_column_key|directus_repository|NULL
+RELATION|topology|i|topology_name_key|directus_repository|NULL
+RELATION|topology|i|topology_pkey|directus_repository|NULL
+RELATION|topology|r|layer|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+RELATION|topology|r|topology|directus_repository|{directus_repository=arwdDxtm/directus_repository,=r/directus_repository}
+SCHEMA|tiger_data|directus_repository|NULL
+SCHEMA|tiger|directus_repository|NULL
+SCHEMA|topology|directus_repository|{directus_repository=UC/directus_repository,=U/directus_repository}

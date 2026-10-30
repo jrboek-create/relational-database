@@ -1,0 +1,104 @@
+[
+    {
+        "path":  "gate6_1_baseline.ps1",
+        "bytes":  10059,
+        "algorithm":  "SHA256",
+        "sha256":  "CA0BE8ED349E8FE9EEFF3842C3E3C64F8685AC7E6F90DF3D694FBB2FBCC56532"
+    },
+    {
+        "path":  "compose.yaml",
+        "bytes":  3225,
+        "algorithm":  "SHA256",
+        "sha256":  "D49C2C2B2BF85F5FB525548948E8A16345EA0341856D95442C8D3128EC2B3346"
+    },
+    {
+        "path":  "middleware\\contracts\\api-courses-v1.json",
+        "bytes":  3839,
+        "algorithm":  "SHA256",
+        "sha256":  "68A2D51409AD1D75E7FA516A3C9ACE60CFDA0A715D0F99DAA1F5F4A845624C87"
+    },
+    {
+        "path":  "middleware\\src\\server.js",
+        "bytes":  5682,
+        "algorithm":  "SHA256",
+        "sha256":  "91500B12BBDE850C703DE9C46BC6E81AC200665527323BCD67165DDC1BDF1FA8"
+    },
+    {
+        "path":  "middleware\\Dockerfile",
+        "bytes":  157,
+        "algorithm":  "SHA256",
+        "sha256":  "A6128BC24DE30090933626080D5F78B949D98B7454294454C9C923743DB6C13E"
+    },
+    {
+        "path":  "middleware\\package.json",
+        "bytes":  400,
+        "algorithm":  "SHA256",
+        "sha256":  "EE931350F24594CE288BEC205FE86FBB7C4753E84408FF88413EA5BE2C7967DF"
+    },
+    {
+        "path":  "middleware\\package-lock.json",
+        "bytes":  37529,
+        "algorithm":  "SHA256",
+        "sha256":  "16987CCF140CEDCCD4C029790B2ABA94B11F7B42C69DADC4BFA9E34618CA24A6"
+    },
+    {
+        "path":  "ui\\Dockerfile",
+        "bytes":  138,
+        "algorithm":  "SHA256",
+        "sha256":  "77620433D1CCD4FF9DB6BACFFA223A1CED4FFE056699D70CF7C1575102DE059B"
+    },
+    {
+        "path":  "ui\\default.conf",
+        "bytes":  886,
+        "algorithm":  "SHA256",
+        "sha256":  "62E62A19EFC7C9A92C08F4B23E8858D1B359F08792274A6609961147DE958345"
+    },
+    {
+        "path":  "ui\\index.html",
+        "bytes":  3208,
+        "algorithm":  "SHA256",
+        "sha256":  "CF36ECA0773F9900E3BF8C0634E365AFF8F53240DA97A1EF4F9A26AB1EFB5823"
+    },
+    {
+        "path":  "ui\\styles.css",
+        "bytes":  3724,
+        "algorithm":  "SHA256",
+        "sha256":  "15180CA666DCED55F4CD644B7E825EB0D3E56C44DB3C5DA569670F0E46AEEFB5"
+    },
+    {
+        "path":  "ui\\app.js",
+        "bytes":  4287,
+        "algorithm":  "SHA256",
+        "sha256":  "7E64DEF2737818028A4F50C314F1D290485BFA3E56008E6B732115FF4F3587F9"
+    },
+    {
+        "path":  "evidence\\gate5\\closure_20261006_075904\\gate5-closure.json",
+        "bytes":  1623,
+        "algorithm":  "SHA256",
+        "sha256":  "513F939BB76BC6F478B1CB6130DE139861640A49E074CB9956FE3B73A1B9779C"
+    },
+    {
+        "path":  "evidence\\gate6\\ui_start_checkpoint_20261009_111228\\gate6-ui-start-checkpoint.json",
+        "bytes":  1228,
+        "algorithm":  "SHA256",
+        "sha256":  "2289FED4CE1D7C7D15A527108266F0C96D4C730CF344FC10DDDF2F168A7B4991"
+    },
+    {
+        "path":  "evidence\\gate6\\ui_start_checkpoint_20261009_111228\\source-artifact-manifest.json",
+        "bytes":  1260,
+        "algorithm":  "SHA256",
+        "sha256":  "6BBA8A9385A53CA7898EEFE1AEA92FD9F43F03447B39D5B039ABA02A83A30293"
+    },
+    {
+        "path":  "evidence\\gate6\\ui_start_checkpoint_20261009_111228\\SHA256SUMS.txt",
+        "bytes":  195,
+        "algorithm":  "SHA256",
+        "sha256":  "4451615E245499A2B398FA74A746C2B1D027204EF75447C43AB3810B63BC6A1E"
+    },
+    {
+        "path":  "evidence\\gate6\\ui_scaffold_20261009_112144\\ui-scaffold-manifest.json",
+        "bytes":  975,
+        "algorithm":  "SHA256",
+        "sha256":  "949489C621B725A1F920AB91A39677C63D77FEB6917A0717BA55FEE2DBA0BFDE"
+    }
+]

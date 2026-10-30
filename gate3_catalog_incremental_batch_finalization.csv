@@ -1,0 +1,2 @@
+﻿batch_id,staging_status,completed_at,component_status,staged_rows,core_batch_status,authoritative_indicator,current_course_rows,new_batch_lineage_rows,prior_batch_lineage_rows,finalization_reconciliation
+53e0ae11-6a25-4f0a-9beb-814c8c3d1946,STAGED,2026-09-28 18:46:01.701075+00,SUCCEEDED,966,PROMOTED,f,966,5,961,PASS

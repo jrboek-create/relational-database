@@ -1,0 +1,12 @@
+.env
+data/
+uploads/
+backups/
+imports/
+loader/__pycache__/
+
+.secrets/
+
+# Added before GitHub upload
+imports_hold/
+node_modules/

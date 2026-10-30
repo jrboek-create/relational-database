@@ -1,0 +1,11 @@
+BEGIN;
+SET ROLE air_repository_owner;
+DELETE FROM reporting.course_current_catalog_api;
+INSERT INTO reporting.course_current_catalog_api (course_id,university_course_id,course_code,course_title,source_system_code,report_refresh_run_id,report_as_of_utc) SELECT course_id,university_course_id,course_code,course_title,source_system_code,report_refresh_run_id,report_as_of_utc FROM gate6_3_backup_20261019_124010.course_current_catalog_api;
+ALTER TABLE reporting.course_current_catalog_api DROP COLUMN IF EXISTS college_name;
+ALTER TABLE reporting.course_current_catalog_api DROP COLUMN IF EXISTS department_name;
+DELETE FROM reporting.course_catalog_detail_api;
+INSERT INTO reporting.course_catalog_detail_api (course_id,university_course_id,course_code,course_title,college_name,course_description,course_goals,course_learning_outcomes) SELECT course_id,university_course_id,course_code,course_title,college_name,course_description,course_goals,course_learning_outcomes FROM gate6_3_backup_20261019_124010.course_catalog_detail_api;
+ALTER TABLE reporting.course_catalog_detail_api DROP COLUMN IF EXISTS department_name;
+DROP TABLE IF EXISTS reporting.course_organization_reconciliation;
+COMMIT;

@@ -1,0 +1,15 @@
+{
+    "verified_utc":  "2026-10-09T17:22:15.5782853Z",
+    "baseline_record_valid_json":  true,
+    "artifact_manifest_valid_json":  true,
+    "artifact_count":  17,
+    "artifact_hashes_verified":  true,
+    "runtime_controls_verified":  true,
+    "security_boundary_verified":  true,
+    "secret_contents_included":  false,
+    "secret_hashes_included":  false,
+    "business_row_data_included":  false,
+    "baseline_record_sha256":  "EDBA5EB8EEC90F0DF8ADACBA0C47AC43F9651804AFB7A30147DE111DB6ACBC98",
+    "artifact_manifest_sha256":  "AFC2F7806586159AA601716C2A2BC97634ABFB9475B9E45D25770AEF0D724190",
+    "decision":  "PASS - GATE 6.1 PRE-CHANGE BASELINE FROZEN"
+}

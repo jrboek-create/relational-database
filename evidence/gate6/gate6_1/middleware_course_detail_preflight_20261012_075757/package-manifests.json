@@ -1,0 +1,17 @@
+﻿[
+    {
+        "relative_path":  "middleware\\package.json",
+        "package_name":  null,
+        "package_version":  null,
+        "scripts":  [
+
+                    ],
+        "dependencies":  [
+
+                         ],
+        "development_dependencies":  [
+
+                                     ],
+        "manifest_parse_status":  "FAIL: The property \u0027devDependencies\u0027 cannot be found on this object. Verify that the property exists."
+    }
+]

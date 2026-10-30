@@ -1,0 +1,85 @@
+{
+    "contract":  "AIR Course Development Master Hub",
+    "version":  "1.0",
+    "route":  "GET /api/courses",
+    "upstream":  "/items/course_current_catalog_api",
+    "fields":  [
+                   "course_id",
+                   "university_course_id",
+                   "course_code",
+                   "course_title",
+                   "source_system_code",
+                   "report_refresh_run_id",
+                   "report_as_of_utc"
+               ],
+    "pagination":  {
+                       "page_default":  1,
+                       "limit_default":  25,
+                       "limit_maximum":  100
+                   },
+    "filters":  {
+                    "allowed":  [
+                                    "course_code",
+                                    "course_title"
+                                ],
+                    "behavior":  "case-insensitive partial match"
+                },
+    "sorting":  {
+                    "allowed":  [
+                                    "course_id",
+                                    "-course_id"
+                                ],
+                    "default":  "course_id"
+                },
+    "query_policy":  {
+                         "unsupported_parameters":  "HTTP 400",
+                         "invalid_values":  "HTTP 400"
+                     },
+    "response":  {
+                     "success_envelope":  [
+                                              "ok",
+                                              "request_id",
+                                              "data",
+                                              "meta"
+                                          ],
+                     "meta":  [
+                                  "page",
+                                  "limit",
+                                  "returned",
+                                  "total",
+                                  "sort",
+                                  "report_refresh_run_id",
+                                  "report_as_of_utc"
+                              ],
+                     "error_envelope":  [
+                                            "ok",
+                                            "request_id",
+                                            "error"
+                                        ],
+                     "error_codes":  [
+                                         "INVALID_QUERY",
+                                         "UNAUTHORIZED",
+                                         "FORBIDDEN",
+                                         "NOT_FOUND",
+                                         "DIRECTUS_UNAVAILABLE",
+                                         "INTERNAL_ERROR"
+                                     ]
+                 },
+    "requirements":  [
+                         "Preserve GET /health",
+                         "Use Directus token server-side only",
+                         "Explicitly request only the seven approved fields",
+                         "Generate or propagate a correlation/request ID",
+                         "Use standardized safe errors",
+                         "Use structured audit/request logging",
+                         "Never expose secrets, tokens, stack traces, internal URLs, SQL details, or Directus administrative details"
+                     ],
+    "prohibitions":  [
+                         "No PostgreSQL access from middleware",
+                         "No access to reporting.course_current_catalog",
+                         "No access to staging",
+                         "No Directus administrative resources",
+                         "No Directus service token exposure to browser",
+                         "No fields outside the seven-field contract"
+                     ]
+}

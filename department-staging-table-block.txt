@@ -1,0 +1,21 @@
+    [void]$Sql.AppendLine('BEGIN;')
+
+    [void]$Sql.AppendLine(@'
+CREATE TEMP TABLE department_rehearsal (
+    university_course_id text,
+    effective_date date,
+    department_name text,
+    college_name text
+) ON COMMIT DROP;
+
+COPY department_rehearsal (
+    university_course_id,
+    effective_date,
+    department_name,
+    college_name
+)
+FROM STDIN
+WITH (
+    FORMAT csv
+);
+'@)

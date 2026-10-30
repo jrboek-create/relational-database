@@ -1,0 +1,8 @@
+﻿FAIL|GATE6_1_DEPARTMENT_HEADER_DIAGNOSTIC_V2
+source=C:\Directus\relational-repository\imports_hold\ER_SR_1CAT_UNIV_MASTER_DETAIL_618456250.xls
+sha256_before=A0D1F5830672D86B8314495774FA0DD740B4FB826EFF0E8F525248C59E8D4296
+sha256_after_failure=A0D1F5830672D86B8314495774FA0DD740B4FB826EFF0E8F525248C59E8D4296
+error=Argument types do not match
+runtime_mutated=false
+department_reconciliation_performed=false
+department_filtering_enabled=false

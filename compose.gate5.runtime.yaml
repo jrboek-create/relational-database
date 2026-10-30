@@ -1,0 +1,13 @@
+﻿services:
+  directus:
+    environment:
+      DB_USER: "directus_runtime"
+      DB_SEARCH_PATH: "array:reporting,public"
+      DB_PASSWORD: null
+      DB_CONNECTION_STRING: null
+      DB_PASSWORD_FILE: "/run/secrets/directus_runtime_db_password"
+    secrets:
+      - directus_runtime_db_password
+secrets:
+  directus_runtime_db_password:
+    file: "./.secrets/directus_runtime_db_password.txt"

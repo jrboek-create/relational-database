@@ -1,0 +1,16 @@
+﻿"Attributes","File","IsFilter","IsConfiguration","Module","StartPosition","DebuggerHidden","Id","Ast"
+"System.Collections.Generic.List`1[System.Attribute]",,"False","False",,"System.Management.Automation.PSToken","False","58cb4657-aebc-4568-9b8f-9f73b178ccd7","{
+                $parts=$_ -split '\|',4
+
+                if($parts.Count -ne 4)
+                {
+                    throw ""INVALID ROW ENCODING: $_""
+                }
+
+                [pscustomobject][ordered]@{
+                    'Course ID'            = $parts[0]
+                    'University Course ID' = ConvertFrom-B64 $parts[1]
+                    'Course Code'          = ConvertFrom-B64 $parts[2]
+                    'Course Title'         = ConvertFrom-B64 $parts[3]
+                }
+            }"

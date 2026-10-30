@@ -1,0 +1,7 @@
+﻿"Test","PostgreSQLCount","PowerShellDisplayCount","CsvDataRows","HeaderStatus","DuplicateCourseIds","MissingCourseIds","UnexpectedCourseIds","SortStatus","Status","CsvFile"
+"T01","966","966","966","PASS","0","0","0","PASS","PASS","C:\Directus\relational-repository\evidence\gate4\gate4_6_filter_csv_RETRY_20260929_144300\T01.csv"
+"T02","1","1","1","PASS","0","0","0","PASS","PASS","C:\Directus\relational-repository\evidence\gate4\gate4_6_filter_csv_RETRY_20260929_144300\T02.csv"
+"T03","115","115","115","PASS","0","0","0","PASS","PASS","C:\Directus\relational-repository\evidence\gate4\gate4_6_filter_csv_RETRY_20260929_144300\T03.csv"
+"T04","1","1","1","PASS","0","0","0","PASS","PASS","C:\Directus\relational-repository\evidence\gate4\gate4_6_filter_csv_RETRY_20260929_144300\T04.csv"
+"T05","0","0","0","PASS","0","0","0","PASS","PASS","C:\Directus\relational-repository\evidence\gate4\gate4_6_filter_csv_RETRY_20260929_144300\T05.csv"
+"T06","0","0","0","PASS","0","0","0","PASS","PASS","C:\Directus\relational-repository\evidence\gate4\gate4_6_filter_csv_RETRY_20260929_144300\T06.csv"

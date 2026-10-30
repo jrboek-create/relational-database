@@ -1,0 +1,86 @@
+﻿PASS|GATE6_1_DEPARTMENT_HEADER_V3_READONLY_INTEGRITY
+source=C:\Directus\relational-repository\imports_hold\ER_SR_1CAT_UNIV_MASTER_DETAIL_618456250.xls
+report_query_family=ER_SR_1CAT_UNIV_MASTER_DETAIL
+provider=Microsoft.ACE.OLEDB.16.0
+read_method=ACE OLE DB fixed-cell read-only queries
+inspected_sheet=sheet1
+inspected_row=2
+expected_structural_width=52
+broad_range_provider_field_count=32
+broad_range_row_returned=True
+fixed_cell_queries=52
+fixed_cell_query_errors=20
+sha256_before=A0D1F5830672D86B8314495774FA0DD740B4FB826EFF0E8F525248C59E8D4296
+sha256_after=A0D1F5830672D86B8314495774FA0DD740B4FB826EFF0E8F525248C59E8D4296
+source_modified=false
+runtime_mutated=false
+department_reconciliation_performed=false
+department_filtering_enabled=false
+ownership_header_status=NOT_VERIFIED_STOP_RECONCILIATION
+HEADER|01|A|cell=A2|actual=Univ Course ID|normalized=university course id|read_status=VALUE_READ|provider_fields=1
+HEADER|02|B|cell=B2|actual=Eff Date|normalized=effective date|read_status=VALUE_READ|provider_fields=1
+HEADER|03|C|cell=C2|actual=Univ Subject|normalized=university subject|read_status=VALUE_READ|provider_fields=1
+HEADER|04|D|cell=D2|actual=Univ Catalog Nbr|normalized=university catalog number|read_status=VALUE_READ|provider_fields=1
+HEADER|05|E|cell=E2|actual=Univ Course Title|normalized=university course title|read_status=VALUE_READ|provider_fields=1
+HEADER|06|F|cell=F2|actual=Campuses Offering This Course|normalized=campuses offering this course|read_status=VALUE_READ|provider_fields=1
+HEADER|07|G|cell=G2|actual=DB Course(s)|normalized=db course s|read_status=VALUE_READ|provider_fields=1
+HEADER|08|H|cell=H2|actual=PC Course(s)|normalized=pc course s|read_status=VALUE_READ|provider_fields=1
+HEADER|09|I|cell=I2|actual=WW Course(s)|normalized=worldwide course s|read_status=VALUE_READ|provider_fields=1
+HEADER|10|J|cell=J2|actual=Long Title|normalized=long title|read_status=VALUE_READ|provider_fields=1
+HEADER|11|K|cell=K2|actual=Course Description|normalized=course description|read_status=VALUE_READ|provider_fields=1
+HEADER|12|L|cell=L2|actual=Min Units|normalized=min units|read_status=VALUE_READ|provider_fields=1
+HEADER|13|M|cell=M2|actual=Max Units|normalized=max units|read_status=VALUE_READ|provider_fields=1
+HEADER|14|N|cell=N2|actual=Grading Basis|normalized=grading basis|read_status=VALUE_READ|provider_fields=1
+HEADER|15|O|cell=O2|actual=Repeat for Credit|normalized=repeat for credit|read_status=VALUE_READ|provider_fields=1
+HEADER|16|P|cell=P2|actual=Total Units Allowed|normalized=total units allowed|read_status=VALUE_READ|provider_fields=1
+HEADER|17|Q|cell=Q2|actual=Total Completions Allowed|normalized=total completions allowed|read_status=VALUE_READ|provider_fields=1
+HEADER|18|R|cell=R2|actual=Drop Consent|normalized=drop consent|read_status=VALUE_READ|provider_fields=1
+HEADER|19|S|cell=S2|actual=Equivalent Course Group|normalized=equivalent course group|read_status=VALUE_READ|provider_fields=1
+HEADER|20|T|cell=T2|actual=Equivalent Course Group Descr|normalized=equivalent course group description|read_status=VALUE_READ|provider_fields=1
+HEADER|21|U|cell=U2|actual=Academic Group|normalized=academic group|read_status=VALUE_READ|provider_fields=1
+HEADER|22|V|cell=V2|actual=Academic Organization|normalized=academic organization|read_status=VALUE_READ|provider_fields=1
+HEADER|23|W|cell=W2|actual=Academic Career|normalized=academic career|read_status=VALUE_READ|provider_fields=1
+HEADER|24|X|cell=X2|actual=Course Approved|normalized=course approved|read_status=VALUE_READ|provider_fields=1
+HEADER|25|Y|cell=Y2|actual=Allow Course to be Scheduled|normalized=allow course to be scheduled|read_status=VALUE_READ|provider_fields=1
+HEADER|26|Z|cell=Z2|actual=Catalog Print|normalized=catalog print|read_status=VALUE_READ|provider_fields=1
+HEADER|27|AA|cell=AA2|actual=Print Instructor in Schedule|normalized=print instructor in schedule|read_status=VALUE_READ|provider_fields=1
+HEADER|28|AB|cell=AB2|actual=Schedule Print|normalized=schedule print|read_status=VALUE_READ|provider_fields=1
+HEADER|29|AC|cell=AC2|actual=Schedule Term Roll|normalized=schedule term roll|read_status=VALUE_READ|provider_fields=1
+HEADER|30|AD|cell=AD2|actual=Split Ownership|normalized=split ownership|read_status=VALUE_READ|provider_fields=1
+HEADER|31|AE|cell=AE2|actual=Requirement Group|normalized=requirement group|read_status=VALUE_READ|provider_fields=1
+HEADER|32|AF|cell=AF2|actual=Req Group Long Descr|normalized=req group long description|read_status=VALUE_READ|provider_fields=1
+HEADER|33|AG|cell=AG2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|34|AH|cell=AH2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|35|AI|cell=AI2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|36|AJ|cell=AJ2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|37|AK|cell=AK2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|38|AL|cell=AL2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|39|AM|cell=AM2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|40|AN|cell=AN2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|41|AO|cell=AO2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|42|AP|cell=AP2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|43|AQ|cell=AQ2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|44|AR|cell=AR2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|45|AS|cell=AS2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|46|AT|cell=AT2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|47|AU|cell=AU2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|48|AV|cell=AV2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|49|AW|cell=AW2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|50|AX|cell=AX2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|51|AY|cell=AY2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+HEADER|52|AZ|cell=AZ2|actual=<BLANK_OR_NOT_EXPOSED>|normalized=<BLANK>|read_status=QUERY_ERROR_NOT_EXPOSED|provider_fields=0
+CONCEPT|University Course ID|status=VERIFIED
+CANDIDATE|University Course ID|column=A|label=Univ Course ID|normalized=university course id|score=220|exact=True|strong=True
+CANDIDATE|University Course ID|column=E|label=Univ Course Title|normalized=university course title|score=40|exact=False|strong=False
+CANDIDATE|University Course ID|column=C|label=Univ Subject|normalized=university subject|score=20|exact=False|strong=False
+CANDIDATE|University Course ID|column=D|label=Univ Catalog Nbr|normalized=university catalog number|score=20|exact=False|strong=False
+CANDIDATE|University Course ID|column=F|label=Campuses Offering This Course|normalized=campuses offering this course|score=20|exact=False|strong=False
+CONCEPT|Effective Date|status=VERIFIED
+CANDIDATE|Effective Date|column=B|label=Eff Date|normalized=effective date|score=200|exact=True|strong=True
+CONCEPT|Worldwide Academic Organization|status=NOT_VERIFIED
+CANDIDATE|Worldwide Academic Organization|column=V|label=Academic Organization|normalized=academic organization|score=40|exact=False|strong=False
+CANDIDATE|Worldwide Academic Organization|column=I|label=WW Course(s)|normalized=worldwide course s|score=20|exact=False|strong=False
+CANDIDATE|Worldwide Academic Organization|column=U|label=Academic Group|normalized=academic group|score=20|exact=False|strong=False
+CANDIDATE|Worldwide Academic Organization|column=W|label=Academic Career|normalized=academic career|score=20|exact=False|strong=False
+CONCEPT|Worldwide Department Name|status=NOT_VERIFIED
+CANDIDATE|Worldwide Department Name|column=I|label=WW Course(s)|normalized=worldwide course s|score=20|exact=False|strong=False

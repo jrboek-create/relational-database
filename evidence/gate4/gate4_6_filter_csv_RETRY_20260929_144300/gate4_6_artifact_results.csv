@@ -1,0 +1,6 @@
+﻿"Name","Path","Exists","Length","SHA256","Status"
+"GATE_4_1","C:\Directus\relational-repository\sql\gate4\000_preflight_course_current_catalog.sql","True","18187","CADC8B20258EF21F6D90B0069FB0D087B1301D85A8F4D7124C3A3C66F653AE46","PASS"
+"GATE_4_2","C:\Directus\relational-repository\sql\gate4\001_create_reporting_schema.sql","True","54865","3792F3BD5C19CD81A7E50620A266CCF2751CCD2FCAA60E5DB4FFDC242C6188D8","PASS"
+"GATE_4_3","C:\Directus\relational-repository\sql\gate4\002_refresh_course_current_catalog.sql","True","49739","A6689281A43D34A38B302568AFD071774122ADEBB404E6D8563852B510E86A7B","PASS"
+"GATE_4_5_AUTHORITATIVE","C:\Directus\relational-repository\sql\gate4\003_repeat_refresh_course_current_catalog.sql","True","32411","7DD1376AFC0D54A998A95F9DB448DF00D44B6906E7B9432FE11A5F99DCBF963E","PASS"
+"GATE_4_5_REHEARSAL","C:\Directus\relational-repository\sql\gate4\003_repeat_refresh_course_current_catalog_REHEARSAL.sql","True","32411","F44FAA96867F079E8654C74880FB0070325CE3161E4B21CC0B1EF4E8BEB438D7","PASS"

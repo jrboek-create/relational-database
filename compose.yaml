@@ -1,0 +1,131 @@
+name: relational-repository
+ 
+services:
+  database:
+    image: postgis/postgis:17-3.5
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/database:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --host=localhost --username=${POSTGRES_USER} --dbname=${POSTGRES_DB}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+ 
+  cache:
+    image: redis:7
+    restart: unless-stopped
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(redis-cli ping) = 'PONG' ]"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+ 
+  directus:
+    image: directus/directus:${DIRECTUS_VERSION}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${DIRECTUS_PORT}:8055"
+    volumes:
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+      - ./.secrets/directus_runtime_db_password.txt:/run/secrets/directus_runtime_db_password:ro
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      database:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    environment:
+      SECRET: ${DIRECTUS_SECRET}
+ 
+      DB_CLIENT: pg
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_USER: directus_runtime
+      DB_PASSWORD_FILE: /run/secrets/directus_runtime_db_password
+      DB_SEARCH_PATH: array:reporting,public
+ 
+      CACHE_ENABLED: "true"
+      CACHE_AUTO_PURGE: "true"
+      CACHE_STORE: redis
+      REDIS: redis://cache:6379
+ 
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+      TELEMETRY: "false"
+ 
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --spider -q http://127.0.0.1:8055/server/ping || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+ 
+  middleware:
+    build:
+      context: ./middleware
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:3000"
+    networks:
+      - frontend
+    depends_on:
+      directus:
+        condition: service_healthy
+    environment:
+      DIRECTUS_URL: http://directus:8055
+      PORT: 3000
+    volumes:
+      - ./.secrets:/.secrets:ro
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - frontend
+    depends_on:
+      middleware:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  frontend:
+  backend:
+    internal: true

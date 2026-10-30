@@ -1,0 +1,14 @@
+﻿[
+    {
+        "relative_path":  "middleware\\src\\server.gate6-shell.backup.js",
+        "node_check_exit_code":  0,
+        "syntax_status":  "PASS",
+        "diagnostic":  null
+    },
+    {
+        "relative_path":  "middleware\\src\\server.js",
+        "node_check_exit_code":  0,
+        "syntax_status":  "PASS",
+        "diagnostic":  null
+    }
+]

@@ -1,0 +1,50 @@
+﻿[
+    {
+        "Test":  "health",
+        "Status":  200,
+        "Result":  "PASS",
+        "Evidence":  "status=ok"
+    },
+    {
+        "Test":  "pagination-page2",
+        "Status":  200,
+        "Result":  "PASS",
+        "Evidence":  "sha256="
+    },
+    {
+        "Test":  "csv-export",
+        "Status":  200,
+        "Result":  "PASS",
+        "Evidence":  "bytes=0;sha256="
+    },
+    {
+        "Test":  "staging-denial",
+        "Status":  403,
+        "Result":  "PASS",
+        "Evidence":  "403/404"
+    },
+    {
+        "Test":  "admin-endpoint-denial",
+        "Status":  403,
+        "Result":  "PASS",
+        "Evidence":  "/users denied"
+    },
+    {
+        "Test":  "write-denial",
+        "Status":  403,
+        "Result":  "PASS",
+        "Evidence":  "POST denied"
+    },
+    {
+        "Test":  "restricted-field-denial",
+        "Status":  403,
+        "Result":  "PASS",
+        "Evidence":  "unapproved field denied"
+    },
+    {
+        "Test":  "runtime-db-identity",
+        "Status":  200,
+        "Result":  "PASS",
+        "Evidence":  "directus_runtime_connections=2"
+    }
+]

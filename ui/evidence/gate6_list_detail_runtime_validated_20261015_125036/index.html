@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AIR Course Catalog</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#catalog">Skip to course catalog</a>
+<header class="top">
+<div><span class="eyebrow">ACADEMIC INNOVATION RESEARCH</span>
+<h1>Course Development Master Hub</h1>
+<p>Read-only current course catalog</p></div>
+<span class="pill">Gate 6 UI slice</span>
+</header>
+<main id="catalog">
+<section class="intro" aria-labelledby="catalogTitle">
+<div><span class="kicker">COURSE CATALOG</span>
+<h2 id="catalogTitle">Current course catalog</h2>
+<p>Search the approved seven-field catalog through the middleware API.</p></div>
+<dl class="metrics">
+<div><dt>Total courses</dt><dd id="total">—</dd></div>
+<div><dt>Report as of</dt><dd id="asOf">—</dd></div>
+</dl>
+</section>
+<section class="panel" aria-labelledby="filterTitle">
+<div class="head"><div><span class="kicker">FILTERS</span>
+<h2 id="filterTitle">Find a course</h2></div>
+<button id="clear" type="button">Clear filters</button></div>
+<form id="filters" class="filters">
+<label>Course code<input id="code" type="search" maxlength="200" autocomplete="off" placeholder="Example: AERO"></label>
+<label>Course title<input id="title" type="search" maxlength="200" autocomplete="off" placeholder="Example: aviation safety"></label>
+<label>Sort<select id="sort"><option value="course_id">Course ID ascending</option><option value="-course_id">Course ID descending</option></select></label>
+<label>Rows per page<select id="limit"><option>25</option><option>50</option><option>100</option></select></label>
+<button class="primary" type="submit">Apply</button>
+</form>
+</section>
+<div id="message" class="message" role="status" aria-live="polite" aria-atomic="true"></div>
+<div class="workspace">
+<section class="panel results" aria-labelledby="resultsTitle">
+<div class="head"><div><span class="kicker">RESULTS</span>
+<h2 id="resultsTitle" tabindex="-1">Courses</h2></div>
+<span id="summary" class="muted">Loading…</span></div>
+<div class="tablewrap"><table>
+<caption class="sr">Current course catalog results</caption>
+<thead><tr><th scope="col">Course code</th><th scope="col">Course title</th><th scope="col">University course ID</th><th scope="col">Source</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>
+<tbody id="rows"></tbody>
+</table></div>
+<nav class="pager" aria-label="Catalog pagination">
+<button id="previous" type="button">Previous</button>
+<span id="pageStatus" aria-live="polite">Page 1</span>
+<button id="next" type="button">Next</button>
+</nav>
+</section>
+<aside id="detailPanel" class="panel detail" aria-labelledby="detailTitle">
+<span class="kicker">COURSE DETAIL</span>
+<h2 id="detailTitle" tabindex="-1">Select a course</h2>
+<p id="detailHint" class="muted">Choose View details from the catalog.</p>
+<dl id="detail" hidden></dl>
+</aside>
+</div>
+</main>
+<footer>Read-only Gate 6 catalog • Browser → middleware → approved reporting projection</footer>
+</body>
+</html>

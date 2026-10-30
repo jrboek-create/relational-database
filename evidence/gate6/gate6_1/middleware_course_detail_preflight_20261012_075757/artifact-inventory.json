@@ -1,0 +1,219 @@
+﻿[
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "compose.yaml",
+        "bytes":  3225,
+        "last_write_utc":  "2026-10-09T15:21:45.1640453Z",
+        "sha256":  "D49C2C2B2BF85F5FB525548948E8A16345EA0341856D95442C8D3128EC2B3346"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "middleware\\contracts\\api-courses-v1.json",
+        "bytes":  3839,
+        "last_write_utc":  "2026-10-08T14:59:52.7958748Z",
+        "sha256":  "68A2D51409AD1D75E7FA516A3C9ACE60CFDA0A715D0F99DAA1F5F4A845624C87"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "middleware\\src\\server.js",
+        "bytes":  5682,
+        "last_write_utc":  "2026-10-08T15:03:21.6437799Z",
+        "sha256":  "91500B12BBDE850C703DE9C46BC6E81AC200665527323BCD67165DDC1BDF1FA8"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\000_preflight_course_current_catalog.sql",
+        "bytes":  18187,
+        "last_write_utc":  "2026-09-28T19:21:11.4286726Z",
+        "sha256":  "CADC8B20258EF21F6D90B0069FB0D087B1301D85A8F4D7124C3A3C66F653AE46"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\001_create_reporting_schema.sql",
+        "bytes":  54865,
+        "last_write_utc":  "2026-09-29T12:43:41.8952343Z",
+        "sha256":  "3792F3BD5C19CD81A7E50620A266CCF2751CCD2FCAA60E5DB4FFDC242C6188D8"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\001_create_reporting_schema_REHEARSAL.sql",
+        "bytes":  54865,
+        "last_write_utc":  "2026-09-29T13:04:01.2625213Z",
+        "sha256":  "57739CC5C7485EAB52E9826DEC667BF5AB20539A3968F7CD2DE404A9F263874D"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\002_refresh_course_current_catalog.sql",
+        "bytes":  49739,
+        "last_write_utc":  "2026-09-29T13:48:45.5551217Z",
+        "sha256":  "A6689281A43D34A38B302568AFD071774122ADEBB404E6D8563852B510E86A7B"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\002_refresh_course_current_catalog_REHEARSAL.sql",
+        "bytes":  49739,
+        "last_write_utc":  "2026-09-29T15:02:55.5492639Z",
+        "sha256":  "DBCDA449FE46569460E363071CAC1CBAF1FF557DC53B21B0D0FE18FA88674714"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\003_repeat_refresh_course_current_catalog.sql",
+        "bytes":  32411,
+        "last_write_utc":  "2026-09-29T15:50:53.6069713Z",
+        "sha256":  "7DD1376AFC0D54A998A95F9DB448DF00D44B6906E7B9432FE11A5F99DCBF963E"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate4\\003_repeat_refresh_course_current_catalog_REHEARSAL.sql",
+        "bytes":  32411,
+        "last_write_utc":  "2026-09-29T15:55:41.5276227Z",
+        "sha256":  "F44FAA96867F079E8654C74880FB0070325CE3161E4B21CC0B1EF4E8BEB438D7"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142509\\gate5_0_database_owner_forward.sql",
+        "bytes":  90,
+        "last_write_utc":  "2026-10-01T18:25:13.1396483Z",
+        "sha256":  "3041C77720E74CDE8CE0A26951C4967AF8E641FDE8BA8E9355EDFF1733D2069C"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142509\\gate5_0_database_owner_reverse.sql",
+        "bytes":  89,
+        "last_write_utc":  "2026-10-01T18:25:13.1699067Z",
+        "sha256":  "B9F8E150555F05B0CFEC5DB61D0596E9048A7963D91B6278CEEC33D938212E9D"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142509\\gate5_0_targeted_ownership_forward.sql",
+        "bytes":  9180,
+        "last_write_utc":  "2026-10-01T18:25:13.0676846Z",
+        "sha256":  "B4D32FB2B1FC3AAAAB58CB48DF6A694BF98A07D78B58BD46AE45C685D54FC676"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142509\\gate5_0_targeted_ownership_rehearsal.sql",
+        "bytes":  9182,
+        "last_write_utc":  "2026-10-01T18:25:13.1073987Z",
+        "sha256":  "479AC2B6B857B8D65AB479B68305608725F99E54B1A9223EF8009CA6FB48EAFA"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142509\\gate5_0_targeted_ownership_reverse.sql",
+        "bytes":  9067,
+        "last_write_utc":  "2026-10-01T18:25:13.1307242Z",
+        "sha256":  "1F9B1B98427F153B24EDA4846556DD06761F55CAC47998D97ECEA16E8F8F5E68"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142611\\gate5_0_database_owner_forward.sql",
+        "bytes":  90,
+        "last_write_utc":  "2026-10-01T18:26:14.6332100Z",
+        "sha256":  "3041C77720E74CDE8CE0A26951C4967AF8E641FDE8BA8E9355EDFF1733D2069C"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142611\\gate5_0_database_owner_reverse.sql",
+        "bytes":  89,
+        "last_write_utc":  "2026-10-01T18:26:14.6426605Z",
+        "sha256":  "B9F8E150555F05B0CFEC5DB61D0596E9048A7963D91B6278CEEC33D938212E9D"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142611\\gate5_0_targeted_ownership_forward.sql",
+        "bytes":  9180,
+        "last_write_utc":  "2026-10-01T18:26:14.5679705Z",
+        "sha256":  "B4D32FB2B1FC3AAAAB58CB48DF6A694BF98A07D78B58BD46AE45C685D54FC676"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142611\\gate5_0_targeted_ownership_rehearsal.sql",
+        "bytes":  9182,
+        "last_write_utc":  "2026-10-01T18:26:14.5923537Z",
+        "sha256":  "479AC2B6B857B8D65AB479B68305608725F99E54B1A9223EF8009CA6FB48EAFA"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261001_142611\\gate5_0_targeted_ownership_reverse.sql",
+        "bytes":  9067,
+        "last_write_utc":  "2026-10-01T18:26:14.6224465Z",
+        "sha256":  "1F9B1B98427F153B24EDA4846556DD06761F55CAC47998D97ECEA16E8F8F5E68"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261002_071029\\gate5_0_database_owner_forward.sql",
+        "bytes":  90,
+        "last_write_utc":  "2026-10-02T11:10:31.4931438Z",
+        "sha256":  "3041C77720E74CDE8CE0A26951C4967AF8E641FDE8BA8E9355EDFF1733D2069C"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261002_071029\\gate5_0_database_owner_reverse.sql",
+        "bytes":  89,
+        "last_write_utc":  "2026-10-02T11:10:31.4931438Z",
+        "sha256":  "B9F8E150555F05B0CFEC5DB61D0596E9048A7963D91B6278CEEC33D938212E9D"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261002_071029\\gate5_0_targeted_ownership_forward.sql",
+        "bytes":  9199,
+        "last_write_utc":  "2026-10-02T11:10:31.4891194Z",
+        "sha256":  "8155A1AC348EF1AA92B4842F0F2A836961339828D0594F9257C35EAE37F50422"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261002_071029\\gate5_0_targeted_ownership_rehearsal.sql",
+        "bytes":  9201,
+        "last_write_utc":  "2026-10-02T11:10:31.4891194Z",
+        "sha256":  "47731AF64478B6DF83E1BF5E4C1717495086E0E8FE6A2A9DC66838B55E74EF2C"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\ownership_20261002_071029\\gate5_0_targeted_ownership_reverse.sql",
+        "bytes":  9086,
+        "last_write_utc":  "2026-10-02T11:10:31.4911311Z",
+        "sha256":  "E6209B3403C4B3A3FA9100A47905CBC1792A4E1E36FC0E93D68D12F8B860CEC5"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\runtime_privileges_20261002_074331\\gate5_0_runtime_privileges_forward.sql",
+        "bytes":  8121,
+        "last_write_utc":  "2026-10-02T11:43:31.7378722Z",
+        "sha256":  "BC95709E70CBE021042BB6D76E35BE89733859B40D22817BC4743A08781F8EFF"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\runtime_privileges_20261002_074331\\gate5_0_runtime_privileges_rehearsal.sql",
+        "bytes":  8123,
+        "last_write_utc":  "2026-10-02T11:43:31.7471838Z",
+        "sha256":  "673D9786674871DDFE7505F88DFD38F68917222FAD5FAF901DEC5443103A73AF"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "sql\\gate5\\runtime_privileges_20261002_074331\\gate5_0_runtime_privileges_reverse.sql",
+        "bytes":  4101,
+        "last_write_utc":  "2026-10-02T11:43:31.7477274Z",
+        "sha256":  "8C0412292D4903DE833A57AFB4248FA4BB985DA0846AE67AD6378628DA666C0B"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "ui\\app.js",
+        "bytes":  4287,
+        "last_write_utc":  "2026-10-09T15:21:45.1192155Z",
+        "sha256":  "7E64DEF2737818028A4F50C314F1D290485BFA3E56008E6B732115FF4F3587F9"
+    },
+    {
+        "category":  "PATTERN_MATCHED_ARTIFACT",
+        "relative_path":  "ui\\default.conf",
+        "bytes":  886,
+        "last_write_utc":  "2026-10-09T15:21:45.1093005Z",
+        "sha256":  "62E62A19EFC7C9A92C08F4B23E8858D1B359F08792274A6609961147DE958345"
+    },
+    {
+        "category":  "KEY_ARTIFACT",
+        "relative_path":  "middleware\\package.json",
+        "bytes":  400,
+        "last_write_utc":  "2026-10-06T12:15:22.7039886Z",
+        "sha256":  "EE931350F24594CE288BEC205FE86FBB7C4753E84408FF88413EA5BE2C7967DF"
+    }
+]

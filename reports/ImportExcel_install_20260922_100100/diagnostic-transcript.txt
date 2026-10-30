@@ -1,0 +1,296 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260922100101
+Username: ERAU\BOEKENOJ
+RunAs User: ERAU\BOEKENOJ
+Configuration Name: 
+Machine: DB-B7WR594 (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 31972
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Directus\relational-repository\reports\ImportExcel_install_20260922_100100\diagnostic-transcript.txt
+PS C:\Directus\relational-repository> Write-Host "`n=== POWERSHELL ENVIRONMENT ===" -ForegroundColor Cyan
+
+=== POWERSHELL ENVIRONMENT ===
+PS C:\Directus\relational-repository> $PSVersionTable
+
+Name                           Value
+----                           -----
+PSVersion                      5.1.26100.9444
+PSEdition                      Desktop
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+BuildVersion                   10.0.26100.9444
+CLRVersion                     4.0.30319.42000
+WSManStackVersion              3.0
+PSRemotingProtocolVersion      2.3
+SerializationVersion           1.1.0.1
+
+
+PS C:\Directus\relational-repository> "64-bit process: $([Environment]::Is64BitProcess)"
+64-bit process: True
+PS C:\Directus\relational-repository> "Identity:       $([Security.Principal.WindowsIdentity]::GetCurrent().Name)"
+Identity:       ERAU\BOEKENOJ
+PS C:\Directus\relational-repository> "TEMP:           $env:TEMP"
+TEMP:           C:\Users\boekenoj\AppData\Local\Temp
+PS C:\Directus\relational-repository> "TMP:            $env:TMP"
+TMP:            C:\Users\boekenoj\AppData\Local\Temp
+PS C:\Directus\relational-repository> "My Documents:   $([Environment]::GetFolderPath('MyDocuments'))"
+My Documents:   C:\Users\boekenoj\OneDrive - Embry-Riddle Aeronautical University\Documents
+PS C:\Directus\relational-repository> "`nPSModulePath:"
+
+PSModulePath:
+PS C:\Directus\relational-repository> $env:PSModulePath -split ';'
+C:\Users\boekenoj\OneDrive - Embry-Riddle Aeronautical University\Documents\WindowsPowerShell\Modules
+C:\Program Files\WindowsPowerShell\Modules
+C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+PS C:\Directus\relational-repository> Write-Host "`n=== MODULE VERSIONS ===" -ForegroundColor Cyan
+
+=== MODULE VERSIONS ===
+PS C:\Directus\relational-repository> Get-Module PowerShellGet, PackageManagement -ListAvailable |
+    Sort-Object Name, Version -Descending |
+    Select-Object Name, Version, Path |
+    Format-Table -AutoSize
+
+Name              Version Path
+----              ------- ----
+PowerShellGet     1.0.0.1 C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PowerShellGet.psd1
+PackageManagement 1.0.0.1 C:\Program Files\WindowsPowerShell\Modules\PackageManagement\1.0.0.1\PackageManagement.psd1
+
+
+PS C:\Directus\relational-repository> Write-Host "`n=== ACTIVE COMMAND SOURCE ===" -ForegroundColor Cyan
+
+=== ACTIVE COMMAND SOURCE ===
+PS C:\Directus\relational-repository> Get-Command Install-Module, Install-Package, Install-PackageProvider `
+    -ErrorAction SilentlyContinue |
+    Select-Object Name, Source, Version |
+    Format-Table -AutoSize
+
+Name                    Source            Version
+----                    ------            -------
+Install-Module          PowerShellGet     1.0.0.1
+Install-Package         PackageManagement 1.0.0.1
+Install-PackageProvider PackageManagement 1.0.0.1
+
+
+PS C:\Directus\relational-repository> Write-Host "`n=== REPOSITORY / PROVIDER ===" -ForegroundColor Cyan
+
+=== REPOSITORY / PROVIDER ===
+PS C:\Directus\relational-repository> Get-PSRepository -ErrorAction Continue |
+    Format-List Name, SourceLocation, InstallationPolicy
+
+
+Name               : PSGallery
+SourceLocation     : https://www.powershellgallery.com/api/v2
+InstallationPolicy : Untrusted
+
+
+
+PS C:\Directus\relational-repository> Get-PackageProvider -ListAvailable -ErrorAction Continue |
+    Select-Object Name, Version, ProviderPath |
+    Format-Table -AutoSize
+
+Name          Version   ProviderPath
+----          -------   ------------
+msi           3.0.0.0   C:\Program Files\WindowsPowerShell\Modules\PackageManagement\1.0.0.1\Microsoft.PackageManage...
+msu           3.0.0.0   C:\Program Files\WindowsPowerShell\Modules\PackageManagement\1.0.0.1\Microsoft.PackageManage...
+NuGet         2.8.5.208 C:\Users\boekenoj\AppData\Local\PackageManagement\ProviderAssemblies\nuget\2.8.5.208\Microso...
+PowerShellGet 1.0.0.1   C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PSModule.psm1
+Programs      3.0.0.0   C:\Program Files\WindowsPowerShell\Modules\PackageManagement\1.0.0.1\Microsoft.PackageManage...
+
+
+PS C:\Directus\relational-repository> Write-Host "`n=== EXECUTION POLICY — INFORMATION ONLY ===" -ForegroundColor Cyan
+
+=== EXECUTION POLICY — INFORMATION ONLY ===
+PS C:\Directus\relational-repository> Get-ExecutionPolicy -List | Format-Table -AutoSize
+
+        Scope ExecutionPolicy
+        ----- ---------------
+MachinePolicy       Undefined
+   UserPolicy       Undefined
+      Process       Undefined
+  CurrentUser    RemoteSigned
+ LocalMachine       Undefined
+
+
+PS C:\Directus\relational-repository> Write-Host "`n=== TEMP ACL ===" -ForegroundColor Cyan
+
+=== TEMP ACL ===
+PS C:\Directus\relational-repository> Get-Acl -LiteralPath $env:TEMP |
+    Format-List Owner, AccessToString, AreAccessRulesProtected
+
+
+Owner                   : ERAU\BOEKENOJ
+AccessToString          : NT AUTHORITY\SYSTEM Allow  FullControl
+                          BUILTIN\Administrators Allow  FullControl
+                          ERAU\BOEKENOJ Allow  FullControl
+                          S-1-5-21-1060946381-3252703040-1456405613-1965147570 Allow  Modify, Synchronize
+                          S-1-5-21-1640462966-503930943-211499594-3325887646 Allow  DeleteSubdirectoriesAndFiles,
+                          Modify, Synchronize
+                          DB-B7WR594\CodexSandboxUsers Allow  Modify, Synchronize
+AreAccessRulesProtected : True
+
+
+
+PS C:\Directus\relational-repository> Write-Host "`n=== TEMP SCRIPT-FILE PROBE ===" -ForegroundColor Cyan
+
+=== TEMP SCRIPT-FILE PROBE ===
+PS C:\Directus\relational-repository> $ProbeDir  = Join-Path $env:TEMP ("ImportExcelProbe_" + [guid]::NewGuid())
+PS C:\Directus\relational-repository> $ProbeFile = Join-Path $ProbeDir 'Add-Subtotals.ps1'
+PS C:\Directus\relational-repository> try {
+    New-Item -ItemType Directory -Path $ProbeDir -Force -ErrorAction Stop |
+        Out-Null
+ 
+    Set-Content -LiteralPath $ProbeFile `
+        -Value "function Test-ImportExcelProbe { 'probe-ok' }" `
+        -Encoding UTF8 `
+        -ErrorAction Stop
+ 
+    $ProbeContent = Get-Content -LiteralPath $ProbeFile -Raw -ErrorAction Stop
+ 
+    if ($ProbeContent -notmatch 'probe-ok') {
+        throw 'Probe file content could not be verified.'
+    }
+ 
+    Get-Item -LiteralPath $ProbeFile |
+        Select-Object FullName, Length, CreationTimeUtc
+ 
+    Write-Host "TEMP_PROBE_RESULT: PASS" -ForegroundColor Green
+}
+catch {
+    Write-Host "TEMP_PROBE_RESULT: FAIL" -ForegroundColor Red
+    $_ | Format-List * -Force
+ 
+    $_ | Format-List * -Force |
+        Out-File (Join-Path $DiagDir 'temp-probe-error.txt') -Width 300
+}
+PS C:\Directus\relational-repository> TerminatingError(Get-Content): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: Access to the path 'C:\Users\boekenoj\AppData\Local\Temp\ImportExcelProbe_e378a3b7-6493-4d8f-b6d0-ecd089d837fb\Add-Subtotals.ps1' is denied."
+TEMP_PROBE_RESULT: FAIL
+
+
+PSMessageDetails      :
+Exception             : System.UnauthorizedAccessException: Access to the path 'C:\Users\boekenoj\AppData\Local\Temp\Im
+                        portExcelProbe_e378a3b7-6493-4d8f-b6d0-ecd089d837fb\Add-Subtotals.ps1' is denied.
+                           at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+                           at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights,
+                        Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES
+                        secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+                           at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare
+                        share)
+                           at Microsoft.PowerShell.Commands.FileSystemContentReaderWriter.CreateStreams(String
+                        filePath, String streamName, FileMode fileMode, FileAccess fileAccess, FileShare fileShare,
+                        Encoding fileEncoding)
+                           at Microsoft.PowerShell.Commands.FileSystemProvider.GetContentReader(String path)
+TargetObject          : C:\Users\boekenoj\AppData\Local\Temp\ImportExcelProbe_e378a3b7-6493-4d8f-b6d0-ecd089d837fb\Add-
+                        Subtotals.ps1
+CategoryInfo          : PermissionDenied: (C:\Users\boeken...d-Subtotals.ps1:String) [Get-Content],
+                        UnauthorizedAccessException
+FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+ErrorDetails          :
+InvocationInfo        : System.Management.Automation.InvocationInfo
+ScriptStackTrace      : at <ScriptBlock>, <No file>: line 10
+PipelineIterationInfo : {}
+
+
+
+PS C:\Directus\relational-repository> finally {
+    Remove-Item -LiteralPath $ProbeDir `
+        -Recurse -Force -ErrorAction SilentlyContinue
+}
+finally : The term 'finally' is not recognized as the name of a cmdlet, function, script file, or operable program. 
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ finally {
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (finally:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+finally : The term 'finally' is not recognized as the name of a cmdlet, function, script file, or operable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ finally {
++ ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (finally:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Directus\relational-repository> Write-Host "`n=== DEFENDER / CONTROLLED FOLDER STATUS ===" -ForegroundColor Cyan
+
+=== DEFENDER / CONTROLLED FOLDER STATUS ===
+PS C:\Directus\relational-repository> try {
+    Get-MpPreference |
+        Select-Object `
+            EnableControlledFolderAccess,
+            ControlledFolderAccessProtectedFolders,
+            ControlledFolderAccessAllowedApplications |
+        Format-List
+}
+catch {
+    "Defender preference query unavailable: $($_.Exception.Message)"
+}
+
+
+EnableControlledFolderAccess              : 0
+ControlledFolderAccessProtectedFolders    :
+ControlledFolderAccessAllowedApplications : {N/A: Must be an administrator to view exclusions}
+
+
+
+PS C:\Directus\relational-repository> Write-Host "`n=== RECENT DEFENDER EVENTS ===" -ForegroundColor Cyan
+
+=== RECENT DEFENDER EVENTS ===
+PS C:\Directus\relational-repository> try {
+    Get-WinEvent -FilterHashtable @{
+        LogName   = 'Microsoft-Windows-Windows Defender/Operational'
+        StartTime = (Get-Date).AddHours(-4)
+    } -ErrorAction Stop |
+        Where-Object Id -In 1116, 1117, 1123, 1124, 5007 |
+        Select-Object TimeCreated, Id, LevelDisplayName, Message |
+        Format-List
+}
+catch {
+    "Defender event query unavailable: $($_.Exception.Message)"
+}
+
+
+TimeCreated      : 9/22/2026 9:10:57 AM
+Id               : 5007
+LevelDisplayName : Information
+Message          : Microsoft Defender Antivirus Configuration has changed. If this is an unexpected event you should
+                   review the settings as this may be the result of malware.
+                    	Old value: HKLM\SOFTWARE\Microsoft\Windows Defender\DLP Configs\Tag\Tag = 0x4
+                    	New value: HKLM\SOFTWARE\Microsoft\Windows Defender\DLP Configs\Tag\Tag = 0x5
+
+TimeCreated      : 9/22/2026 7:15:53 AM
+Id               : 5007
+LevelDisplayName : Information
+Message          : Microsoft Defender Antivirus Configuration has changed. If this is an unexpected event you should
+                   review the settings as this may be the result of malware.
+                    	Old value: HKLM\SOFTWARE\Microsoft\Windows Defender\DLP Configs\Tag\Tag = 0x3
+                    	New value: HKLM\SOFTWARE\Microsoft\Windows Defender\DLP Configs\Tag\Tag = 0x4
+
+TimeCreated      : 9/22/2026 6:57:56 AM
+Id               : 5007
+LevelDisplayName : Information
+Message          : Microsoft Defender Antivirus Configuration has changed. If this is an unexpected event you should
+                   review the settings as this may be the result of malware.
+                    	Old value: HKLM\SOFTWARE\Microsoft\Windows Defender\UX Configuration\ToastOrSsoTrigger = 0x0
+                    	New value: HKLM\SOFTWARE\Microsoft\Windows Defender\UX Configuration\ToastOrSsoTrigger = 0x1
+
+
+
+PS C:\Directus\relational-repository> Write-Host "`nDiagnostic evidence saved to:" -ForegroundColor Cyan
+
+Diagnostic evidence saved to:
+PS C:\Directus\relational-repository> Write-Host $DiagDir
+C:\Directus\relational-repository\reports\ImportExcel_install_20260922_100100
+PS C:\Directus\relational-repository> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20260922100221
+**********************

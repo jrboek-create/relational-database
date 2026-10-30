@@ -1,0 +1,18 @@
+services:
+  loader:
+    build:
+      context: ./loader
+    restart: "no"
+    environment:
+      PGHOST: database
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./imports:/imports:ro
+    networks:
+      - backend
+    depends_on:
+      database:
+        condition: service_healthy
