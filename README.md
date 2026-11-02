@@ -27,6 +27,9 @@ Search the current course catalog by code, title, college, or department. Open a
 - Course performance: grades, enrollment, and DFWI
 - Faculty survey and student survey results, including question-level student survey results
 - Instructional design and development history
+- AI in this course (AI production projects), integrations (month last done or started per integration type), and redeveloped-course feedback from instructors (without names or emails)
+
+A **Data status** box under the filters shows each data area's row count and when it was last rebuilt.
 
 ## Project layout
 
@@ -34,10 +37,12 @@ Search the current course catalog by code, title, college, or department. Open a
 |---|---|
 | `compose.yaml` | Defines and runs all services |
 | `compose.loader.yaml` | Optional Excel import job (see below) |
-| `compose.upload.yaml` | Tableau `.twbx` upload preview (see below) |
+| `compose.upload.yaml` | Tableau `.twbx` upload: `preview`, `check`, `apply`, `refresh` (see below) |
 | `ui/` | Web UI: `index.html`, `app.js`, `styles.css`, plus the nginx config and Dockerfile |
 | `middleware/` | Node.js/Express API (`src/server.js`) |
-| `loader/` | Python script that loads Excel workbooks into staging tables |
+| `loader/` | `load_excel.py` (Excel import) and `twbx_upload.py` (Tableau upload and reporting rebuild) |
+| `sql/refresh/` | Build SQL for every reporting table, used by `apply` and `refresh`; `verify/` checks them against live data |
+| `sql/schema/` | One-time setup for newer reporting tables and their Directus registration |
 
 These local folders are **not in git** (see `.gitignore`):
 
@@ -47,6 +52,7 @@ These local folders are **not in git** (see `.gitignore`):
 | `.secrets/` | `directus_runtime_db_password.txt` and `wwairml_directus_static_token.txt` |
 | `data/` | PostgreSQL data files (the actual database) |
 | `backups/` | Database dumps |
+| `upload_reports/` | Upload preview reports (they list grade changes) |
 | `imports/`, `imports_hold/` | Source Excel files, which include student and faculty data |
 | `uploads/`, `extensions/` | Directus uploads and extensions |
 
@@ -142,6 +148,37 @@ To rebuild only the reporting tables from the data already loaded (no upload), r
 - **UI:** edit files in `ui/`, then run `docker compose up -d --build ui`
 - **Middleware:** edit `middleware/src/server.js`, then run `docker compose up -d --build middleware`
 
+### Adding a new course section
+
+Follow the pattern of the AI, Integrations and Redeveloped sections:
+
+1. `sql/refresh/build_<name>.sql`: builds a temporary table `tmp_course_<name>_summary` from the staging data.
+2. `sql/schema/create_<name>_tables.sql`: creates `reporting.course_<name>_summary` and its `_api` copy (owner `directus_repository`; `SELECT` on the `_api` copy for `directus_runtime`). Run it once.
+3. `sql/schema/register_<name>_directus.sql`: copies the DFWI collection's Directus settings and read permission. Run it once, then `docker compose restart directus`.
+4. `loader/twbx_upload.py`: add the table to `PROJECTIONS` (with its API id formula) and the build file to `BUILD_FILES`. Run `upload refresh` to fill it.
+5. `middleware/src/server.js`: add an entry to `courseSections` (path, collection, sort, fields).
+6. `ui/`: add the section to `index.html` and its loader to `app.js` (use `loadSectionRows`), then rebuild `middleware` and `ui`.
+
+### Running SQL from PowerShell
+
+Pipe the SQL in. Windows PowerShell removes double quotes inside a single-quoted argument, so `psql -c "..."` does not work as written:
+
+```
+"SELECT count(*) FROM core.grade;" | docker compose exec -T database sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
+Get-Content some_file.sql | docker compose exec -T database sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
+```
+
 ## Database notes
 
-The database structure (the `reporting` and `phase2_staging` schemas, roles, and permissions) exists in the running database. The SQL scripts used to build it during development are not in the current version of this repo. They are in the first commit's history on GitHub. Keep regular backups in `backups/`, because that is the main way to restore the database.
+The database structure (the `core`, `staging`, `phase2_staging` and `reporting` schemas, roles, and permissions) exists in the running database. The reporting tables can be rebuilt at any time from the data already loaded with `upload refresh`; the build SQL in `sql/refresh/` was verified on 2 Nov 2026 to reproduce the original tables exactly. The scripts that first created the schemas are in the first commit's history on GitHub. Keep regular backups in `backups/`, because that is the main way to restore the database.
+
+### Restoring a backup
+
+This puts the whole database back exactly as it was when the backup was taken. Anything added later is removed, including tables and Directus registrations from `sql/schema/` (run those again afterwards if needed). Restore into a recreated database: a plain `pg_restore --clean` does not remove tables created after the backup.
+
+```
+docker compose stop directus middleware
+docker compose cp backups/before-upload.dump database:/tmp/restore.dump
+docker compose exec -T database sh -c 'dropdb -U "$POSTGRES_USER" --if-exists "$POSTGRES_DB" && createdb -U "$POSTGRES_USER" "$POSTGRES_DB" && pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" /tmp/restore.dump'
+docker compose start directus middleware
+```
