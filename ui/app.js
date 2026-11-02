@@ -23,7 +23,7 @@
   };
 
   const $ = id => document.getElementById(id);
-  const unavailable = "Not yet available";
+  const unavailable = "Not available";
 
   document.addEventListener("DOMContentLoaded", async () => {
     $("filterForm").addEventListener("submit", event => {
@@ -207,14 +207,14 @@
     loadStudentSurveyQuestions(course);
     loadInstructionalDesignDevelopment(course);
     if (!course.course_id) {
-      notice("No governed course identifier was returned.");
+      notice("This course has no identifier, so details can't be loaded.");
       return;
     }
 
     state.detailController?.abort();
     state.detailController=new AbortController();
     const timer=setTimeout(()=>state.detailController.abort(),15000);
-    $("detailStatus").textContent="Loading approved course detail...";
+    $("detailStatus").textContent="Loading course details...";
 
     try {
       const response=await fetch(
@@ -227,7 +227,7 @@
       );
 
       if ([404,501].includes(response.status)) {
-        notice("The governed course-detail middleware route is not yet available. Catalog identity is shown; other sections remain unavailable.");
+        notice("Course details were not found. Basic course information is shown.");
         return;
       }
 
@@ -253,7 +253,7 @@
       $("detailSubtitle").textContent=detail.course_title || course.course_title;
       notice("");
     } catch {
-      notice("Approved course detail is temporarily unavailable. Catalog identity remains available.");
+      notice("Course details are temporarily unavailable. Basic course information is shown.");
     } finally {
       clearTimeout(timer);
       $("detailStatus").textContent="";

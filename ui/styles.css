@@ -31,8 +31,7 @@ button{min-height:42px;padding:.55rem .8rem;border:1px solid #9babb9;
 border-radius:8px;background:white;color:var(--navy);font-weight:700}
 button.primary{background:#0f666c;color:white;border-color:#0f666c}
 button:disabled{cursor:not-allowed;opacity:.5}:focus-visible{outline:3px solid
-#f6b93b;outline-offset:2px}.boundary-note{margin-top:1.2rem;padding:.8rem;
-background:#edf7f7;border-left:4px solid var(--teal)}.boundary-note p{margin:.3rem 0 0}
+#f6b93b;outline-offset:2px}
 .catalog-header{align-items:flex-start}.freshness{padding:.7rem .9rem;
 background:var(--soft);border:1px solid var(--line);border-radius:9px}
 .freshness small,.freshness strong{display:block}.table-wrap{overflow:auto;
