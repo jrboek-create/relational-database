@@ -19,7 +19,8 @@
     facultySurveyController: null, facultySurvey: [],
     studentSurveyController: null, studentSurvey: [],
     studentSurveyQuestionController: null, studentSurveyQuestions: [],
-    instructionalDesignDevelopmentController: null, instructionalDesignDevelopment: []
+    instructionalDesignDevelopmentController: null, instructionalDesignDevelopment: [],
+    aiProductionController: null
   };
 
   const $ = id => document.getElementById(id);
@@ -207,6 +208,7 @@
     loadStudentSurvey(course);
     loadStudentSurveyQuestions(course);
     loadInstructionalDesignDevelopment(course);
+    loadAiProduction(course);
     drawCharts();
     if (!course.course_id) {
       notice("This course has no identifier, so details can't be loaded.");
@@ -294,7 +296,8 @@
     grades: { path: "grades", none: "No Grades available.", loading: "Loading Grades...", aborted: "Grades data could not be loaded.", failed: "Grades data is temporarily unavailable." },
     enrollment: { path: "enrollment", none: "No Enrollment data available.", loading: "Loading Enrollment...", aborted: "Enrollment data could not be loaded.", failed: "Enrollment data is temporarily unavailable." },
     dfwi: { path: "dfwi", none: "No DFWI data available.", loading: "Loading DFWI...", aborted: "DFWI data could not be loaded.", failed: "DFWI data is temporarily unavailable." },
-    facultySurvey: { path: "faculty-survey", none: "No Faculty Survey results available.", loading: "Loading Faculty Survey results...", aborted: "Faculty Survey results could not be loaded.", failed: "Faculty Survey results are temporarily unavailable." }
+    facultySurvey: { path: "faculty-survey", none: "No Faculty Survey results available.", loading: "Loading Faculty Survey results...", aborted: "Faculty Survey results could not be loaded.", failed: "Faculty Survey results are temporarily unavailable." },
+    aiProduction: { path: "ai-production", none: "No AI integration recorded for this course.", loading: "Loading AI in this course...", aborted: "AI data could not be loaded.", failed: "AI data is temporarily unavailable." }
   };
 
   async function fetchCourseRows(course, path, controller) {
@@ -1010,6 +1013,42 @@
       selector.append(option);
     });
     selector.value = months.includes(previous) ? previous : (months[0] || "");
+  }
+
+  // AI in this course: one block per AI production project (from the AI Production Schedule).
+  async function loadAiProduction(course) {
+    state.aiProductionController?.abort();
+    $("aiProductionList").replaceChildren();
+    $("aiProductionSummary").textContent = "";
+    const rows = await loadSectionRows("aiProduction", course);
+    if (!rows) return;
+    $("aiProductionSummary").textContent = `Yes: ${rows.length} AI project${rows.length === 1 ? "" : "s"} recorded.`;
+    rows.forEach(row => {
+      const item = document.createElement("div");
+      item.className = "ai-project";
+      const heading = document.createElement("h4");
+      heading.textContent = row.project_name || row.raw_course || "AI project";
+      const list = document.createElement("dl");
+      list.className = "grades-summary";
+      [["Implemented", row.implementation_label || row.implementation_month],
+       ["AI type", row.ai_type],
+       ["Status", row.project_status],
+       ["What students do", row.description],
+       ["Sections listed with AI", row.ai_section_count > 0 ? row.ai_section_count : null]
+      ].forEach(([label, value]) => {
+        if (value === null || value === undefined || String(value).trim() === "") return;
+        const card = document.createElement("div");
+        const dt = document.createElement("dt");
+        const dd = document.createElement("dd");
+        dt.textContent = label;
+        dd.textContent = String(value).trim();
+        card.append(dt, dd);
+        list.append(card);
+      });
+      item.append(heading, list);
+      $("aiProductionList").append(item);
+    });
+    showSectionContent("aiProduction");
   }
 
   function renderSelectedInstructionalDesignDevelopment() {

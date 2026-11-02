@@ -115,3 +115,5 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .chart-value{fill:#202936;font-size:11px;font-weight:700}
 .chart-cell{font-size:11px;font-weight:700}
 .chart-grid{stroke:#d9e2e9;stroke-width:1}
+.ai-project h4{margin:0 0 .5rem}
+.ai-project+.ai-project{margin-top:1rem;padding-top:1rem;border-top:1px solid #d9e2e9}

@@ -3,6 +3,7 @@
     python twbx_upload.py preview   # stage the newest .twbx, compare, write a report; changes no live tables
     python twbx_upload.py check     # run the whole apply, then roll it back (nothing is saved)
     python twbx_upload.py apply     # add the new rows from the last preview and rebuild the reporting tables
+    python twbx_upload.py refresh   # only rebuild the reporting tables from the data already loaded
 
 Rules (agreed 2 Nov 2026, see the "AIR Hub data input map" doc): rows are matched by key; new keys are
 added, unchanged keys skipped, changed keys listed (never applied), keys missing from the file are kept.
@@ -357,9 +358,11 @@ PROJECTIONS = [
      "md5(course_id::text || ':' || term_id::text || ':' || survey_version || ':' || question_code)::uuid"),
     ("course_instructional_design_development_summary", "tmp_course_instructional_design_development_summary",
      "instructional_design_development_summary_id", "md5(source_hash || ':' || source_row_number::text)::uuid"),
+    ("course_ai_production_summary", "tmp_course_ai_production_summary", "ai_production_summary_id",
+     "md5(source_hash || ':' || source_row_number::text)::uuid"),
 ]
 BUILD_FILES = ["build_grade_enrollment_dfwi.sql", "build_faculty_survey.sql", "build_student_survey.sql",
-               "build_student_survey_questions.sql", "build_instructional_design_development.sql"]
+               "build_student_survey_questions.sql", "build_instructional_design_development.sql", "build_ai_production.sql"]
 
 
 def columns(cur, schema, table):
@@ -478,45 +481,61 @@ def refresh_reporting(cur, twbx_name, run_id):
         n, ok = cur.fetchone()
         if n != ok:
             raise SystemExit(f"reporting.{table}_api: {n - ok} of {n} ids do not follow {id_expr}; stopping before any change")
+    for _, tmp, _, _ in PROJECTIONS:  # some builds keep their temp table until the connection ends; start clean
+        cur.execute(f"DROP TABLE IF EXISTS pg_temp.{tmp}")
+    result = {}
+    # Each table is replaced right after its build, because later builds read earlier tables
+    # (survey questions read the student survey summary; IDD reads the enrollment summary).
     for f in BUILD_FILES:
         cur.execute((REFRESH_DIR / f).read_text(encoding="utf-8-sig"))
-    result = {}
-    for table, tmp, id_col, id_expr in PROJECTIONS:
-        cols, api_cols = columns(cur, "reporting", table), columns(cur, "reporting", table + "_api")
-        cur.execute(f"SELECT * FROM {tmp} LIMIT 0")
-        tmp_cols = [d.name for d in cur.description]
-        business = [c for c in cols if c in tmp_cols and c not in ("core_import_batch_id", "report_refresh_run_id", "report_as_of_utc", "business_row_hash")]
-        refresh_id = str(uuid.uuid4())
-        fill = {"report_refresh_run_id": f"{lit(refresh_id)}::uuid", "report_as_of_utc": "now()",
-                "business_row_hash": "md5(concat_ws('|', " + ", ".join(f"{c}::text" for c in business) + "))"}
-        missing = [c for c in cols if c not in tmp_cols and c not in fill]
-        api_missing = [c for c in api_cols if c != id_col and c not in cols]
-        if missing or api_missing:
-            raise SystemExit(f"reporting.{table}: no source for columns {missing + api_missing}")
-        cur.execute(f"SELECT count(*) FROM reporting.{table}")
-        before = cur.fetchone()[0]
-        cur.execute(f"DELETE FROM reporting.{table}")
-        cur.execute(f"INSERT INTO reporting.{table} ({', '.join(cols)}) SELECT {', '.join(c if c in tmp_cols else fill[c] for c in cols)} FROM {tmp}")
-        after = cur.rowcount
-        cur.execute(f"DELETE FROM reporting.{table}_api")
-        cur.execute(f"INSERT INTO reporting.{table}_api ({', '.join(api_cols)}) "
-                    f"SELECT {', '.join(id_expr if c == id_col else c for c in api_cols)} FROM reporting.{table}")
-        cur.execute(f"SELECT max(report_refresh_run_id::text)::uuid FROM reporting.{table}")
-        log_id = cur.fetchone()[0] or refresh_id
-        cur.execute("SELECT 1 FROM reporting.projection_refresh_run WHERE run_id = %s", (log_id,))
-        if cur.fetchone():
-            log_id = str(uuid.uuid4())
-        checksum_of = "business_row_hash" if "business_row_hash" in cols else "md5(concat_ws('|', " + ", ".join(f"{c}::text" for c in cols) + "))"
-        cur.execute(f"SELECT md5(coalesce(string_agg({checksum_of}, '' ORDER BY {checksum_of}), '')) FROM reporting.{table}")
-        checksum = cur.fetchone()[0]
-        # the log's rules for COMPLETED: every count, a checksum, and source_state/source_filter objects
-        cur.execute("""INSERT INTO reporting.projection_refresh_run (run_id, projection_name, started_at, completed_at, source_filter, source_state,
-                       source_row_count, rows_inserted, rows_updated, rows_deleted, rows_unchanged, business_checksum, status, notes)
-                       VALUES (%s, %s, now(), clock_timestamp(), %s, %s, %s, %s, 0, %s, 0, %s, 'COMPLETED', %s)""",
-                    (log_id, table, json.dumps({"upload_run": run_id, "twbx": twbx_name}), json.dumps({"rows_before": before, "rows_after": after}),
-                     after, after, before, checksum, f"Rebuilt after TWBX upload of {twbx_name} (sql/refresh builds)."))
-        result[table] = (before, after)
+        for table, tmp, id_col, id_expr in PROJECTIONS:
+            if table in result:
+                continue
+            cur.execute("SELECT to_regclass(%s) IS NOT NULL", (f"pg_temp.{tmp}",))
+            if cur.fetchone()[0]:
+                result[table] = replace_table(cur, table, tmp, id_col, id_expr, twbx_name, run_id)
+    missing = [t for t, *_ in PROJECTIONS if t not in result]
+    if missing:
+        raise SystemExit(f"No build produced {missing}")
     return result
+
+
+def replace_table(cur, table, tmp, id_col, id_expr, twbx_name, run_id):
+    """Replaces one reporting table and its API copy from its temp table, and logs it. Returns (rows before, rows after)."""
+    cols, api_cols = columns(cur, "reporting", table), columns(cur, "reporting", table + "_api")
+    cur.execute(f"SELECT * FROM {tmp} LIMIT 0")
+    tmp_cols = [d.name for d in cur.description]
+    business = [c for c in cols if c in tmp_cols and c not in ("core_import_batch_id", "report_refresh_run_id", "report_as_of_utc", "business_row_hash")]
+    refresh_id = str(uuid.uuid4())
+    fill = {"report_refresh_run_id": f"{lit(refresh_id)}::uuid", "report_as_of_utc": "now()",
+            "business_row_hash": "md5(concat_ws('|', " + ", ".join(f"{c}::text" for c in business) + "))"}
+    missing = [c for c in cols if c not in tmp_cols and c not in fill]
+    api_missing = [c for c in api_cols if c != id_col and c not in cols]
+    if missing or api_missing:
+        raise SystemExit(f"reporting.{table}: no source for columns {missing + api_missing}")
+    cur.execute(f"SELECT count(*) FROM reporting.{table}")
+    before = cur.fetchone()[0]
+    cur.execute(f"DELETE FROM reporting.{table}")
+    cur.execute(f"INSERT INTO reporting.{table} ({', '.join(cols)}) SELECT {', '.join(c if c in tmp_cols else fill[c] for c in cols)} FROM {tmp}")
+    after = cur.rowcount
+    cur.execute(f"DELETE FROM reporting.{table}_api")
+    cur.execute(f"INSERT INTO reporting.{table}_api ({', '.join(api_cols)}) "
+                f"SELECT {', '.join(id_expr if c == id_col else c for c in api_cols)} FROM reporting.{table}")
+    cur.execute(f"SELECT max(report_refresh_run_id::text)::uuid FROM reporting.{table}")
+    log_id = cur.fetchone()[0] or refresh_id
+    cur.execute("SELECT 1 FROM reporting.projection_refresh_run WHERE run_id = %s", (log_id,))
+    if cur.fetchone():
+        log_id = str(uuid.uuid4())
+    checksum_of = "business_row_hash" if "business_row_hash" in cols else "md5(concat_ws('|', " + ", ".join(f"{c}::text" for c in cols) + "))"
+    cur.execute(f"SELECT md5(coalesce(string_agg({checksum_of}, '' ORDER BY {checksum_of}), '')) FROM reporting.{table}")
+    checksum = cur.fetchone()[0]
+    # the log's rules for COMPLETED: every count, a checksum, and source_state/source_filter objects
+    cur.execute("""INSERT INTO reporting.projection_refresh_run (run_id, projection_name, started_at, completed_at, source_filter, source_state,
+                   source_row_count, rows_inserted, rows_updated, rows_deleted, rows_unchanged, business_checksum, status, notes)
+                   VALUES (%s, %s, now(), clock_timestamp(), %s, %s, %s, %s, 0, %s, 0, %s, 'COMPLETED', %s)""",
+                (log_id, table, json.dumps({"upload_run": run_id, "twbx": twbx_name}), json.dumps({"rows_before": before, "rows_after": after}),
+                 after, after, before, checksum, f"Rebuilt after TWBX upload of {twbx_name} (sql/refresh builds)."))
+    return before, after
 
 
 def apply(save):
@@ -564,12 +583,34 @@ def apply(save):
         conn.close()
 
 
+def refresh():
+    """Rebuilds the reporting tables and API copies from the data already loaded (no upload)."""
+    for f in BUILD_FILES:
+        if not (REFRESH_DIR / f).exists():
+            raise SystemExit(f"Missing {REFRESH_DIR / f}")
+    conn = connect()
+    try:
+        with conn.cursor() as cur:
+            print("REFRESH: rebuilding reporting tables ...")
+            for table, (before, after) in refresh_reporting(cur, "(refresh only)", None).items():
+                print(f"  {table:<50}{before:>9,} -> {after:>9,} rows")
+        conn.commit()
+        print("\nREFRESHED.")
+    except BaseException:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "preview"
     if cmd == "preview":
         preview()
     elif cmd in ("check", "apply"):
         apply(save=cmd == "apply")
+    elif cmd == "refresh":
+        refresh()
     else:
-        raise SystemExit(f"Unknown command {cmd!r}. Use: preview, check or apply")
+        raise SystemExit(f"Unknown command {cmd!r}. Use: preview, check, apply or refresh")
 

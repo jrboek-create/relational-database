@@ -280,6 +280,14 @@ const courseSections = [
     sort: "-idd_year_month,project_type,project_status,modified_timestamp",
     limit: 5000,
     fields: ["instructional_design_development_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "extracted_course_code", "catalog_match_status", "idd_year_month", "raw_idd_term", "term_id", "term_code", "term_label", "institutional_term_match_status", "project_type", "source_college", "project_status", "course_developer", "instructional_designer", "notes", "project_schedule_changes", "major_side_project_type", "important_project_dates", "project_finished_date_raw", "developer_completion_date_raw", "days_late_after_course_copy", "weeks_late_course_copy", "days_past_contract_due_date", "weeks_past_contract_due_date", "course_delayed_reason", "kickoff_info_needed", "eoc_feedback", "contract", "supplemental_pay_request", "snapgen_notes", "snapgen_section_count", "snapgen_sections_released", "modified_timestamp", "modified_by", "hide_project", "report_refresh_run_id", "report_as_of_utc"]
+  },
+  {
+    path: "ai-production",
+    label: "AI production",
+    collection: "course_ai_production_summary_api",
+    sort: "-implementation_month,project_name",
+    limit: 500,
+    fields: ["ai_production_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "implementation_month", "implementation_label", "project_name", "ai_type", "project_status", "description", "template_link", "source_college", "ai_section_count", "report_refresh_run_id", "report_as_of_utc"]
   }
 ];
 

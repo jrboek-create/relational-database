@@ -96,6 +96,7 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/courses/:course_id/student-survey` | Student survey summary |
 | `/api/courses/:course_id/student-survey/questions` | Student survey question-level summary |
 | `/api/courses/:course_id/instructional-design-development` | Instructional design and development summary |
+| `/api/courses/:course_id/ai-production` | AI production projects for the course (AI in this course) |
 
 Each endpoint reads from a matching `*_api` collection in the `reporting` schema (for example, `course_grade_summary_api`).
 
@@ -126,6 +127,8 @@ docker compose cp database:/tmp/before-upload.dump backups/before-upload.dump
 docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload check
 docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload apply
 ```
+
+To rebuild only the reporting tables from the data already loaded (no upload), run `upload refresh` the same way.
 
 `apply` only works on the file that was previewed. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. A preview run after an apply should show nothing left to add.
 
