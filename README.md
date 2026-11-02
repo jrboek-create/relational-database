@@ -34,6 +34,7 @@ Search the current course catalog by code, title, college, or department. Open a
 |---|---|
 | `compose.yaml` | Defines and runs all services |
 | `compose.loader.yaml` | Optional Excel import job (see below) |
+| `compose.upload.yaml` | Tableau `.twbx` upload preview (see below) |
 | `ui/` | Web UI: `index.html`, `app.js`, `styles.css`, plus the nginx config and Dockerfile |
 | `middleware/` | Node.js/Express API (`src/server.js`) |
 | `loader/` | Python script that loads Excel workbooks into staging tables |
@@ -105,6 +106,28 @@ The loader reads every `.xlsx` file in `imports/`, skipping any with "old" in th
 ```powershell
 docker compose -f compose.yaml -f compose.loader.yaml run --rm --build loader
 ```
+
+## Uploading a Tableau workbook (.twbx)
+
+Put the new `.twbx` in `imports_hold/` (the file name can change; the newest `.twbx` is used). Then run:
+
+```
+docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload preview
+```
+
+The preview unpacks the workbook, compares every dataset with the existing data by its key, and writes a report to `upload_reports/`: new rows, unchanged rows, changed rows, rows missing from the file, and any added or missing columns. It changes nothing in the live tables. Changed rows are only listed, never applied, and rows missing from the file are kept.
+
+After reviewing the report, back up the database, run `check` (does everything, then rolls it back), and then `apply`:
+
+```
+New-Item -ItemType Directory -Force backups | Out-Null
+docker compose exec -T database sh -c 'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc -f /tmp/before-upload.dump'
+docker compose cp database:/tmp/before-upload.dump backups/before-upload.dump
+docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload check
+docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload apply
+```
+
+`apply` only works on the file that was previewed. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. A preview run after an apply should show nothing left to add.
 
 ## Making changes
 

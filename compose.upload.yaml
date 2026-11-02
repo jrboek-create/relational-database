@@ -1,0 +1,22 @@
+services:
+  upload:
+    build:
+      context: ./loader
+    entrypoint: ["python", "/app/twbx_upload.py"]
+    command: ["preview"]
+    restart: "no"
+    environment:
+      PGHOST: database
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./imports_hold:/imports_hold:ro
+      - ./upload_reports:/upload_reports
+      - ./sql/refresh:/sql_refresh:ro
+    networks:
+      - backend
+    depends_on:
+      database:
+        condition: service_healthy
