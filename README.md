@@ -103,7 +103,7 @@ Each endpoint reads from a matching `*_api` collection in the `reporting` schema
 The loader reads every `.xlsx` file in `imports/`, skipping any with "old" in the name. It stores each row as raw JSON in the `phase2_staging` tables and records the batch, file, and checksum. It only stages data; it does not change the reporting tables.
 
 ```powershell
-docker compose -f compose.yaml -f compose.loader.yaml run --rm loader
+docker compose -f compose.yaml -f compose.loader.yaml run --rm --build loader
 ```
 
 ## Making changes

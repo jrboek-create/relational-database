@@ -57,7 +57,7 @@ def main():
 						headers.append(name)
 					cur.execute("INSERT INTO phase2_staging.source_sheet (source_file_id,sheet_name,historical_flag,row_count,notes) VALUES (%s,%s,%s,0,%s) RETURNING id",(file_id,ws.title,historical,"Raw Excel worksheet"))
 					sheet_id=cur.fetchone()[0]
-					count=0
+					staged=[]
 					for rownum,row in enumerate(rows[1:],2):
 						values={}
 						has_data=False
@@ -68,9 +68,12 @@ def main():
 							if cell.hyperlink:values[header+"__hyperlink"]=cell.hyperlink.target
 						if not has_data:continue
 						raw={"_meta":{"workbook":path.name,"worksheet":ws.title,"excel_row_number":rownum,"historical_sheet":historical},"values":values}
-						cur.execute("INSERT INTO phase2_staging.staging_row (source_sheet_id,import_batch_id,row_number,raw_json) VALUES (%s,%s,%s,%s)",(sheet_id,batch_id,rownum,Jsonb(raw)))
-						count+=1
-						total+=1
+						staged.append((sheet_id,batch_id,rownum,Jsonb(raw)))
+					# One batched call per sheet instead of one round trip per row.
+					if staged:
+						cur.executemany("INSERT INTO phase2_staging.staging_row (source_sheet_id,import_batch_id,row_number,raw_json) VALUES (%s,%s,%s,%s)",staged)
+					count=len(staged)
+					total+=count
 					cur.execute("UPDATE phase2_staging.source_sheet SET row_count=%s WHERE id=%s",(count,sheet_id))
 					print("SHEET:",ws.title,"ROWS:",count,"HISTORICAL:",historical)
 				wb.close()
