@@ -1375,52 +1375,18 @@
   }
 
   async function loadFilterOptions() {
-    const rows = [];
-    let page = 1;
-    let pages = 1;
+    const response = await fetch("/api/filter-options", {
+      headers:{"Accept":"application/json"},
+      credentials:"same-origin"
+    });
+    const payload = await json(response);
 
-    do {
-      const params = new URLSearchParams({
-        page:String(page),
-        limit:"100",
-        sort:"course_code"
-      });
+    if (!response.ok || payload.ok === false || !Array.isArray(payload.data)) {
+      throw new Error("filters");
+    }
 
-      const response = await fetch(`/api/courses?${params}`, {
-        headers:{"Accept":"application/json"},
-        credentials:"same-origin"
-      });
-
-      const payload = await json(response);
-
-      if (!response.ok || payload.ok === false) {
-        throw new Error("filters");
-      }
-
-      const batch = Array.isArray(payload.data) ? payload.data : [];
-      rows.push(...batch);
-
-      const total = number(
-        payload?.meta?.total,
-        rows.length
-      );
-
-      pages = Math.max(1,Math.ceil(total / 100));
-      page++;
-    } while (page <= pages);
-
-    state.filterCourses = rows;
-
-    const colleges = uniqueSorted(
-      rows.map(row => row.college_name)
-    );
-
-    populateSelect(
-      "collegeFilter",
-      "All colleges",
-      colleges
-    );
-
+    state.filterCourses = payload.data;
+    populateSelect("collegeFilter","All colleges",uniqueSorted(payload.data.map(row => row.college_name)));
     populateDepartments();
   }
 

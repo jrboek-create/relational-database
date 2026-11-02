@@ -168,6 +168,54 @@ app.get("/api/courses/:course_id", async (req, res) => {
   }
 });
 
+// Distinct college/department pairs for the catalog filter dropdowns.
+app.get("/api/filter-options", async (req, res) => {
+  const started = Date.now();
+  const log = (status, extra = {}) => console.log(JSON.stringify({ event: "request", request_id: req.requestId, method: req.method, path: req.path, status, ...extra, duration_ms: Date.now() - started }));
+  const fail = (status, code, message) => {
+    log(status);
+    return res.status(status).json({ ok: false, request_id: req.requestId, error: { code, message } });
+  };
+
+  try {
+    if (Object.keys(req.query).length !== 0) return fail(400, "INVALID_QUERY", "The request contains an unsupported parameter.");
+
+    const params = new URLSearchParams();
+    params.append("groupBy[]", "college_name");
+    params.append("groupBy[]", "department_name");
+    params.set("aggregate[count]", "course_id");
+    params.set("limit", "1000");
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    let upstream;
+    try {
+      upstream = await fetch(`${directusUrl}/items/course_current_catalog_api?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${directusToken}`, Accept: "application/json", "x-request-id": req.requestId },
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!upstream.ok) return fail(502, "DIRECTUS_UNAVAILABLE", "The course data service is unavailable.");
+
+    const payload = await upstream.json();
+    if (!Array.isArray(payload.data)) return fail(500, "INTERNAL_ERROR", "The request could not be completed.");
+
+    const data = payload.data.map((row) => ({ college_name: row.college_name ?? null, department_name: row.department_name ?? null }));
+    log(200, { returned: data.length });
+    return res.status(200).json({ ok: true, request_id: req.requestId, data, meta: { returned: data.length } });
+  } catch (error) {
+    const timedOut = error?.name === "AbortError";
+    return fail(
+      timedOut ? 504 : 500,
+      timedOut ? "DIRECTUS_UNAVAILABLE" : "INTERNAL_ERROR",
+      timedOut ? "The course data service timed out." : "The request could not be completed."
+    );
+  }
+});
+
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Per-course sections. Each one becomes GET /api/courses/:course_id/<path>

@@ -87,6 +87,7 @@ All are `GET` requests and return JSON with a `request_id`.
 |---|---|
 | `/api/courses` | Course catalog list. Query params: `page`, `limit`, `course_code`, `course_title`, `college_name`, `department_name`, `sort` (`course_code` or `-course_code`) |
 | `/api/courses/:course_id` | Course detail |
+| `/api/filter-options` | Distinct college and department pairs for the filter dropdowns |
 | `/api/courses/:course_id/grades` | Grade summary |
 | `/api/courses/:course_id/enrollment` | Enrollment summary |
 | `/api/courses/:course_id/dfwi` | DFWI summary |
