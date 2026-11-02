@@ -63,13 +63,13 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
   grid-column:span 1;
 }
 
-.grades-card label{
+.grades-card label,.chart-card label{
   display:block;
   margin-top:0;
   margin-bottom:.3rem;
 }
 
-.grades-card select{
+.grades-card select,.chart-card select{
   width:100%;
   min-width:0;
   max-width:100%;
@@ -87,40 +87,27 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
   background:white;
 }
 
-.grade-distribution{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(44px,1fr));
-  gap:.45rem;
-}
-
-.grade-distribution > div{
-  display:grid;
-  justify-items:center;
-  gap:.15rem;
-  min-width:0;
-  padding:.55rem .3rem;
-  background:white;
-  border:1px solid var(--line);
-  border-radius:8px;
-}
-
-.grade-distribution span{
-  color:var(--muted);
-  font-size:.75rem;
-  font-weight:800;
-}
-
-.grade-distribution strong{
-  color:var(--navy);
-  font-size:1rem;
-}
-
 @media(max-width:650px){
   .grades-summary{
     grid-template-columns:1fr;
   }
 
-  .grade-distribution{
-    grid-template-columns:repeat(3,minmax(44px,1fr));
   }
-}
+
+.chart-range{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+.chart-range label{margin:0}
+.chart-range select{min-height:36px;padding:.3rem .5rem}
+.chart-row{margin-top:.7rem}
+.chart-wrap h4{margin-bottom:.4rem}
+.chart-wrap svg{display:block;width:100%;height:auto}
+.card-stack{display:grid;gap:.7rem}
+.chart-card{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);column-gap:1.2rem;align-items:start}
+.chart-card > *{grid-column:1}
+.chart-card > .chart-wrap{grid-column:2;grid-row:1 / span 6}
+.chart-title{margin:0 0 .3rem;color:var(--muted);font-size:.8rem;font-weight:700}
+@media(max-width:800px){.chart-card{grid-template-columns:1fr}.chart-card > .chart-wrap{grid-column:1;grid-row:auto;margin-top:.8rem}}
+.chart-axis{fill:#637080;font-size:11px}
+.chart-legend{fill:#202936;font-size:12px}
+.chart-value{fill:#202936;font-size:11px;font-weight:700}
+.chart-cell{font-size:11px;font-weight:700}
+.chart-grid{stroke:#d9e2e9;stroke-width:1}

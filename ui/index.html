@@ -155,8 +155,15 @@
 
     <section>
       <h3>Course performance</h3>
-      <div class="grid three">
-        <article id="gradesCard" class="grades-card">
+      <div class="chart-range">
+        <label for="chartRange">Trend charts show</label>
+        <select id="chartRange">
+          <option value="24">Last 24 terms</option>
+          <option value="all">All terms</option>
+        </select>
+      </div>
+      <div class="card-stack">
+        <article id="gradesCard" class="grades-card chart-card">
   <h4>Grades</h4>
 
   <p id="gradesStatus" class="unavailable" role="status">
@@ -178,17 +185,11 @@
       </div>
     </dl>
 
-    <div class="grade-distribution" aria-label="Grade distribution">
-      <div><span>A</span><strong id="gradeCountA">0</strong></div>
-      <div><span>B</span><strong id="gradeCountB">0</strong></div>
-      <div><span>C</span><strong id="gradeCountC">0</strong></div>
-      <div><span>D</span><strong id="gradeCountD">0</strong></div>
-      <div><span>F</span><strong id="gradeCountF">0</strong></div>
-      <div><span>W</span><strong id="gradeCountW">0</strong></div>
-    </div>
   </div>
+
+  <div class="chart-wrap" hidden><p class="chart-title">Grade distribution</p><div id="gradesChart"></div></div>
 </article>
-        <article>
+        <article class="chart-card">
   <h4>Enrollment</h4>
 
   <p id="enrollmentStatus" class="unavailable">
@@ -218,8 +219,10 @@
       </div>
     </dl>
   </div>
+
+  <div class="chart-wrap" hidden><p class="chart-title">Enrollment by term</p><div id="enrollmentChart"></div></div>
 </article>
-<article>
+<article class="chart-card">
   <h4>DFWI</h4>
 
   <p id="dfwiStatus" class="unavailable">
@@ -243,23 +246,26 @@
         <dt>Total enrollment</dt>
         <dd id="dfwiEnrollment">Not available</dd>
       </div>
+      <div>
+        <dt>D / F</dt>
+        <dd id="dfwiDF">Not available</dd>
+      </div>
+      <div>
+        <dt>W / I</dt>
+        <dd id="dfwiWI">Not available</dd>
+      </div>
     </dl>
-
-    <div class="grade-distribution" aria-label="DFWI distribution">
-      <div><span>D</span><strong id="dfwiCountD">0</strong></div>
-      <div><span>F</span><strong id="dfwiCountF">0</strong></div>
-      <div><span>W</span><strong id="dfwiCountW">0</strong></div>
-      <div><span>I</span><strong id="dfwiCountI">0</strong></div>
-    </div>
   </div>
+
+  <div class="chart-wrap" hidden><p class="chart-title">DFWI rate by term</p><div id="dfwiChart"></div></div>
 </article>
       </div>
     </section>
 
     <section>
       <h3>Feedback and evaluation</h3>
-      <div class="grid two">
-<article>
+      <div class="card-stack">
+<article class="chart-card">
   <h4>Faculty survey results</h4>
 
   <p id="facultySurveyStatus" class="unavailable">
@@ -297,8 +303,10 @@
       </div>
     </dl>
   </div>
+
+  <div class="chart-wrap" hidden><p class="chart-title">Faculty survey averages by term</p><div id="facultySurveyChart"></div></div>
 </article>
-        <article>
+        <article class="chart-card">
           <h4>Student survey results</h4>
 
           <p id="studentSurveyStatus" class="unavailable">
@@ -354,8 +362,11 @@
               </div>
             </dl>
           </div>
+
+          <div class="chart-wrap" hidden><p class="chart-title">Student survey averages by term</p><div id="studentSurveyChart"></div></div>
         </article>
       </div>
+      <article class="chart-wrap chart-row" hidden><h4>Student survey questions by term</h4><div id="studentSurveyHeatmap"></div></article>
     </section>
 
     <section>
