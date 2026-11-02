@@ -20,7 +20,7 @@
     studentSurveyController: null, studentSurvey: [],
     studentSurveyQuestionController: null, studentSurveyQuestions: [],
     instructionalDesignDevelopmentController: null, instructionalDesignDevelopment: [],
-    aiProductionController: null
+    aiProductionController: null, integrationsController: null
   };
 
   const $ = id => document.getElementById(id);
@@ -209,6 +209,7 @@
     loadStudentSurveyQuestions(course);
     loadInstructionalDesignDevelopment(course);
     loadAiProduction(course);
+    loadIntegrations(course);
     drawCharts();
     if (!course.course_id) {
       notice("This course has no identifier, so details can't be loaded.");
@@ -297,7 +298,8 @@
     enrollment: { path: "enrollment", none: "No Enrollment data available.", loading: "Loading Enrollment...", aborted: "Enrollment data could not be loaded.", failed: "Enrollment data is temporarily unavailable." },
     dfwi: { path: "dfwi", none: "No DFWI data available.", loading: "Loading DFWI...", aborted: "DFWI data could not be loaded.", failed: "DFWI data is temporarily unavailable." },
     facultySurvey: { path: "faculty-survey", none: "No Faculty Survey results available.", loading: "Loading Faculty Survey results...", aborted: "Faculty Survey results could not be loaded.", failed: "Faculty Survey results are temporarily unavailable." },
-    aiProduction: { path: "ai-production", none: "No AI integration recorded for this course.", loading: "Loading AI in this course...", aborted: "AI data could not be loaded.", failed: "AI data is temporarily unavailable." }
+    aiProduction: { path: "ai-production", none: "No AI integration recorded for this course.", loading: "Loading AI in this course...", aborted: "AI data could not be loaded.", failed: "AI data is temporarily unavailable." },
+    integrations: { path: "integrations", none: "No integrations recorded for this course.", loading: "Loading Integrations...", aborted: "Integration data could not be loaded.", failed: "Integration data is temporarily unavailable." }
   };
 
   async function fetchCourseRows(course, path, controller) {
@@ -1049,6 +1051,25 @@
       $("aiProductionList").append(item);
     });
     showSectionContent("aiProduction");
+  }
+
+  // Integrations: one line per integration type, with the month it was last done or started.
+  async function loadIntegrations(course) {
+    state.integrationsController?.abort();
+    $("integrationsList").replaceChildren();
+    const rows = await loadSectionRows("integrations", course);
+    if (!rows) return;
+    rows.forEach(row => {
+      const card = document.createElement("div");
+      const dt = document.createElement("dt");
+      const dd = document.createElement("dd");
+      dt.textContent = row.integration_name;
+      const when = { last: "last", start: "started" }[row.date_meaning];
+      dd.textContent = when ? `${row.integration_month} (${when})` : row.integration_month;
+      card.append(dt, dd);
+      $("integrationsList").append(card);
+    });
+    showSectionContent("integrations");
   }
 
   function renderSelectedInstructionalDesignDevelopment() {

@@ -97,6 +97,7 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/courses/:course_id/student-survey/questions` | Student survey question-level summary |
 | `/api/courses/:course_id/instructional-design-development` | Instructional design and development summary |
 | `/api/courses/:course_id/ai-production` | AI production projects for the course (AI in this course) |
+| `/api/courses/:course_id/integrations` | Integrations for the course (month last done or started, per integration type) |
 
 Each endpoint reads from a matching `*_api` collection in the `reporting` schema (for example, `course_grade_summary_api`).
 

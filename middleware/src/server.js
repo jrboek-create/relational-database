@@ -288,6 +288,14 @@ const courseSections = [
     sort: "-implementation_month,project_name",
     limit: 500,
     fields: ["ai_production_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "implementation_month", "implementation_label", "project_name", "ai_type", "project_status", "description", "template_link", "source_college", "ai_section_count", "report_refresh_run_id", "report_as_of_utc"]
+  },
+  {
+    path: "integrations",
+    label: "Integrations",
+    collection: "course_integration_summary_api",
+    sort: "integration_order,-integration_month",
+    limit: 500,
+    fields: ["integration_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "integration_name", "integration_order", "date_meaning", "integration_month", "report_refresh_run_id", "report_as_of_utc"]
   }
 ];
 
