@@ -104,6 +104,10 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .chart-card{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);column-gap:1.2rem;align-items:start}
 .chart-card > *{grid-column:1}
 .chart-card > .chart-wrap{grid-column:2;grid-row:1 / span 6}
+#studentSurveyContent:not([hidden]){display:contents}
+#studentSurveyContent > *{grid-column:1}
+#studentSurveyContent > #studentSurveyQuestionStatus,#studentSurveyContent > #studentSurveyQuestions{grid-column:1 / -1;order:1;margin-top:.8rem}
+#studentSurveyQuestions{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 .chart-title{margin:0 0 .3rem;color:var(--muted);font-size:.8rem;font-weight:700}
 @media(max-width:800px){.chart-card{grid-template-columns:1fr}.chart-card > .chart-wrap{grid-column:1;grid-row:auto;margin-top:.8rem}}
 .chart-axis{fill:#637080;font-size:11px}
