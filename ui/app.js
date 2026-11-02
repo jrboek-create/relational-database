@@ -64,14 +64,14 @@
     $("enrollmentTerm").addEventListener("change", () => {
       renderSelectedEnrollmentTerm();
 
-      populateFacultySurveyTerms();
+      populateSurveyTerms("facultySurveyTerm");
 
       $("facultySurveyStatus").hidden = true;
       $("facultySurveyContent").hidden = false;
 
       renderSelectedFacultySurveyTerm();
 
-      populateStudentSurveyTerms();
+      populateSurveyTerms("studentSurveyTerm");
       renderSelectedStudentSurveyTerm();
       populateStudentSurveyInstruments();
       renderSelectedStudentSurveyQuestions();
@@ -280,61 +280,107 @@
 
   async function loadGrades(course) {
     resetGrades();
+    const rows = await loadSectionRows("grades", course);
+    if (!rows) return;
 
-    state.gradesController = new AbortController();
-    const controller = state.gradesController;
+    state.grades = rows;
+    populateIndexTerms("gradesTerm", rows);
+    showSectionContent("grades");
+    renderSelectedGradesTerm();
+  }
 
-    if (!course.course_id) {
-      showGradesMessage("No Grades available.");
-      return;
-    }
+  // ---- Shared section helpers -------------------------------------------
+  const termSections = {
+    grades: { path: "grades", none: "No Grades available.", loading: "Loading Grades...", aborted: "Grades data could not be loaded.", failed: "Grades data is temporarily unavailable." },
+    enrollment: { path: "enrollment", none: "No Enrollment data available.", loading: "Loading Enrollment...", aborted: "Enrollment data could not be loaded.", failed: "Enrollment data is temporarily unavailable." },
+    dfwi: { path: "dfwi", none: "No DFWI data available.", loading: "Loading DFWI...", aborted: "DFWI data could not be loaded.", failed: "DFWI data is temporarily unavailable." },
+    facultySurvey: { path: "faculty-survey", none: "No Faculty Survey results available.", loading: "Loading Faculty Survey results...", aborted: "Faculty Survey results could not be loaded.", failed: "Faculty Survey results are temporarily unavailable." }
+  };
 
-    showGradesMessage("Loading Grades...");
-
+  async function fetchCourseRows(course, path, controller) {
     const timer = setTimeout(() => controller.abort(), 15000);
-
     try {
-      const response = await fetch(
-        `/api/courses/${encodeURIComponent(course.course_id)}/grades`,
-        {
-          headers: {
-            Accept: "application/json"
-          },
-          credentials: "same-origin",
-          signal: controller.signal
-        }
-      );
-
+      const response = await fetch(`/api/courses/${encodeURIComponent(course.course_id)}/${path}`, {
+        headers: { Accept: "application/json" },
+        credentials: "same-origin",
+        signal: controller.signal
+      });
       const payload = await json(response);
-
-      if (!response.ok || payload.ok === false) {
-        throw new Error("grades");
-      }
-
-      const rows = Array.isArray(payload.data) ? payload.data : [];
-
-      if (rows.length === 0) {
-        showGradesMessage("No Grades available.");
-        return;
-      }
-
-      state.grades = rows;
-      populateGradesTerms();
-
-      $("gradesStatus").hidden = true;
-      $("gradesContent").hidden = false;
-
-      renderSelectedGradesTerm();
-    } catch (error) {
-      if (error?.name === "AbortError") {
-        showGradesMessage("Grades data could not be loaded.");
-        return;
-      }
-
-      showGradesMessage("Grades data is temporarily unavailable.");
+      if (!response.ok || payload.ok === false) throw new Error(path);
+      return Array.isArray(payload.data) ? payload.data : [];
     } finally {
       clearTimeout(timer);
     }
+  }
+
+  // Returns the section's rows, or null after showing the right message.
+  async function loadSectionRows(key, course) {
+    const section = termSections[key];
+    const controller = new AbortController();
+    state[`${key}Controller`] = controller;
+
+    if (!course.course_id) {
+      showSectionMessage(key, section.none);
+      return null;
+    }
+
+    showSectionMessage(key, section.loading);
+    try {
+      const rows = await fetchCourseRows(course, section.path, controller);
+      if (rows.length === 0) {
+        showSectionMessage(key, section.none);
+        return null;
+      }
+      return rows;
+    } catch (error) {
+      showSectionMessage(key, error?.name === "AbortError" ? section.aborted : section.failed);
+      return null;
+    }
+  }
+
+  function showSectionMessage(key, message) {
+    $(`${key}Content`).hidden = true;
+    $(`${key}Status`).textContent = message;
+    $(`${key}Status`).hidden = false;
+  }
+
+  function showSectionContent(key) {
+    $(`${key}Status`).hidden = true;
+    $(`${key}Content`).hidden = false;
+  }
+
+  function termLabel(row, index) {
+    return row.term_label || row.term_code || `Term ${index + 1}`;
+  }
+
+  // Grades, Enrollment, DFWI: one option per row, value = row index.
+  function populateIndexTerms(selectId, rows) {
+    const selector = $(selectId);
+    selector.replaceChildren();
+    rows.forEach((row, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = termLabel(row, index);
+      selector.append(option);
+    });
+    selector.value = "0";
+  }
+
+  // Survey sections list enrollment terms (value = term_id) and keep the
+  // current selection when it still exists.
+  function populateSurveyTerms(selectId) {
+    const selector = $(selectId);
+    const previousTermId = selector.value;
+    selector.replaceChildren();
+    state.enrollment.forEach((row, index) => {
+      const option = document.createElement("option");
+      option.value = row.term_id || "";
+      option.textContent = termLabel(row, index);
+      selector.append(option);
+    });
+    if (selector.options.length === 0) return;
+    const stillExists = Array.from(selector.options).some(option => option.value === previousTermId);
+    selector.value = stillExists ? previousTermId : selector.options[0].value;
   }
 
   function resetGrades() {
@@ -350,35 +396,6 @@
     set("gradesAverage", null);
     set("gradesTotal", null);
 
-
-
-
-
-  }
-
-  function showGradesMessage(message) {
-    $("gradesContent").hidden = true;
-    $("gradesStatus").textContent = message;
-    $("gradesStatus").hidden = false;
-  }
-
-  function populateGradesTerms() {
-    const selector = $("gradesTerm");
-    selector.replaceChildren();
-
-    state.grades.forEach((grade, index) => {
-      const option = document.createElement("option");
-
-      option.value = String(index);
-      option.textContent =
-        grade.term_label ||
-        grade.term_code ||
-        `Term ${index + 1}`;
-
-      selector.append(option);
-    });
-
-    selector.value = "0";
   }
 
   function renderSelectedGradesTerm() {
@@ -387,7 +404,7 @@
     const grade = state.grades[index];
 
     if (!grade) {
-      showGradesMessage("No Grades available.");
+      showSectionMessage("grades", "No Grades available.");
       return;
     }
 
@@ -404,83 +421,27 @@
       formatWholeNumber(grade.grade_count)
     );
 
-
-
-
-
   }
 
   async function loadEnrollment(course) {
     resetEnrollment();
+    const rows = await loadSectionRows("enrollment", course);
+    if (!rows) return;
 
-    state.enrollmentController = new AbortController();
-    const controller = state.enrollmentController;
+    state.enrollment = rows;
+    populateIndexTerms("enrollmentTerm", rows);
+    showSectionContent("enrollment");
+    renderSelectedEnrollmentTerm();
 
-    if (!course.course_id) {
-      showEnrollmentMessage("No Enrollment data available.");
-      return;
-    }
+    // Both survey sections list terms from enrollment, so refresh them now.
+    populateSurveyTerms("facultySurveyTerm");
+    showSectionContent("facultySurvey");
+    renderSelectedFacultySurveyTerm();
 
-    showEnrollmentMessage("Loading Enrollment...");
-
-    const timer = setTimeout(() => controller.abort(), 15000);
-
-    try {
-      const response = await fetch(
-        `/api/courses/${encodeURIComponent(course.course_id)}/enrollment`,
-        {
-          headers: {
-            Accept: "application/json"
-          },
-          credentials: "same-origin",
-          signal: controller.signal
-        }
-      );
-
-      const payload = await json(response);
-
-      if (!response.ok || payload.ok === false) {
-        throw new Error("enrollment");
-      }
-
-      const rows = Array.isArray(payload.data) ? payload.data : [];
-
-      if (rows.length === 0) {
-        showEnrollmentMessage("No Enrollment data available.");
-        return;
-      }
-
-      state.enrollment = rows;
-      populateEnrollmentTerms();
-
-      $("enrollmentStatus").hidden = true;
-      $("enrollmentContent").hidden = false;
-
-      renderSelectedEnrollmentTerm();
-
-      populateFacultySurveyTerms();
-
-      $("facultySurveyStatus").hidden = true;
-      $("facultySurveyContent").hidden = false;
-
-      renderSelectedFacultySurveyTerm();
-
-      populateStudentSurveyTerms();
-      renderSelectedStudentSurveyTerm();
-      populateStudentSurveyInstruments();
-      renderSelectedStudentSurveyQuestions();
-    } catch (error) {
-      if (error?.name === "AbortError") {
-        showEnrollmentMessage("Enrollment data could not be loaded.");
-        return;
-      }
-
-      showEnrollmentMessage(
-        "Enrollment data is temporarily unavailable."
-      );
-    } finally {
-      clearTimeout(timer);
-    }
+    populateSurveyTerms("studentSurveyTerm");
+    renderSelectedStudentSurveyTerm();
+    populateStudentSurveyInstruments();
+    renderSelectedStudentSurveyQuestions();
   }
 
   function resetEnrollment() {
@@ -499,38 +460,13 @@
     set("enrollmentMaximum", null);
   }
 
-  function showEnrollmentMessage(message) {
-    $("enrollmentContent").hidden = true;
-    $("enrollmentStatus").textContent = message;
-    $("enrollmentStatus").hidden = false;
-  }
-
-  function populateEnrollmentTerms() {
-    const selector = $("enrollmentTerm");
-    selector.replaceChildren();
-
-    state.enrollment.forEach((enrollment, index) => {
-      const option = document.createElement("option");
-
-      option.value = String(index);
-      option.textContent =
-        enrollment.term_label ||
-        enrollment.term_code ||
-        `Term ${index + 1}`;
-
-      selector.append(option);
-    });
-
-    selector.value = "0";
-  }
-
   function renderSelectedEnrollmentTerm() {
     drawCharts();
     const index = Number($("enrollmentTerm").value);
     const enrollment = state.enrollment[index];
 
     if (!enrollment) {
-      showEnrollmentMessage("No Enrollment data available.");
+      showSectionMessage("enrollment", "No Enrollment data available.");
       return;
     }
 
@@ -560,61 +496,13 @@
 
   async function loadDfwi(course) {
     resetDfwi();
+    const rows = await loadSectionRows("dfwi", course);
+    if (!rows) return;
 
-    state.dfwiController = new AbortController();
-    const controller = state.dfwiController;
-
-    if (!course.course_id) {
-      showDfwiMessage("No DFWI data available.");
-      return;
-    }
-
-    showDfwiMessage("Loading DFWI...");
-
-    const timer = setTimeout(() => controller.abort(), 15000);
-
-    try {
-      const response = await fetch(
-        `/api/courses/${encodeURIComponent(course.course_id)}/dfwi`,
-        {
-          headers: {
-            Accept: "application/json"
-          },
-          credentials: "same-origin",
-          signal: controller.signal
-        }
-      );
-
-      const payload = await json(response);
-
-      if (!response.ok || payload.ok === false) {
-        throw new Error("dfwi");
-      }
-
-      const rows = Array.isArray(payload.data) ? payload.data : [];
-
-      if (rows.length === 0) {
-        showDfwiMessage("No DFWI data available.");
-        return;
-      }
-
-      state.dfwi = rows;
-      populateDfwiTerms();
-
-      $("dfwiStatus").hidden = true;
-      $("dfwiContent").hidden = false;
-
-      renderSelectedDfwiTerm();
-    } catch (error) {
-      if (error?.name === "AbortError") {
-        showDfwiMessage("DFWI data could not be loaded.");
-        return;
-      }
-
-      showDfwiMessage("DFWI data is temporarily unavailable.");
-    } finally {
-      clearTimeout(timer);
-    }
+    state.dfwi = rows;
+    populateIndexTerms("dfwiTerm", rows);
+    showSectionContent("dfwi");
+    renderSelectedDfwiTerm();
   }
 
   function resetDfwi() {
@@ -634,38 +522,13 @@
     set("dfwiWI", null);
   }
 
-  function showDfwiMessage(message) {
-    $("dfwiContent").hidden = true;
-    $("dfwiStatus").textContent = message;
-    $("dfwiStatus").hidden = false;
-  }
-
-  function populateDfwiTerms() {
-    const selector = $("dfwiTerm");
-    selector.replaceChildren();
-
-    state.dfwi.forEach((dfwi, index) => {
-      const option = document.createElement("option");
-
-      option.value = String(index);
-      option.textContent =
-        dfwi.term_label ||
-        dfwi.term_code ||
-        `Term ${index + 1}`;
-
-      selector.append(option);
-    });
-
-    selector.value = "0";
-  }
-
   function renderSelectedDfwiTerm() {
     drawCharts();
     const index = Number($("dfwiTerm").value);
     const dfwi = state.dfwi[index];
 
     if (!dfwi) {
-      showDfwiMessage("No DFWI data available.");
+      showSectionMessage("dfwi", "No DFWI data available.");
       return;
     }
 
@@ -691,71 +554,15 @@
       : unavailable;
   }
 
-
   async function loadFacultySurvey(course) {
     resetFacultySurvey();
+    const rows = await loadSectionRows("facultySurvey", course);
+    if (!rows) return;
 
-    state.facultySurveyController = new AbortController();
-    const controller = state.facultySurveyController;
-
-    if (!course.course_id) {
-      showFacultySurveyMessage("No Faculty Survey results available.");
-      return;
-    }
-
-    showFacultySurveyMessage("Loading Faculty Survey results...");
-
-    const timer = setTimeout(() => controller.abort(), 15000);
-
-    try {
-      const response = await fetch(
-        `/api/courses/${encodeURIComponent(course.course_id)}/faculty-survey`,
-        {
-          headers: {
-            Accept: "application/json"
-          },
-          credentials: "same-origin",
-          signal: controller.signal
-        }
-      );
-
-      const payload = await json(response);
-
-      if (!response.ok || payload.ok === false) {
-        throw new Error("faculty-survey");
-      }
-
-      const rows = Array.isArray(payload.data)
-        ? payload.data
-        : [];
-
-      if (rows.length === 0) {
-        showFacultySurveyMessage("No Faculty Survey results available.");
-        return;
-      }
-
-      state.facultySurvey = rows;
-      populateFacultySurveyTerms();
-
-      $("facultySurveyStatus").hidden = true;
-      $("facultySurveyContent").hidden = false;
-
-      renderSelectedFacultySurveyTerm();
-
-    } catch (error) {
-
-      if (error?.name === "AbortError") {
-        showFacultySurveyMessage("Faculty Survey results could not be loaded.");
-        return;
-      }
-
-      showFacultySurveyMessage(
-        "Faculty Survey results are temporarily unavailable."
-      );
-
-    } finally {
-      clearTimeout(timer);
-    }
+    state.facultySurvey = rows;
+    populateSurveyTerms("facultySurveyTerm");
+    showSectionContent("facultySurvey");
+    renderSelectedFacultySurveyTerm();
   }
 
   function resetFacultySurvey() {
@@ -777,51 +584,12 @@
     set("facultyQualityResponses", null);
   }
 
-  function showFacultySurveyMessage(message) {
-    $("facultySurveyContent").hidden = true;
-    $("facultySurveyStatus").textContent = message;
-    $("facultySurveyStatus").hidden = false;
-  }
-
-  function populateFacultySurveyTerms() {
-    const selector = $("facultySurveyTerm");
-    const previousTermId = selector.value;
-
-    selector.replaceChildren();
-
-    state.enrollment.forEach((enrollment, index) => {
-      const option = document.createElement("option");
-
-      option.value = enrollment.term_id || "";
-
-      option.textContent =
-        enrollment.term_label ||
-        enrollment.term_code ||
-        `Term ${index + 1}`;
-
-      selector.append(option);
-    });
-
-    if (selector.options.length === 0) {
-      return;
-    }
-
-    const previousStillExists =
-      Array.from(selector.options).some(
-        (option) => option.value === previousTermId
-      );
-
-    selector.value = previousStillExists
-      ? previousTermId
-      : selector.options[0].value;
-  }
-
   function renderSelectedFacultySurveyTerm() {
     drawCharts();
     const selectedTermId = $("facultySurveyTerm").value;
 
     if (!selectedTermId) {
-      showFacultySurveyMessage("No term data available.");
+      showSectionMessage("facultySurvey", "No term data available.");
       return;
     }
 
@@ -885,60 +653,29 @@
     resetStudentSurvey();
 
     if (!course.course_id) {
-      showStudentSurveyMessage("No Data");
+      showSectionMessage("studentSurvey", "No Data");
       return;
     }
 
     state.studentSurveyController?.abort();
     state.studentSurveyController = new AbortController();
-    const controller = state.studentSurveyController;
-
-    showStudentSurveyMessage("Loading Student Survey results...");
-
-    const timer = setTimeout(() => controller.abort(), 15000);
+    showSectionMessage("studentSurvey", "Loading Student Survey results...");
 
     try {
-      const response = await fetch(
-        `/api/courses/${encodeURIComponent(course.course_id)}/student-survey`,
-        {
-          headers: { Accept: "application/json" },
-          credentials: "same-origin",
-          signal: controller.signal
-        }
-      );
-
-      const payload = await json(response);
-
-      if (!response.ok || payload.ok === false) {
-        throw new Error("student-survey");
-      }
-
-      state.studentSurvey = Array.isArray(payload.data)
-        ? payload.data
-        : [];
+      state.studentSurvey = await fetchCourseRows(course, "student-survey", state.studentSurveyController);
 
       if (state.enrollment.length > 0) {
-        populateStudentSurveyTerms();
+        populateSurveyTerms("studentSurveyTerm");
         renderSelectedStudentSurveyTerm();
         populateStudentSurveyInstruments();
         renderSelectedStudentSurveyQuestions();
       } else {
-        showStudentSurveyMessage(
-          "Loading Student Survey results..."
-        );
+        showSectionMessage("studentSurvey", "Loading Student Survey results...");
       }
     } catch (error) {
-      if (error?.name === "AbortError") {
-        showStudentSurveyMessage(
-          "Student Survey results could not be loaded."
-        );
-      } else {
-        showStudentSurveyMessage(
-          "Student Survey results are temporarily unavailable."
-        );
-      }
-    } finally {
-      clearTimeout(timer);
+      showSectionMessage("studentSurvey", error?.name === "AbortError"
+        ? "Student Survey results could not be loaded."
+        : "Student Survey results are temporarily unavailable.");
     }
   }
 
@@ -965,50 +702,12 @@
     setStudentSurveyNoData();
   }
 
-  function showStudentSurveyMessage(message) {
-    $("studentSurveyContent").hidden = true;
-    $("studentSurveyStatus").textContent = message;
-    $("studentSurveyStatus").hidden = false;
-  }
-
-  function populateStudentSurveyTerms() {
-    const selector = $("studentSurveyTerm");
-    const previousTermId = selector.value;
-
-    selector.replaceChildren();
-
-    state.enrollment.forEach((enrollment, index) => {
-      const option = document.createElement("option");
-
-      option.value = enrollment.term_id || "";
-      option.textContent =
-        enrollment.term_label ||
-        enrollment.term_code ||
-        `Term ${index + 1}`;
-
-      selector.append(option);
-    });
-
-    if (selector.options.length === 0) {
-      return;
-    }
-
-    const previousStillExists =
-      Array.from(selector.options).some(
-        option => option.value === previousTermId
-      );
-
-    selector.value = previousStillExists
-      ? previousTermId
-      : selector.options[0].value;
-  }
-
   function renderSelectedStudentSurveyTerm() {
     drawCharts();
     const selectedTermId = $("studentSurveyTerm").value;
 
     if (!selectedTermId) {
-      showStudentSurveyMessage("No term data available.");
+      showSectionMessage("studentSurvey", "No term data available.");
       return;
     }
 
