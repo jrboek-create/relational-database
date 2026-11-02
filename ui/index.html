@@ -66,6 +66,16 @@
       </div>
     </form>
 
+    <details id="dataStatus" class="data-status">
+      <summary>Data status</summary>
+      <p id="dataStatusMessage" class="unavailable">Loading data status...</p>
+      <table id="dataStatusTable" hidden>
+        <caption class="sr-only">Rows and last rebuild time for each data area</caption>
+        <thead><tr><th scope="col">Data</th><th scope="col">Rows</th><th scope="col">Last rebuilt</th></tr></thead>
+        <tbody id="dataStatusRows"></tbody>
+      </table>
+    </details>
+
   </aside>
 
   <section id="catalog" class="panel catalog" aria-labelledby="catalog-title">
@@ -386,6 +396,17 @@
         <p id="integrationsStatus" class="unavailable">Loading Integrations...</p>
         <div id="integrationsContent" hidden>
           <dl id="integrationsList" class="grades-summary" aria-live="polite"></dl>
+        </div>
+      </article>
+    </section>
+
+    <section>
+      <h3>Redeveloped course feedback</h3>
+      <article>
+        <p id="redevelopedStatus" class="unavailable">Loading Redeveloped course feedback...</p>
+        <div id="redevelopedContent" hidden>
+          <p id="redevelopedSummary"></p>
+          <div id="redevelopedList" aria-live="polite"></div>
         </div>
       </article>
     </section>

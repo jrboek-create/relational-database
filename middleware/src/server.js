@@ -1,4 +1,5 @@
 ﻿import express from "express";
+import compression from "compression";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -16,6 +17,7 @@ const allowedParams = new Set(["page","limit","course_code","course_title","coll
 const allowedSorts = new Set(["course_code","-course_code"]);
 
 app.disable("x-powered-by");
+app.use(compression());  // gzip responses for clients that accept it (large JSON)
 app.use(express.json({ limit: "100kb" }));
 
 app.use((req, res, next) => {
@@ -296,6 +298,14 @@ const courseSections = [
     sort: "integration_order,-integration_month",
     limit: 500,
     fields: ["integration_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "integration_name", "integration_order", "date_meaning", "integration_month", "report_refresh_run_id", "report_as_of_utc"]
+  },
+  {
+    path: "redeveloped",
+    label: "Redeveloped course feedback",
+    collection: "course_redeveloped_summary_api",
+    sort: "-term_code,section_identifier",
+    limit: 500,
+    fields: ["redeveloped_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "sis_source_id", "term_id", "term_code", "term_label", "section_identifier", "responded", "response_date", "helpfulness_rating", "significant_changes", "changes_detail", "would_have_liked_to_know", "report_refresh_run_id", "report_as_of_utc"]
   }
 ];
 
@@ -362,6 +372,42 @@ for (const section of courseSections) {
     }
   });
 }
+
+// Data status: row count and last rebuild time of each reporting collection (one Directus aggregate call each).
+app.get("/api/data-status", async (req, res) => {
+  const started = Date.now();
+  const log = (status, extra = {}) => console.log(JSON.stringify({ event: "request", request_id: req.requestId, method: req.method, path: req.path, status, ...extra, duration_ms: Date.now() - started }));
+  if (Object.keys(req.query).length !== 0) {
+    log(400);
+    return res.status(400).json({ ok: false, request_id: req.requestId, error: { code: "INVALID_QUERY", message: "The request contains an unsupported parameter." } });
+  }
+  const first = (value) => (value !== null && typeof value === "object" ? Object.values(value)[0] : value);
+  const sections = [{ label: "Course catalog", collection: "course_current_catalog_api" }, ...courseSections];
+  const data = await Promise.all(sections.map(async (section) => {
+    const result = { section: section.label, collection: section.collection, available: false, rows: null, last_refreshed_utc: null };
+    const params = new URLSearchParams();
+    params.set("aggregate[count]", "*");
+    params.set("aggregate[max]", "report_as_of_utc");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      const upstream = await fetch(`${directusUrl}/items/${section.collection}?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${directusToken}`, Accept: "application/json", "x-request-id": req.requestId },
+        signal: controller.signal
+      });
+      if (!upstream.ok) return result;
+      const row = (await upstream.json())?.data?.[0] ?? {};
+      const count = first(row.count);
+      return { ...result, available: true, rows: count === null || count === undefined ? null : Number(count), last_refreshed_utc: first(row.max) ?? null };
+    } catch {
+      return result;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }));
+  log(200, { returned: data.length });
+  return res.status(200).json({ ok: true, request_id: req.requestId, data, meta: { returned: data.length } });
+});
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`AIR middleware listening on port ${port}`);

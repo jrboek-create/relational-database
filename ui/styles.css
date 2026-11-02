@@ -117,3 +117,8 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .chart-grid{stroke:#d9e2e9;stroke-width:1}
 .ai-project h4{margin:0 0 .5rem}
 .ai-project+.ai-project{margin-top:1rem;padding-top:1rem;border-top:1px solid #d9e2e9}
+.data-status{margin-top:1.25rem;font-size:.85rem}
+.data-status summary{cursor:pointer;font-weight:700}
+.data-status table{width:100%;border-collapse:collapse;margin-top:.5rem}
+.data-status th,.data-status td{padding:.25rem .35rem;text-align:left;border-bottom:1px solid #d9e2e9}
+.data-status td:nth-child(2){text-align:right}

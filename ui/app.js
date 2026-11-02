@@ -20,13 +20,14 @@
     studentSurveyController: null, studentSurvey: [],
     studentSurveyQuestionController: null, studentSurveyQuestions: [],
     instructionalDesignDevelopmentController: null, instructionalDesignDevelopment: [],
-    aiProductionController: null, integrationsController: null
+    aiProductionController: null, integrationsController: null, redevelopedController: null
   };
 
   const $ = id => document.getElementById(id);
   const unavailable = "Not available";
 
   document.addEventListener("DOMContentLoaded", async () => {
+    loadDataStatus();
     $("filterForm").addEventListener("submit", event => {
       event.preventDefault();
       state.page = 1;
@@ -210,6 +211,7 @@
     loadInstructionalDesignDevelopment(course);
     loadAiProduction(course);
     loadIntegrations(course);
+    loadRedeveloped(course);
     drawCharts();
     if (!course.course_id) {
       notice("This course has no identifier, so details can't be loaded.");
@@ -299,7 +301,8 @@
     dfwi: { path: "dfwi", none: "No DFWI data available.", loading: "Loading DFWI...", aborted: "DFWI data could not be loaded.", failed: "DFWI data is temporarily unavailable." },
     facultySurvey: { path: "faculty-survey", none: "No Faculty Survey results available.", loading: "Loading Faculty Survey results...", aborted: "Faculty Survey results could not be loaded.", failed: "Faculty Survey results are temporarily unavailable." },
     aiProduction: { path: "ai-production", none: "No AI integration recorded for this course.", loading: "Loading AI in this course...", aborted: "AI data could not be loaded.", failed: "AI data is temporarily unavailable." },
-    integrations: { path: "integrations", none: "No integrations recorded for this course.", loading: "Loading Integrations...", aborted: "Integration data could not be loaded.", failed: "Integration data is temporarily unavailable." }
+    integrations: { path: "integrations", none: "No integrations recorded for this course.", loading: "Loading Integrations...", aborted: "Integration data could not be loaded.", failed: "Integration data is temporarily unavailable." },
+    redeveloped: { path: "redeveloped", none: "No redeveloped-course feedback recorded for this course.", loading: "Loading Redeveloped course feedback...", aborted: "Redeveloped course feedback could not be loaded.", failed: "Redeveloped course feedback is temporarily unavailable." }
   };
 
   async function fetchCourseRows(course, path, controller) {
@@ -1072,6 +1075,43 @@
     showSectionContent("integrations");
   }
 
+  // Redeveloped course feedback: one block per responding section (no instructor names are sent by the API).
+  async function loadRedeveloped(course) {
+    state.redevelopedController?.abort();
+    $("redevelopedList").replaceChildren();
+    $("redevelopedSummary").textContent = "";
+    const rows = await loadSectionRows("redeveloped", course);
+    if (!rows) return;
+    const answered = rows.filter(row => row.responded);
+    $("redevelopedSummary").textContent = `${answered.length} of ${rows.length} section${rows.length === 1 ? "" : "s"} responded.`;
+    answered.forEach(row => {
+      const item = document.createElement("div");
+      item.className = "ai-project";
+      const heading = document.createElement("h4");
+      heading.textContent = `${row.term_label || row.term_code}, section ${row.section_identifier}`;
+      const list = document.createElement("dl");
+      list.className = "grades-summary";
+      [["Response date", row.response_date],
+       ["Helpfulness of developer's email", row.helpfulness_rating],
+       ["Significant changes", row.significant_changes],
+       ["Changes described", row.changes_detail],
+       ["Would have liked to know", row.would_have_liked_to_know]
+      ].forEach(([label, value]) => {
+        if (value === null || value === undefined || String(value).trim() === "") return;
+        const card = document.createElement("div");
+        const dt = document.createElement("dt");
+        const dd = document.createElement("dd");
+        dt.textContent = label;
+        dd.textContent = String(value).trim();
+        card.append(dt, dd);
+        list.append(card);
+      });
+      item.append(heading, list);
+      $("redevelopedList").append(item);
+    });
+    showSectionContent("redeveloped");
+  }
+
   function renderSelectedInstructionalDesignDevelopment() {
     const container = $("iddRecords");
     const status = $("iddRecordStatus");
@@ -1462,6 +1502,35 @@
   function number(value,fallback) {
     const n=Number(value);
     return Number.isFinite(n) && n>=0 ? n : fallback;
+  }
+
+  // Data status panel: rows and last rebuild time per data area (from /api/data-status).
+  async function loadDataStatus() {
+    try {
+      const response = await fetch("/api/data-status", { headers: { Accept: "application/json" }, credentials: "same-origin" });
+      const payload = await json(response);
+      if (!response.ok || payload.ok === false || !Array.isArray(payload.data)) throw new Error("data-status");
+      const body = $("dataStatusRows");
+      body.replaceChildren();
+      payload.data.forEach(row => {
+        const tr = document.createElement("tr");
+        [row.section,
+         row.available && row.rows !== null ? Number(row.rows).toLocaleString("en-US") : "Unavailable",
+         row.available && row.last_refreshed_utc ? formatDate(row.last_refreshed_utc) : "\u2014"
+        ].forEach(text => {
+          const td = document.createElement("td");
+          td.textContent = text;
+          tr.append(td);
+        });
+        body.append(tr);
+      });
+      $("dataStatusMessage").hidden = true;
+      $("dataStatusTable").hidden = false;
+    } catch {
+      $("dataStatusMessage").textContent = "Data status is temporarily unavailable.";
+      $("dataStatusMessage").hidden = false;
+      $("dataStatusTable").hidden = true;
+    }
   }
 
   function formatDate(value) {

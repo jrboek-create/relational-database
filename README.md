@@ -89,6 +89,7 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/courses` | Course catalog list. Query params: `page`, `limit`, `course_code`, `course_title`, `college_name`, `department_name`, `sort` (`course_code` or `-course_code`) |
 | `/api/courses/:course_id` | Course detail |
 | `/api/filter-options` | Distinct college and department pairs for the filter dropdowns |
+| `/api/data-status` | Row count and last rebuild time for each data area (shown in the UI's Data status panel) |
 | `/api/courses/:course_id/grades` | Grade summary |
 | `/api/courses/:course_id/enrollment` | Enrollment summary |
 | `/api/courses/:course_id/dfwi` | DFWI summary |
@@ -98,8 +99,11 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/courses/:course_id/instructional-design-development` | Instructional design and development summary |
 | `/api/courses/:course_id/ai-production` | AI production projects for the course (AI in this course) |
 | `/api/courses/:course_id/integrations` | Integrations for the course (month last done or started, per integration type) |
+| `/api/courses/:course_id/redeveloped` | Instructor feedback on redeveloped sections (no instructor names or emails) |
 
 Each endpoint reads from a matching `*_api` collection in the `reporting` schema (for example, `course_grade_summary_api`).
+
+Responses are gzip-compressed for clients that send `Accept-Encoding: gzip`.
 
 ## Importing Excel data (optional)
 
