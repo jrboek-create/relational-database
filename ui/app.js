@@ -20,7 +20,7 @@
     studentSurveyController: null, studentSurvey: [],
     studentSurveyQuestionController: null, studentSurveyQuestions: [],
     instructionalDesignDevelopmentController: null, instructionalDesignDevelopment: [],
-    aiProductionController: null, integrationsController: null, redevelopedController: null
+    aiProductionController: null, integrationsController: null, redevelopedController: null, observationsController: null
   };
 
   const $ = id => document.getElementById(id);
@@ -212,6 +212,7 @@
     loadAiProduction(course);
     loadIntegrations(course);
     loadRedeveloped(course);
+    loadObservations(course);
     drawCharts();
     if (!course.course_id) {
       notice("This course has no identifier, so details can't be loaded.");
@@ -302,7 +303,8 @@
     facultySurvey: { path: "faculty-survey", none: "No Faculty Survey results available.", loading: "Loading Faculty Survey results...", aborted: "Faculty Survey results could not be loaded.", failed: "Faculty Survey results are temporarily unavailable." },
     aiProduction: { path: "ai-production", none: "No AI integration recorded for this course.", loading: "Loading AI in this course...", aborted: "AI data could not be loaded.", failed: "AI data is temporarily unavailable." },
     integrations: { path: "integrations", none: "No integrations recorded for this course.", loading: "Loading Integrations...", aborted: "Integration data could not be loaded.", failed: "Integration data is temporarily unavailable." },
-    redeveloped: { path: "redeveloped", none: "No redeveloped-course feedback recorded for this course.", loading: "Loading Redeveloped course feedback...", aborted: "Redeveloped course feedback could not be loaded.", failed: "Redeveloped course feedback is temporarily unavailable." }
+    redeveloped: { path: "redeveloped", none: "No redeveloped-course feedback recorded for this course.", loading: "Loading Redeveloped course feedback...", aborted: "Redeveloped course feedback could not be loaded.", failed: "Redeveloped course feedback is temporarily unavailable." },
+    observations: { path: "observations", none: "No faculty observations recorded for this course.", loading: "Loading Faculty observations...", aborted: "Faculty observations could not be loaded.", failed: "Faculty observations are temporarily unavailable." }
   };
 
   async function fetchCourseRows(course, path, controller) {
@@ -1110,6 +1112,57 @@
       $("redevelopedList").append(item);
     });
     showSectionContent("redeveloped");
+  }
+
+  // Faculty observations: totals per course over all terms. Courses with fewer than 3 observations show only the count.
+  async function loadObservations(course) {
+    state.observationsController?.abort();
+    $("observationsDetail").replaceChildren();
+    $("observationsSummary").textContent = "";
+    const rows = await loadSectionRows("observations", course);
+    if (!rows) return;
+    const overall = rows.find(row => row.item_number === 0) || rows[0];
+    const n = Number(overall.observation_count);
+    const span = [overall.first_term_month, overall.last_term_month].filter(Boolean);
+    const period = span.length ? ` (${span[0]}${span[1] && span[1] !== span[0] ? " to " + span[1] : ""})` : "";
+    $("observationsSummary").textContent = `${n} observation${n === 1 ? "" : "s"}${period}.`;
+    if (overall.suppressed) {
+      const note = document.createElement("p");
+      note.className = "unavailable";
+      note.textContent = "Fewer than 3 observations, so ratings are not shown to protect individual instructors.";
+      $("observationsDetail").append(note);
+      showSectionContent("observations");
+      return;
+    }
+    const overallText = [["Exceeds", overall.count_exceeds], ["Meets", overall.count_meets], ["Below", overall.count_below],
+                         ["Coaching recommended", overall.count_coaching], ["Not rated", overall.count_not_rated]]
+      .filter(([, v]) => Number(v) > 0).map(([k, v]) => `${k} ${v}`).join(", ");
+    const p = document.createElement("p");
+    p.textContent = `Overall rating: ${overallText || "none recorded"}.`;
+    const table = document.createElement("table");
+    table.className = "observation-table";
+    const head = document.createElement("tr");
+    ["Standard", "Y", "N", "E", "M", "B", "NA"].forEach(text => { const th = document.createElement("th"); th.scope = "col"; th.textContent = text; head.append(th); });
+    const thead = document.createElement("thead"); thead.append(head);
+    const tbody = document.createElement("tbody");
+    rows.filter(row => row.item_number > 0).forEach(row => {
+      const tr = document.createElement("tr");
+      const label = document.createElement("td");
+      label.textContent = `${row.item_number}. ${row.item_text}`;
+      tr.append(label);
+      [row.count_yes, row.count_no, row.count_exceeds, row.count_meets, row.count_below, row.count_not_applicable].forEach(v => {
+        const td = document.createElement("td");
+        td.textContent = Number(v) > 0 ? String(v) : "";
+        tr.append(td);
+      });
+      tbody.append(tr);
+    });
+    table.append(thead, tbody);
+    const key = document.createElement("p");
+    key.className = "unavailable";
+    key.textContent = "Y yes, N no, E exceeds, M meets, B below, NA not applicable.";
+    $("observationsDetail").append(p, table, key);
+    showSectionContent("observations");
   }
 
   function renderSelectedInstructionalDesignDevelopment() {

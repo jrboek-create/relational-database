@@ -364,10 +364,13 @@ PROJECTIONS = [
      "md5(source_hash || ':' || source_row_number::text || ':' || integration_name)::uuid"),
     ("course_redeveloped_summary", "tmp_course_redeveloped_summary", "redeveloped_summary_id",
      "md5(source_hash || ':' || source_row_number::text)::uuid"),
+    ("course_observation_summary", "tmp_course_observation_summary", "observation_summary_id",
+     "md5(course_key || ':' || item_number::text)::uuid"),
 ]
 BUILD_FILES = ["build_grade_enrollment_dfwi.sql", "build_faculty_survey.sql", "build_student_survey.sql",
                "build_student_survey_questions.sql", "build_instructional_design_development.sql", "build_ai_production.sql",
-               "build_integrations.sql", "build_redeveloped.sql"]
+               "build_integrations.sql", "build_redeveloped.sql",
+               "build_observations.sql"]
 
 
 def columns(cur, schema, table):

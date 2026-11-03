@@ -122,3 +122,6 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .data-status table{width:100%;border-collapse:collapse;margin-top:.5rem}
 .data-status th,.data-status td{padding:.25rem .35rem;text-align:left;border-bottom:1px solid #d9e2e9}
 .data-status td:nth-child(2){text-align:right}
+.observation-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:.5rem 0}
+.observation-table th,.observation-table td{padding:.3rem .4rem;border-bottom:1px solid #d9e2e9;text-align:center}
+.observation-table th:first-child,.observation-table td:first-child{text-align:left}

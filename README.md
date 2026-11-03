@@ -27,7 +27,7 @@ Search the current course catalog by code, title, college, or department. Open a
 - Course performance: grades, enrollment, and DFWI
 - Faculty survey and student survey results, including question-level student survey results
 - Instructional design and development history
-- AI in this course (AI production projects), integrations (month last done or started per integration type), and redeveloped-course feedback from instructors (without names or emails)
+- AI in this course (AI production projects), integrations (month last done or started per integration type), redeveloped-course feedback from instructors (without names or emails), and faculty observation totals (ratings shown only for courses with at least 3 observations)
 
 A **Data status** box under the filters shows each data area's row count and when it was last rebuilt.
 
@@ -106,6 +106,7 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/courses/:course_id/ai-production` | AI production projects for the course (AI in this course) |
 | `/api/courses/:course_id/integrations` | Integrations for the course (month last done or started, per integration type) |
 | `/api/courses/:course_id/redeveloped` | Instructor feedback on redeveloped sections (no instructor names or emails) |
+| `/api/courses/:course_id/observations` | Faculty observation totals for the course, all terms combined (no Emplids or comments; ratings hidden below 3 observations) |
 
 Each endpoint reads from a matching `*_api` collection in the `reporting` schema (for example, `course_grade_summary_api`).
 

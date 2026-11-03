@@ -306,6 +306,14 @@ const courseSections = [
     sort: "-term_code,section_identifier",
     limit: 500,
     fields: ["redeveloped_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "sis_source_id", "term_id", "term_code", "term_label", "section_identifier", "responded", "response_date", "helpfulness_rating", "significant_changes", "changes_detail", "would_have_liked_to_know", "report_refresh_run_id", "report_as_of_utc"]
+  },
+  {
+    path: "observations",
+    label: "Faculty observations",
+    collection: "course_observation_summary_api",
+    sort: "item_number",
+    limit: 100,
+    fields: ["observation_summary_id", "course_id", "university_course_id", "course_code", "course_title", "college_name", "department_name", "raw_course", "catalog_match_status", "item_number", "item_text", "observation_count", "first_term_month", "last_term_month", "suppressed", "count_yes", "count_no", "count_exceeds", "count_meets", "count_below", "count_not_applicable", "count_coaching", "count_not_rated", "report_refresh_run_id", "report_as_of_utc"]
   }
 ];
 
