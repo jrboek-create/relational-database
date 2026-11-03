@@ -288,8 +288,8 @@ const courseSections = [
     collection: "course_dfwi_summary_api",
     sort: "-term_code",
     limit: 100,
-    meta: { formula: "(D + F + W + I) / enrollment * 100" },
-    fields: ["dfwi_summary_id", "course_id", "term_id", "term_code", "term_label", "university_course_id", "course_code", "course_title", "college_name", "department_name", "enrollment_count", "d_count", "f_count", "w_count", "i_count", "dfwi_count", "dfwi_rate_pct", "report_refresh_run_id", "report_as_of_utc"]
+    meta: { formula: "(D + F + W + I) / grades * 100", grades: "A, B, C, D, F, W, I, AU, NS, NTG, P, WF (as in Tableau)" },
+    fields: ["dfwi_summary_id", "course_id", "term_id", "term_code", "term_label", "university_course_id", "course_code", "course_title", "college_name", "department_name", "enrollment_count", "grade_count", "d_count", "f_count", "w_count", "i_count", "dfwi_count", "dfwi_rate_pct", "report_refresh_run_id", "report_as_of_utc"]
   },
   {
     path: "faculty-survey",

@@ -3,7 +3,9 @@
 -- Rules reconstructed and verified on 2 Nov 2026 against the tables built 20 Oct 2026:
 --   Grades:     core.grade per course + term, linked courses only (course_id not null).
 --   Enrollment: core.course_offering_section per course + term, sections with an enrollment count only.
---   DFWI:       one row per enrollment row; D + F + W + I grades (WF excluded) over enrollment, rounded to 2 decimals.
+--   DFWI:       (changed 3 Nov 2026 to follow Tableau) one row per course + term with grades; D + F + W + I (WF excluded)
+--               over grades in Tableau's 12 codes (A B C D F W I AU NS NTG P WF), pooled across sections, rounded to 2
+--               decimals. Enrollment is attached for reference only. (Before: over enrollment, one row per enrollment row.)
 --   Course and term labels come from reporting.course_current_catalog_api and core.term.
 
 CREATE TEMP TABLE tmp_grade_summary ON COMMIT DROP AS
@@ -55,18 +57,19 @@ GROUP BY o.course_id, o.term_id, t.term_code, t.term_label,
          c.university_course_id, c.course_code, c.course_title, c.college_name, c.department_name;
 
 CREATE TEMP TABLE tmp_dfwi_summary ON COMMIT DROP AS
-SELECT e.course_id, e.term_id, e.term_code, e.term_label,
-       e.university_course_id, e.course_code, e.course_title, e.college_name, e.department_name,
+SELECT x.course_id, x.term_id, x.term_code, x.term_label,
+       x.university_course_id, x.course_code, x.course_title, x.college_name, x.department_name,
        e.enrollment_count,
-       coalesce(g.d, 0) AS d_count, coalesce(g.f, 0) AS f_count, coalesce(g.w, 0) AS w_count, coalesce(g.i, 0) AS i_count,
-       coalesce(g.d, 0) + coalesce(g.f, 0) + coalesce(g.w, 0) + coalesce(g.i, 0) AS dfwi_count,
-       round((coalesce(g.d, 0) + coalesce(g.f, 0) + coalesce(g.w, 0) + coalesce(g.i, 0)) * 100.0 / nullif(e.enrollment_count, 0), 2) AS dfwi_rate_pct
-FROM tmp_enrollment_summary e
-LEFT JOIN (
-  SELECT course_id, term_id,
-         count(*) FILTER (WHERE official_grade_code = 'D') AS d,
-         count(*) FILTER (WHERE official_grade_code = 'F') AS f,
-         count(*) FILTER (WHERE official_grade_code = 'W') AS w,
-         count(*) FILTER (WHERE official_grade_code = 'I') AS i
-  FROM core.grade WHERE course_id IS NOT NULL GROUP BY course_id, term_id
-) g ON g.course_id = e.course_id AND g.term_id = e.term_id;
+       x.tableau_grades AS grade_count,
+       x.d_count, x.f_count, x.w_count, x.i_count,
+       x.d_count + x.f_count + x.w_count + x.i_count AS dfwi_count,
+       round((x.d_count + x.f_count + x.w_count + x.i_count) * 100.0 / x.tableau_grades, 2) AS dfwi_rate_pct
+FROM (
+  SELECT g.*,
+         g.grade_d_count AS d_count, g.grade_f_count AS f_count, g.grade_w_count AS w_count, g.grade_i_count AS i_count,
+         g.grade_a_count + g.grade_b_count + g.grade_c_count + g.grade_d_count + g.grade_f_count + g.grade_w_count
+           + g.grade_i_count + g.grade_au_count + g.grade_ns_count + g.grade_ntg_count + g.grade_p_count + g.grade_wf_count AS tableau_grades
+  FROM tmp_grade_summary g
+) x
+LEFT JOIN tmp_enrollment_summary e ON e.course_id = x.course_id AND e.term_id = x.term_id
+WHERE x.tableau_grades > 0;

@@ -103,7 +103,7 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/v1/openapi.json` | OpenAPI 3.0 description of every endpoint and field |
 | `/api/courses/:course_id/grades` | Grade summary |
 | `/api/courses/:course_id/enrollment` | Enrollment summary |
-| `/api/courses/:course_id/dfwi` | DFWI summary |
+| `/api/courses/:course_id/dfwi` | DFWI summary: (D + F + W + I) / grades × 100, as in Tableau (grades = A, B, C, D, F, W, I, AU, NS, NTG, P, WF), pooled across sections; enrollment shown for reference |
 | `/api/courses/:course_id/faculty-survey` | Faculty survey summary |
 | `/api/courses/:course_id/student-survey` | Student survey summary |
 | `/api/courses/:course_id/student-survey/questions` | Student survey question-level summary |

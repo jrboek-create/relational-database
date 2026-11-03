@@ -528,6 +528,7 @@
     set("dfwiRate", null);
     set("dfwiTotal", null);
     set("dfwiEnrollment", null);
+    set("dfwiGrades", null);
     set("dfwiDF", null);
     set("dfwiWI", null);
   }
@@ -547,9 +548,10 @@
 
     set("dfwiRate", formatDfwiRate(dfwi.dfwi_rate_pct));
     set("dfwiTotal", formatWholeNumber(dfwi.dfwi_count));
+    set("dfwiGrades", formatWholeNumber(dfwi.grade_count));
     set(
       "dfwiEnrollment",
-      formatWholeNumber(dfwi.enrollment_count)
+      dfwi.enrollment_count === null || dfwi.enrollment_count === undefined ? null : formatWholeNumber(dfwi.enrollment_count)
     );
 
     set("dfwiDF", `${formatWholeNumber(dfwi.d_count)} / ${formatWholeNumber(dfwi.f_count)}`);
