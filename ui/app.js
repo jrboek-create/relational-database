@@ -155,7 +155,164 @@
     $("adminPage").hidden = !show;
     $("appMain").hidden = show;
     $("adminToggle").textContent = show ? "Back to courses" : "Admin";
-    if (show) loadAdmin(admin.selectedId);
+    if (show) showAdminTab($("adminRolesView").hidden ? "users" : "roles");
+  }
+
+  function showAdminTab(tab) {
+    if (tab === "users" && admin.dirty && !confirm("Discard unsaved changes to this role?")) return;
+    if (tab === "users") admin.dirty = false;
+    $("adminRolesView").hidden = tab !== "roles";
+    $("adminUsersView").hidden = tab !== "users";
+    $("adminTabRoles").setAttribute("aria-pressed", String(tab === "roles"));
+    $("adminTabUsers").setAttribute("aria-pressed", String(tab === "users"));
+    if (tab === "roles") loadAdmin(admin.selectedId);
+    else loadUsers();
+  }
+
+  // ---- Admin page: users -------------------------------------------------------------------------------
+  function usersMessage(text, isError) {
+    $("usersMessage").textContent = text || "";
+    $("usersMessage").hidden = !text;
+    $("usersMessage").className = isError ? "error" : "notice";
+  }
+
+  function roleOptions(select, selectedId) {
+    select.replaceChildren(...admin.roles.map(role => {
+      const option = document.createElement("option");
+      option.value = role.id;
+      option.textContent = role.name;
+      option.selected = role.id === selectedId;
+      return option;
+    }));
+  }
+
+  async function loadUsers() {
+    try {
+      const [roles, users] = await Promise.all([adminRequest("GET", "/api/admin/roles"), adminRequest("GET", "/api/admin/users")]);
+      admin.roles = roles.roles;
+      admin.items = roles.items;
+      const chosen = $("newUserRole").value;
+      roleOptions($("newUserRole"), chosen || admin.roles.find(r => !r.is_admin)?.id);
+      renderUsers(users);
+    } catch (error) {
+      usersMessage(error.message, true);
+    }
+  }
+
+  function renderUsers(users) {
+    const me = state.access?.user?.id;
+    $("usersRows").replaceChildren(...users.map(user => {
+      const row = document.createElement("tr");
+      const cell = content => { const td = document.createElement("td"); td.append(content); row.append(td); return td; };
+      cell(user.display_name + (user.id === me ? " (you)" : ""));
+      cell(user.email);
+      const role = document.createElement("select");
+      role.setAttribute("aria-label", `Role for ${user.display_name}`);
+      roleOptions(role, user.role_id);
+      role.disabled = user.id === me;
+      role.addEventListener("change", () => updateUser(user, { role_id: role.value }, `${user.display_name} now has the role ${role.selectedOptions[0].textContent}.`));
+      cell(role);
+      cell(user.active ? "Active" : "Deactivated");
+      const actions = cell("");
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.textContent = user.active ? "Deactivate" : "Reactivate";
+      toggle.disabled = user.id === me;
+      toggle.addEventListener("click", () => {
+        if (user.active && !confirm(`Deactivate ${user.display_name}? They are signed out and can't sign in until reactivated.`)) return;
+        updateUser(user, { active: !user.active }, `${user.display_name} is ${user.active ? "deactivated" : "active again"}.`);
+      });
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.textContent = "Set password";
+      reset.addEventListener("click", () => showPasswordForm(actions, user));
+      actions.append(toggle, " ", reset);
+      if (!user.active) {   // only someone already deactivated can be deleted
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "Delete";
+        remove.addEventListener("click", () => deleteUser(user));
+        actions.append(" ", remove);
+      }
+      return row;
+    }));
+  }
+
+  function showPasswordForm(actions, user) {
+    if (actions.querySelector("form")) return;
+    const form = document.createElement("form");
+    form.className = "admin-password";
+    const input = document.createElement("input");
+    input.type = "password";
+    input.autocomplete = "new-password";
+    input.required = true;
+    input.setAttribute("aria-label", `New password for ${user.display_name} (at least 12 characters)`);
+    input.placeholder = "New password (12+ characters)";
+    const save = document.createElement("button");
+    save.type = "submit";
+    save.textContent = "Save";
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.textContent = "Cancel";
+    cancel.addEventListener("click", () => form.remove());
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      try {
+        await adminRequest("POST", `/api/admin/users/${encodeURIComponent(user.id)}/password`, { password: input.value });
+        form.remove();
+        usersMessage(`New password set for ${user.display_name}. Give it to them yourself.`);
+      } catch (error) {
+        usersMessage(error.message, true);
+      }
+    });
+    form.append(input, save, cancel);
+    actions.append(form);
+    input.focus();
+  }
+
+  async function updateUser(user, changes, done) {
+    try {
+      await adminRequest("PATCH", `/api/admin/users/${encodeURIComponent(user.id)}`, changes);
+      await loadUsers();
+      usersMessage(done);
+    } catch (error) {
+      await loadUsers();
+      usersMessage(error.message, true);
+    }
+  }
+
+  async function deleteUser(user) {
+    if (!confirm(`Delete ${user.display_name} (${user.email})? They are removed from the app for good. This can't be undone.`)) return;
+    try {
+      const result = await adminRequest("DELETE", `/api/admin/users/${encodeURIComponent(user.id)}`);
+      await loadUsers();
+      usersMessage(result.directus_account_deleted
+        ? `${user.display_name} was deleted.`
+        : `${user.display_name} was removed from the app. Their Directus account has a Directus role, so it was kept.`);
+    } catch (error) {
+      await loadUsers();
+      usersMessage(error.message, true);
+    }
+  }
+
+  async function addUser(event) {
+    event.preventDefault();
+    try {
+      const created = await adminRequest("POST", "/api/admin/users", {
+        display_name: $("newUserName").value,
+        email: $("newUserEmail").value,
+        password: $("newUserPassword").value,
+        role_id: $("newUserRole").value
+      });
+      const name = $("newUserName").value.trim();
+      ["newUserName", "newUserEmail", "newUserPassword"].forEach(id => { $(id).value = ""; });
+      await loadUsers();
+      usersMessage(created.linked_existing_account
+        ? `${name} added. Their existing Directus account was linked and keeps its password.`
+        : `${name} added. Give them their temporary password yourself.`);
+    } catch (error) {
+      usersMessage(error.message, true);
+    }
   }
 
   async function loadAdmin(selectId) {
@@ -316,6 +473,9 @@
     $("adminSave").addEventListener("click", saveRole);
     $("adminDelete").addEventListener("click", deleteRole);
     $("adminRoleName").addEventListener("input", () => { admin.dirty = true; });
+    $("adminTabRoles").addEventListener("click", () => showAdminTab("roles"));
+    $("adminTabUsers").addEventListener("click", () => showAdminTab("users"));
+    $("addUserForm").addEventListener("submit", addUser);
     $("filterForm").addEventListener("submit", event => {
       event.preventDefault();
       state.page = 1;

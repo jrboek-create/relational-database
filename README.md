@@ -161,7 +161,9 @@ Details:
 - add, rename or delete a role;
 - tick what each role sees, with the wording shown next to each survey question and All/None buttons for each group.
 
-The Admin role can't be changed. A role can't be deleted while users have it. Every change is logged by the middleware as an `admin_change` line that names who made it.
+The Admin role can't be changed. A role can't be deleted while users have it.
+
+The **Users** tab lists everyone with access to the app. From there you can add a person (name, email, temporary password of at least 12 characters, and role), change someone's role, deactivate or reactivate them, and set a new password. A new person gets a Directus account with no Directus role, so they can sign in to this app but not to the Directus admin screens. If the email already has a Directus account, that account is linked and keeps its own password. A deactivated person is signed out on their next click. Setting a new password also clears a sign-in lockout. You can't change your own role or deactivate yourself. A person can be **deleted** only after they have been deactivated. Deleting removes them from the app. Their Directus account is deleted too, unless it has a Directus role (Directus staff and admin accounts are kept). Every change is logged by the middleware as an `admin_change` line that names who made it.
 
 Changes are saved with a separate Directus admin token in `.secrets/directus_admin_token.txt`. It is not the read-only token the rest of the app uses. To set it up (once):
 

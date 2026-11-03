@@ -351,6 +351,116 @@ app.delete("/api/admin/roles/:id", adminRoute(async (req, reply, fail) => {
   reply(200, { data: { id: role.id } });
 }));
 
+// ---- Admin page: users ------------------------------------------------------------------------------
+// Passwords live only in Directus. New accounts get no Directus role, so they can sign in to this app
+// but can't use the Directus admin screens. app_user links each account to its app role.
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD = 12;
+const passwordProblem = (value) =>
+  typeof value !== "string" || value.length < MIN_PASSWORD || value.length > 200 ? `Use a password of at least ${MIN_PASSWORD} characters.` : null;
+
+async function loadAppUser(id) {
+  const rows = await directusJson(`/items/app_user?filter[directus_user_id][_eq]=${encodeURIComponent(id)}&fields=directus_user_id,email,display_name,role_id,active&limit=1`);
+  if (rows === null) throw Object.assign(new Error("app_user unavailable"), { code: "DIRECTUS_UNAVAILABLE" });
+  return rows[0] || null;
+}
+
+app.get("/api/admin/users", adminRoute(async (req, reply) => {
+  const users = await directusJson("/items/app_user?fields=directus_user_id,email,display_name,role_id,active&sort=display_name&limit=-1");
+  if (users === null) throw Object.assign(new Error("app_user unavailable"), { code: "DIRECTUS_UNAVAILABLE" });
+  reply(200, { data: users.map((u) => ({ id: u.directus_user_id, email: u.email, display_name: u.display_name, role_id: u.role_id, active: u.active === true })) });
+}));
+
+// Body: { display_name, email, password, role_id }. If the email already has a Directus account, that account is
+// linked and its password is left as it is.
+app.post("/api/admin/users", adminRoute(async (req, reply, fail) => {
+  const name = cleanName(req.body?.display_name);
+  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+  if (!name || name.length > 100) return fail(400, "INVALID_NAME", "Enter the person's name.");
+  if (!emailPattern.test(email) || email.length > 254) return fail(400, "INVALID_EMAIL", "Enter a valid email address.");
+  const roles = await loadRoles();
+  if (!roles.some((r) => r.id === req.body?.role_id)) return fail(400, "INVALID_ROLE", "Choose a role.");
+  const taken = await directusJson(`/items/app_user?filter[email][_eq]=${encodeURIComponent(email)}&fields=directus_user_id&limit=1`);
+  if (taken === null) throw Object.assign(new Error("app_user unavailable"), { code: "DIRECTUS_UNAVAILABLE" });
+  if (taken.length) return fail(409, "EMAIL_TAKEN", "This person already has an account in the app.");
+  const existing = await directusWrite("GET", `/users?filter[email][_eq]=${encodeURIComponent(email)}&fields=id&limit=1`);
+  let id = existing[0]?.id, created = false;
+  if (!id) {
+    const problem = passwordProblem(req.body?.password);
+    if (problem) return fail(400, "WEAK_PASSWORD", problem);
+    id = crypto.randomUUID();
+    await directusWrite("POST", "/users", { id, email, password: req.body.password, first_name: name, status: "active" });
+    created = true;
+  }
+  try {
+    await directusWrite("POST", "/items/app_user", { directus_user_id: id, email, display_name: name, role_id: req.body.role_id, active: true });
+  } catch (error) {
+    if (created) await directusWrite("DELETE", `/users/${id}`).catch(() => {});   // don't leave a half-made account
+    throw error;
+  }
+  logChange(req, "user_created", { user: email, role: roles.find((r) => r.id === req.body.role_id).name, new_directus_account: created });
+  reply(201, { data: { id, linked_existing_account: !created } });
+}));
+
+// Body: { role_id?, active? }. You can't change your own role or deactivate yourself (so the Admin can't lock themselves out).
+app.patch("/api/admin/users/:id", adminRoute(async (req, reply, fail) => {
+  if (!isUuid(req.params.id)) return fail(404, "NOT_FOUND", "User not found.");
+  const user = await loadAppUser(req.params.id);
+  if (!user) return fail(404, "NOT_FOUND", "User not found.");
+  const changes = {};
+  if (req.body?.role_id !== undefined && req.body.role_id !== user.role_id) {
+    const roles = await loadRoles();
+    if (!roles.some((r) => r.id === req.body.role_id)) return fail(400, "INVALID_ROLE", "Choose a role.");
+    changes.role_id = req.body.role_id;
+  }
+  if (req.body?.active !== undefined) {
+    if (typeof req.body.active !== "boolean") return fail(400, "INVALID_QUERY", "active must be true or false.");
+    if (req.body.active !== user.active) changes.active = req.body.active;
+  }
+  if (!Object.keys(changes).length) return reply(200, { data: { id: user.directus_user_id } });
+  if (user.directus_user_id === req.access.user.id) return fail(403, "SELF_CHANGE", "You can't change your own role or deactivate yourself.");
+  await directusWrite("PATCH", `/items/app_user/${user.directus_user_id}`, changes);
+  accessCache.clear();   // takes effect on the person's next click; a deactivated person is signed out
+  logChange(req, "user_updated", { user: user.email, ...changes });
+  reply(200, { data: { id: user.directus_user_id } });
+}));
+
+// Deletes a deactivated person from the app. Their Directus account is deleted too, but only if it has no Directus
+// role (an account made for this app); Directus staff and admin accounts are kept.
+app.delete("/api/admin/users/:id", adminRoute(async (req, reply, fail) => {
+  if (!isUuid(req.params.id)) return fail(404, "NOT_FOUND", "User not found.");
+  const user = await loadAppUser(req.params.id);
+  if (!user) return fail(404, "NOT_FOUND", "User not found.");
+  if (user.directus_user_id === req.access.user.id) return fail(403, "SELF_CHANGE", "You can't delete yourself.");
+  if (user.active) return fail(409, "STILL_ACTIVE", "Deactivate this person before deleting them.");
+  let account = null;
+  try {
+    account = await directusWrite("GET", `/users/${user.directus_user_id}?fields=id,role`);
+  } catch (error) {
+    if (error.status !== 403 && error.status !== 404) throw error;   // Directus answers 403 for an account that no longer exists
+  }
+  await directusWrite("DELETE", `/items/app_user/${user.directus_user_id}`);
+  const deleteAccount = Boolean(account) && !account.role;
+  if (deleteAccount) await directusWrite("DELETE", `/users/${user.directus_user_id}`);
+  for (const [hash, session] of sessions) if (session.userId === user.directus_user_id) sessions.delete(hash);
+  accessCache.clear();
+  logChange(req, "user_deleted", { user: user.email, directus_account_deleted: deleteAccount });
+  reply(200, { data: { id: user.directus_user_id, directus_account_deleted: deleteAccount } });
+}));
+
+// Body: { password } — sets a new password in Directus and clears any sign-in lockout for that email.
+app.post("/api/admin/users/:id/password", adminRoute(async (req, reply, fail) => {
+  if (!isUuid(req.params.id)) return fail(404, "NOT_FOUND", "User not found.");
+  const user = await loadAppUser(req.params.id);
+  if (!user) return fail(404, "NOT_FOUND", "User not found.");
+  const problem = passwordProblem(req.body?.password);
+  if (problem) return fail(400, "WEAK_PASSWORD", problem);
+  await directusWrite("PATCH", `/users/${user.directus_user_id}`, { password: req.body.password });
+  loginFailures.delete(String(user.email).toLowerCase());
+  logChange(req, "password_reset", { user: user.email });
+  reply(200, { data: { id: user.directus_user_id } });
+}));
+
 app.get("/health", (_req, res) => {
   res.status(200).json({
     status: "ok",

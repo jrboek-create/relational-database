@@ -37,7 +37,12 @@
   </form>
 </section>
 
-<main id="adminPage" class="layout" hidden>
+<main id="adminPage" class="admin-page" hidden>
+  <nav class="admin-tabs" aria-label="Admin">
+    <button id="adminTabRoles" type="button" aria-pressed="true">Roles</button>
+    <button id="adminTabUsers" type="button" aria-pressed="false">Users</button>
+  </nav>
+  <div id="adminRolesView" class="layout">
   <section class="panel" aria-labelledby="adminRolesTitle">
     <h2 id="adminRolesTitle">Roles</h2>
     <ul id="adminRoleList" class="admin-role-list"></ul>
@@ -63,6 +68,35 @@
       </div>
     </div>
   </section>
+  </div>
+  <div id="adminUsersView" class="admin-users" hidden>
+    <section class="panel" aria-labelledby="usersTitle">
+      <h2 id="usersTitle">Users</h2>
+      <p id="usersMessage" class="notice" role="status" hidden></p>
+      <div class="table-wrap">
+        <table class="admin-users-table">
+          <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th><th scope="col">Status</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+          <tbody id="usersRows"></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="addUserTitle">
+      <h2 id="addUserTitle">Add a user</h2>
+      <form id="addUserForm" autocomplete="off">
+        <label for="newUserName">Name</label>
+        <input id="newUserName" maxlength="100" required>
+        <label for="newUserEmail">Email</label>
+        <input id="newUserEmail" type="email" maxlength="254" required>
+        <label for="newUserPassword">Temporary password (at least 12 characters)</label>
+        <input id="newUserPassword" type="password" autocomplete="new-password" maxlength="200">
+        <label for="newUserRole">Role</label>
+        <select id="newUserRole" required></select>
+        <button class="primary" type="submit">Add user</button>
+      </form>
+      <p class="admin-note">Give the person their temporary password yourself. If the email already has a Directus account,
+        that account is linked and keeps its own password, so the password box can be left empty.</p>
+    </section>
+  </div>
 </main>
 
 <main id="appMain" class="layout" hidden>

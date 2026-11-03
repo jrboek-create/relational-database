@@ -133,7 +133,7 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .sign-in button{margin-top:1.2rem}
 .user-box{margin-left:auto;display:flex;align-items:center;gap:.9rem;color:#fff}
 .user-role{display:block;font-size:.8rem;opacity:.85}
-#appMain[hidden],#adminPage[hidden],#userBox[hidden],.sign-in[hidden]{display:none}
+#appMain[hidden],#adminPage[hidden],#adminRolesView[hidden],#adminUsersView[hidden],#userBox[hidden],.sign-in[hidden]{display:none}
 /* Admin page */
 .admin-role-list{list-style:none;margin:0 0 1.2rem;padding:0}
 .admin-role-list button{display:flex;justify-content:space-between;gap:1rem;width:100%;margin-bottom:.4rem;text-align:left;background:white}
@@ -148,3 +148,15 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .admin-small{min-height:0;padding:.1rem .5rem;font-size:.8rem}
 .admin-off>ul{opacity:.45}
 .admin-actions{display:flex;gap:.8rem;margin-top:1.2rem}
+.admin-page{max-width:1500px;margin:auto;padding:1.4rem}
+.admin-page .layout{padding:0}
+.admin-tabs{display:flex;gap:.6rem;margin-bottom:1.2rem}
+.admin-tabs button[aria-pressed="true"]{background:#0f666c;color:white;border-color:#0f666c}
+.admin-users{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:1.4rem;align-items:start}
+@media(max-width:900px){.admin-users{grid-template-columns:1fr}}
+.admin-users-table td,.admin-users-table th{text-align:left;vertical-align:top}
+.admin-users-table td:last-child{white-space:nowrap}
+.admin-password{display:flex;gap:.4rem;margin-top:.5rem}
+#addUserForm label{display:block;margin-top:.7rem}
+#addUserForm input,#addUserForm select{width:100%;margin-top:.3rem}
+#addUserForm button{margin-top:1rem}
