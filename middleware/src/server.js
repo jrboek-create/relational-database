@@ -4,6 +4,7 @@ import { readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import crypto from "node:crypto";
+import { effectivePermissions, SECTION_PERMISSION, questionKey } from "./permissions.js";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -68,6 +69,164 @@ app.use("/api", (req, res, next) => {
   req.apiClient = client;
   console.log(JSON.stringify({ event: "api_client", request_id: req.requestId, client, version: req.apiVersion || 0, path: req.originalUrl.split("?")[0] }));
   next();
+});
+
+// ---------------------------------------------------------------- sign-in, roles and permissions (stage 1)
+// People use the web app (nginx adds the "ui" key) and must sign in; tools with their own keys keep full access.
+// Passwords are checked by Directus; the session lives here (memory) as an HttpOnly cookie. Roles and ticked items come
+// from app_role / app_role_permission / app_user, read with the read-only token and cached briefly.
+const UI_KEY_NAME = process.env.UI_KEY_NAME || "ui";
+const SESSION_COOKIE = "air_session";
+const SESSION_IDLE_MS = 4 * 60 * 60 * 1000;   // signed out after 4 hours without activity
+const SESSION_MAX_MS = 12 * 60 * 60 * 1000;   // and after 12 hours in any case
+const ACCESS_CACHE_MS = 30 * 1000;            // role changes apply within 30 seconds
+const LOGIN_FAILURE_LIMIT = 5;                // per email, per 15 minutes
+const sessions = new Map();                   // sha256(token) -> { userId, created, lastSeen }
+const accessCache = new Map();                // userId -> { at, access }
+const loginFailures = new Map();              // email -> { count, first }
+const TOOL_ACCESS = { tool: true, admin: true, user: null, role: { name: "API key", is_admin: true }, permissions: effectivePermissions([], true) };
+const sha256 = (value) => crypto.createHash("sha256").update(value).digest("hex");
+
+function readCookie(req, name) {
+  for (const part of (req.get("cookie") || "").split(";")) {
+    const i = part.indexOf("=");
+    if (i > 0 && part.slice(0, i).trim() === name) return decodeURIComponent(part.slice(i + 1).trim());
+  }
+  return null;
+}
+
+function currentSession(req) {
+  const token = readCookie(req, SESSION_COOKIE);
+  if (!token) return null;
+  const hash = sha256(token);
+  const s = sessions.get(hash);
+  const now = Date.now();
+  if (!s || now - s.lastSeen > SESSION_IDLE_MS || now - s.created > SESSION_MAX_MS) {
+    sessions.delete(hash);
+    return null;
+  }
+  s.lastSeen = now;
+  return { hash, ...s };
+}
+
+setInterval(() => {   // forget expired sessions and old login failures
+  const now = Date.now();
+  for (const [hash, s] of sessions) if (now - s.lastSeen > SESSION_IDLE_MS || now - s.created > SESSION_MAX_MS) sessions.delete(hash);
+  for (const [email, f] of loginFailures) if (now - f.first > 15 * 60 * 1000) loginFailures.delete(email);
+}, 10 * 60 * 1000).unref();
+
+async function directusJson(pathAndQuery) {
+  const upstream = await fetch(`${directusUrl}${pathAndQuery}`, { headers: { Authorization: `Bearer ${directusToken}`, Accept: "application/json" } });
+  return upstream.ok ? (await upstream.json()).data : null;
+}
+
+// { user, role, admin, permissions } for a Directus user, or null if they have no (active) access to this app.
+async function loadAccess(userId, fresh = false) {
+  const cached = accessCache.get(userId);
+  if (!fresh && cached && Date.now() - cached.at < ACCESS_CACHE_MS) return cached.access;
+  const id = encodeURIComponent(userId);
+  const users = await directusJson(`/items/app_user?filter[directus_user_id][_eq]=${id}&fields=directus_user_id,email,display_name,role_id,active&limit=1`);
+  if (users === null) throw new Error("app_user unavailable");
+  const user = users[0];
+  let access = null;
+  if (user && user.active) {
+    const roles = await directusJson(`/items/app_role?filter[id][_eq]=${encodeURIComponent(user.role_id)}&fields=id,name,is_admin&limit=1`);
+    const ticked = await directusJson(`/items/app_role_permission?filter[role_id][_eq]=${encodeURIComponent(user.role_id)}&fields=permission_key&limit=-1`);
+    if (roles === null || ticked === null) throw new Error("app_role unavailable");
+    const role = roles[0];
+    if (role) {
+      access = {
+        tool: false,
+        admin: role.is_admin === true,
+        user: { id: user.directus_user_id, email: user.email, display_name: user.display_name },
+        role: { id: role.id, name: role.name, is_admin: role.is_admin === true },
+        permissions: effectivePermissions(ticked.map((t) => t.permission_key), role.is_admin === true)
+      };
+    }
+  }
+  accessCache.set(userId, { at: Date.now(), access });
+  return access;
+}
+
+const describeAccess = (access) => ({ user: access.user, role: access.role, permissions: [...access.permissions] });
+
+// Every /api call from the web app needs a signed-in user (except signing in and out).
+app.use("/api", async (req, res, next) => {
+  // SIGN_IN_REQUIRED stays off until the app's sign-in screen is deployed (stage 2); until then the app works as before.
+  if (req.apiClient !== UI_KEY_NAME || process.env.SIGN_IN_REQUIRED !== "true") {
+    req.access = TOOL_ACCESS;
+    return next();
+  }
+  if (req.path === "/auth/login" || req.path === "/auth/logout") return next();
+  const deny = (status, code, message) => res.status(status).json({ ok: false, request_id: req.requestId, error: { code, message } });
+  const session = currentSession(req);
+  if (!session) return deny(401, "SIGN_IN_REQUIRED", "Please sign in.");
+  try {
+    const access = await loadAccess(session.userId);
+    if (!access) {
+      sessions.delete(session.hash);
+      return deny(401, "NO_ACCESS", "This account no longer has access. Ask the Admin.");
+    }
+    req.access = access;
+    return next();
+  } catch {
+    return deny(503, "DIRECTUS_UNAVAILABLE", "The sign-in service is unavailable.");
+  }
+});
+
+app.post("/api/auth/login", async (req, res) => {
+  const reply = (status, body) => {
+    console.log(JSON.stringify({ event: "sign_in", request_id: req.requestId, status, email: typeof req.body?.email === "string" ? req.body.email.toLowerCase().slice(0, 254) : null }));
+    return res.status(status).json({ ok: status === 200, request_id: req.requestId, ...body });
+  };
+  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+  const password = typeof req.body?.password === "string" ? req.body.password : "";
+  if (!email || !password || email.length > 254 || password.length > 1024) {
+    return reply(400, { error: { code: "INVALID_QUERY", message: "Enter your email and password." } });
+  }
+  const failures = loginFailures.get(email);
+  if (failures && failures.count >= LOGIN_FAILURE_LIMIT && Date.now() - failures.first < 15 * 60 * 1000) {
+    return reply(429, { error: { code: "TOO_MANY_ATTEMPTS", message: "Too many failed sign-ins. Try again in 15 minutes." } });
+  }
+  try {
+    const login = await fetch(`${directusUrl}/auth/login`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ email, password }) });
+    if (!login.ok) {
+      const f = loginFailures.get(email);
+      loginFailures.set(email, f && Date.now() - f.first < 15 * 60 * 1000 ? { count: f.count + 1, first: f.first } : { count: 1, first: Date.now() });
+      return reply(login.status >= 500 ? 503 : 401, { error: { code: login.status >= 500 ? "DIRECTUS_UNAVAILABLE" : "INVALID_LOGIN", message: login.status >= 500 ? "The sign-in service is unavailable." : "Email or password is incorrect." } });
+    }
+    const tokens = (await login.json()).data || {};
+    // We only need to know who this is: the user id is in the token Directus just issued to us. Then end that Directus session.
+    const userId = JSON.parse(Buffer.from(String(tokens.access_token || "").split(".")[1] || "", "base64url").toString("utf8") || "{}").id;
+    if (tokens.refresh_token) {
+      fetch(`${directusUrl}/auth/logout`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: tokens.refresh_token }) }).catch(() => {});
+    }
+    if (!userId) return reply(503, { error: { code: "DIRECTUS_UNAVAILABLE", message: "The sign-in service is unavailable." } });
+    const access = await loadAccess(userId, true);
+    if (!access) return reply(403, { error: { code: "NO_ACCESS", message: "This account has no access to the app. Ask the Admin." } });
+    loginFailures.delete(email);
+    const token = crypto.randomBytes(32).toString("base64url");
+    sessions.set(sha256(token), { userId, created: Date.now(), lastSeen: Date.now() });
+    res.set("Set-Cookie", `${SESSION_COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=${SESSION_MAX_MS / 1000}`);
+    return reply(200, { data: describeAccess(access) });
+  } catch {
+    return reply(503, { error: { code: "DIRECTUS_UNAVAILABLE", message: "The sign-in service is unavailable." } });
+  }
+});
+
+app.post("/api/auth/logout", (req, res) => {
+  const session = currentSession(req);
+  if (session) sessions.delete(session.hash);
+  res.set("Set-Cookie", `${SESSION_COOKIE}=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0`);
+  return res.status(200).json({ ok: true, request_id: req.requestId });
+});
+
+app.get("/api/auth/me", (req, res) => res.status(200).json({ ok: true, request_id: req.requestId, data: describeAccess(req.access) }));
+
+// Exports, data status and the OpenAPI description: Admin (and tools with keys) only.
+app.use(["/api/data-status", "/api/export", "/api/openapi.json"], (req, res, next) => {
+  if (req.access?.admin) return next();
+  return res.status(403).json({ ok: false, request_id: req.requestId, error: { code: "FORBIDDEN", message: "Only the Admin can use this." } });
 });
 
 app.get("/health", (_req, res) => {
@@ -374,6 +533,8 @@ for (const section of courseSections) {
 
       const courseId = typeof req.params.course_id === "string" ? req.params.course_id.trim() : "";
       if (!uuidPattern.test(courseId)) return fail(400, "INVALID_QUERY", "course_id must be a valid UUID.");
+      const needed = SECTION_PERMISSION[section.path];
+      if (needed && !req.access.permissions.has(needed)) return fail(403, "FORBIDDEN", `Your role does not include ${section.label}.`);
 
       const params = new URLSearchParams();
       params.set("fields", section.fields.join(","));
@@ -399,6 +560,7 @@ for (const section of courseSections) {
       if (!Array.isArray(payload.data)) return fail(500, "INTERNAL_ERROR", "The request could not be completed.");
 
       let data = payload.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null])));
+      if (section.path === "student-survey/questions") data = data.filter((row) => req.access.permissions.has(questionKey(row.survey_version, row.question_number)));
       if (req.apiVersion === 1) data = toNumbers(data, await numericFields(section.collection));
       log(200, { returned: data.length });
       return res.status(200).json({
@@ -526,9 +688,11 @@ app.get("/api/courses/:course_id/all", async (req, res) => {
     detailParams.set("filter[course_id][_eq]", courseId);
     detailParams.set("limit", "1");
 
+    const allowedSections = courseSections.filter((section) => !SECTION_PERMISSION[section.path] || req.access.permissions.has(SECTION_PERMISSION[section.path]));
+    const notPermitted = courseSections.filter((section) => !allowedSections.includes(section)).map((section) => section.path.replaceAll("/", "-"));
     const [detail, ...results] = await Promise.all([
       directusItems("course_catalog_detail_api", detailParams, req.requestId),
-      ...courseSections.map((section) => {
+      ...allowedSections.map((section) => {
         const params = new URLSearchParams();
         params.set("fields", section.fields.join(","));
         params.set("filter[course_id][_eq]", courseId);
@@ -542,13 +706,14 @@ app.get("/api/courses/:course_id/all", async (req, res) => {
     if (detail.data.length === 0) return fail(404, "NOT_FOUND", "The requested course was not found.");
 
     const course = Object.fromEntries(detailFields.map((field) => [field, detail.data[0][field] ?? null]));
-    const numeric = req.apiVersion === 1 ? await Promise.all(courseSections.map((section) => numericFields(section.collection))) : null;
+    const numeric = req.apiVersion === 1 ? await Promise.all(allowedSections.map((section) => numericFields(section.collection))) : null;
     const sections = {};
     const sectionMeta = {};
-    courseSections.forEach((section, i) => {
+    allowedSections.forEach((section, i) => {
       const key = section.path.replaceAll("/", "-");
       const result = results[i];
       let rows = result.ok ? result.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null]))) : null;
+      if (rows && section.path === "student-survey/questions") rows = rows.filter((row) => req.access.permissions.has(questionKey(row.survey_version, row.question_number)));
       if (rows && numeric) rows = toNumbers(rows, numeric[i]);
       sections[key] = rows;
       sectionMeta[key] = {
@@ -560,7 +725,7 @@ app.get("/api/courses/:course_id/all", async (req, res) => {
     });
     const unavailable = Object.keys(sectionMeta).filter((key) => !sectionMeta[key].available);
     log(200, { sections: Object.keys(sections).length, unavailable: unavailable.length });
-    return res.status(200).json({ ok: true, request_id: req.requestId, data: { course, sections }, meta: { course_id: courseId, sections: sectionMeta, unavailable } });
+    return res.status(200).json({ ok: true, request_id: req.requestId, data: { course, sections }, meta: { course_id: courseId, sections: sectionMeta, unavailable, not_permitted: notPermitted } });
   } catch {
     return fail(500, "INTERNAL_ERROR", "The request could not be completed.");
   }
