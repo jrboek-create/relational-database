@@ -4,13 +4,14 @@
     python twbx_upload.py check     # run the whole apply, then roll it back (nothing is saved)
     python twbx_upload.py apply     # add the new rows from the last preview and rebuild the reporting tables
     python twbx_upload.py refresh   # only rebuild the reporting tables from the data already loaded
+    python twbx_upload.py export    # write every reporting dataset to /exports as JSON (also runs after apply and refresh)
 
 Rules (agreed 2 Nov 2026, see the "AIR Hub data input map" doc): rows are matched by key; new keys are
 added, unchanged keys skipped, changed keys listed (never applied), keys missing from the file are kept.
 Cell values are read as calculated values, not formulas.
 """
 import hashlib, json, os, sys, uuid, zipfile, tempfile
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timezone
 from pathlib import Path
 
 import psycopg
@@ -19,6 +20,7 @@ from openpyxl import load_workbook
 IMPORT_DIR = Path(os.getenv("UPLOAD_DIR", "/imports_hold"))
 REPORT_DIR = Path(os.getenv("REPORT_DIR", "/upload_reports"))
 REFRESH_DIR = Path(os.getenv("REFRESH_DIR", "/sql_refresh"))
+EXPORT_DIR = Path(os.getenv("EXPORT_DIR", "/exports"))
 ROW_LIMIT = int(os.getenv("UPLOAD_ROW_LIMIT", "0"))  # testing only; 0 = all rows
 
 ONLINE_OLD = ["raw_master_online_part_s01_online_31fb6e24", "raw_master_online_part_s01_online_3417e822",
@@ -584,11 +586,95 @@ def apply(save):
             cur.execute("DELETE FROM upload.row WHERE run_id = %s", (run_id,))  # staged copy no longer needed
         conn.commit()
         print(f"\nAPPLIED. Import batch {batch_id}.")
+        export_after_save()
     except BaseException:
         conn.rollback()
         raise
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------- export
+# Datasets written to EXPORT_DIR: (file name, reporting API table, sort column). Same tables the API serves,
+# so the same privacy rules apply.
+EXPORTS = [
+    ("catalog", "course_current_catalog_api", "course_id"),
+    ("grades", "course_grade_summary_api", "grade_summary_id"),
+    ("enrollment", "course_enrollment_summary_api", "enrollment_summary_id"),
+    ("dfwi", "course_dfwi_summary_api", "dfwi_summary_id"),
+    ("faculty-survey", "course_faculty_survey_summary_api", "faculty_survey_summary_id"),
+    ("student-survey", "course_student_survey_summary_api", "student_survey_summary_id"),
+    ("student-survey-questions", "course_student_survey_question_summary_api", "student_survey_question_summary_id"),
+    ("instructional-design-development", "course_instructional_design_development_summary_api", "instructional_design_development_summary_id"),
+    ("ai-production", "course_ai_production_summary_api", "ai_production_summary_id"),
+    ("integrations", "course_integration_summary_api", "integration_summary_id"),
+    ("redeveloped", "course_redeveloped_summary_api", "redeveloped_summary_id"),
+    ("observations", "course_observation_summary_api", "observation_summary_id"),
+]
+
+
+def write_atomically(final, write):
+    """Writes to a hidden temp file, then renames it, so readers never see a half-written file. Returns the SHA-256."""
+    tmp = final.with_name("." + final.name + ".tmp")
+    with open(tmp, "w", encoding="utf-8", newline="\n") as f:
+        write(f)
+    h = hashlib.sha256()
+    with open(tmp, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    os.replace(tmp, final)
+    return h.hexdigest()
+
+
+def export_all():
+    """Writes each dataset to EXPORT_DIR/<name>.json as {"meta": {...}, "data": [...]}, then manifest.json (written last).
+    All datasets come from one consistent snapshot of the database."""
+    EXPORT_DIR.mkdir(parents=True, exist_ok=True)
+    exported_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    conn = connect()
+    conn.isolation_level = psycopg.IsolationLevel.REPEATABLE_READ
+    conn.read_only = True
+    entries = []
+    try:
+        with conn.cursor() as cur:
+            print(f"EXPORT to {EXPORT_DIR}:")
+            for name, table, key in EXPORTS:
+                cur.execute(f"SELECT count(*), max(report_as_of_utc) FROM reporting.{table}")
+                rows, as_of = cur.fetchone()
+                meta = {"dataset": name, "source": f"reporting.{table}", "rows": rows, "fields": columns(cur, "reporting", table),
+                        "report_as_of_utc": as_of.isoformat() if as_of else None, "exported_at_utc": exported_at}
+                written = 0
+
+                def write(f):
+                    nonlocal written
+                    f.write('{"meta": ' + json.dumps(meta) + ',\n"data": [')
+                    with conn.cursor(name=f"export_{name.replace('-', '_')}") as rows_cur:   # streamed from the server
+                        rows_cur.execute(f"SELECT row_to_json(t)::text FROM reporting.{table} t ORDER BY {key}")
+                        for (line,) in rows_cur:
+                            f.write(("\n" if written == 0 else ",\n") + line)
+                            written += 1
+                    f.write("\n]}\n")
+
+                digest = write_atomically(EXPORT_DIR / f"{name}.json", write)
+                if written != rows:
+                    raise SystemExit(f"{name}: wrote {written} rows but the table has {rows}")
+                entries.append({"dataset": name, "file": f"{name}.json", "rows": rows, "sha256": digest,
+                                "report_as_of_utc": meta["report_as_of_utc"]})
+                print(f"  {name:<34}{rows:>9,} rows")
+        conn.rollback()
+        manifest = {"exported_at_utc": exported_at, "datasets": entries}
+        write_atomically(EXPORT_DIR / "manifest.json", lambda f: f.write(json.dumps(manifest, indent=2) + "\n"))
+        print(f"EXPORTED {len(entries)} datasets.")
+    finally:
+        conn.close()
+
+
+def export_after_save():
+    """Runs the export after apply/refresh. The data is already saved; an export problem is reported, not fatal."""
+    try:
+        export_all()
+    except Exception as error:
+        print(f"WARNING: the data was saved, but the export failed ({error}). Run 'export' to try again.")
 
 
 def refresh():
@@ -604,6 +690,7 @@ def refresh():
                 print(f"  {table:<50}{before:>9,} -> {after:>9,} rows")
         conn.commit()
         print("\nREFRESHED.")
+        export_after_save()
     except BaseException:
         conn.rollback()
         raise
@@ -619,6 +706,8 @@ if __name__ == "__main__":
         apply(save=cmd == "apply")
     elif cmd == "refresh":
         refresh()
+    elif cmd == "export":
+        export_all()
     else:
-        raise SystemExit(f"Unknown command {cmd!r}. Use: preview, check, apply or refresh")
+        raise SystemExit(f"Unknown command {cmd!r}. Use: preview, check, apply, refresh or export")
 

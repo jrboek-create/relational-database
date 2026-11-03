@@ -11,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tokenPath = path.resolve(__dirname, "../../.secrets/wwairml_directus_static_token.txt");
 const directusUrl = (process.env.DIRECTUS_URL || "http://127.0.0.1:8066").replace(/\/+$/, "");
 const directusToken = readFileSync(tokenPath, "utf8").trim();
+const exportDir = path.resolve(process.env.EXPORT_DIR || "/exports");
 const approvedFields = ["course_id","university_course_id","course_code","course_title","college_name","department_name","source_system_code","report_refresh_run_id","report_as_of_utc"];
 const detailFields = ["course_id","university_course_id","course_code","course_title","college_name","department_name","course_description","course_goals","course_learning_outcomes"];
 const allowedParams = new Set(["page","limit","course_code","course_title","college_name","department_name","sort"]);
@@ -415,6 +416,55 @@ app.get("/api/data-status", async (req, res) => {
   }));
   log(200, { returned: data.length });
   return res.status(200).json({ ok: true, request_id: req.requestId, data, meta: { returned: data.length } });
+});
+
+// Bulk export: the JSON files written by the uploader's export step (twbx_upload.py export), served as they are.
+// GET /api/export lists the datasets (from manifest.json); GET /api/export/<dataset> returns one whole dataset.
+function readManifest() {
+  try {
+    return JSON.parse(readFileSync(path.join(exportDir, "manifest.json"), "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+app.get("/api/export", (req, res) => {
+  const started = Date.now();
+  const log = (status, extra = {}) => console.log(JSON.stringify({ event: "request", request_id: req.requestId, method: req.method, path: req.path, status, ...extra, duration_ms: Date.now() - started }));
+  if (Object.keys(req.query).length !== 0) {
+    log(400);
+    return res.status(400).json({ ok: false, request_id: req.requestId, error: { code: "INVALID_QUERY", message: "The request contains an unsupported parameter." } });
+  }
+  const manifest = readManifest();
+  if (!manifest || !Array.isArray(manifest.datasets)) {
+    log(404);
+    return res.status(404).json({ ok: false, request_id: req.requestId, error: { code: "NOT_EXPORTED", message: "No export is available yet." } });
+  }
+  const data = manifest.datasets.map((d) => ({ ...d, url: `/api/export/${d.dataset}` }));
+  log(200, { returned: data.length });
+  return res.status(200).json({ ok: true, request_id: req.requestId, data, meta: { returned: data.length, exported_at_utc: manifest.exported_at_utc ?? null } });
+});
+
+app.get("/api/export/:dataset", (req, res) => {
+  const started = Date.now();
+  const log = (status, extra = {}) => console.log(JSON.stringify({ event: "request", request_id: req.requestId, method: req.method, path: req.path, status, ...extra, duration_ms: Date.now() - started }));
+  const fail = (status, code, message) => {
+    log(status);
+    return res.status(status).json({ ok: false, request_id: req.requestId, error: { code, message } });
+  };
+  if (Object.keys(req.query).length !== 0) return fail(400, "INVALID_QUERY", "The request contains an unsupported parameter.");
+  const name = String(req.params.dataset || "");
+  const entry = readManifest()?.datasets?.find((d) => d.dataset === name);   // only datasets listed in the manifest
+  if (!/^[a-z0-9-]{1,64}$/.test(name) || !entry) return fail(404, "NOT_FOUND", "That dataset is not in the current export.");
+  res.set({ "Cache-Control": "no-store", "X-Export-Sha256": entry.sha256 ?? "", "X-Export-Rows": String(entry.rows ?? "") });
+  res.type("application/json");
+  return res.sendFile(path.join(exportDir, `${name}.json`), (error) => {
+    if (error) {
+      if (!res.headersSent) return fail(500, "INTERNAL_ERROR", "The export file could not be read.");
+      return log(500);
+    }
+    log(200, { rows: entry.rows });
+  });
 });
 
 app.listen(port, "0.0.0.0", () => {

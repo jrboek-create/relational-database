@@ -53,6 +53,7 @@ These local folders are **not in git** (see `.gitignore`):
 | `data/` | PostgreSQL data files (the actual database) |
 | `backups/` | Database dumps |
 | `upload_reports/` | Upload preview reports (they list grade changes) |
+| `exports/` | JSON exports of every reporting dataset |
 | `imports/`, `imports_hold/` | Source Excel files, which include student and faculty data |
 | `uploads/`, `extensions/` | Directus uploads and extensions |
 
@@ -96,6 +97,8 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/courses/:course_id` | Course detail |
 | `/api/filter-options` | Distinct college and department pairs for the filter dropdowns |
 | `/api/data-status` | Row count and last rebuild time for each data area (shown in the UI's Data status panel) |
+| `/api/export` | List of exported datasets (from `exports/manifest.json`), each with rows, checksum and URL |
+| `/api/export/:dataset` | One whole dataset as JSON, exactly as written to `exports/` (see Exporting data as JSON) |
 | `/api/courses/:course_id/grades` | Grade summary |
 | `/api/courses/:course_id/enrollment` | Enrollment summary |
 | `/api/courses/:course_id/dfwi` | DFWI summary |
@@ -143,6 +146,20 @@ docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload ap
 To rebuild only the reporting tables from the data already loaded (no upload), run `upload refresh` the same way.
 
 `apply` only works on the file that was previewed. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. A preview run after an apply should show nothing left to add.
+
+## Exporting data as JSON
+
+Every `apply` and `refresh` ends by writing all 12 reporting datasets to `exports/` as JSON. To write them on their own:
+
+```
+docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload export
+```
+
+Each file is `exports/<dataset>.json` with the shape `{"meta": {...}, "data": [ ... ]}`. `meta` gives the dataset, source table, row count, field names, data as-of time and export time. `exports/manifest.json` (written last) lists every file with its row count and SHA-256 checksum. Files are written under a temporary name and renamed when complete, so a reader never sees a half-written file. All datasets come from one consistent snapshot and use the same tables, and privacy rules, as the API.
+
+Datasets: `catalog`, `grades`, `enrollment`, `dfwi`, `faculty-survey`, `student-survey`, `student-survey-questions`, `instructional-design-development`, `ai-production`, `integrations`, `redeveloped`, `observations`.
+
+Other tools can read the folder or call `GET /api/export` (list) and `GET /api/export/<dataset>` (one file, gzip-compressed if requested, with `X-Export-Sha256` and `X-Export-Rows` headers).
 
 ## Making changes
 

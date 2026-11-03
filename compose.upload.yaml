@@ -15,6 +15,7 @@ services:
       - ./imports_hold:/imports_hold:ro
       - ./upload_reports:/upload_reports
       - ./sql/refresh:/sql_refresh:ro
+      - ./exports:/exports
     networks:
       - backend
     depends_on:
