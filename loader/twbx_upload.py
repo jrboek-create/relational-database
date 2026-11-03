@@ -82,6 +82,11 @@ SETUP_SQL = [
     "CREATE TABLE IF NOT EXISTS upload.new_row (run_id uuid NOT NULL, dataset text NOT NULL, row_number integer NOT NULL)",
     "ALTER TABLE upload.summary ADD COLUMN IF NOT EXISTS new_rows_skipped bigint",
     "ALTER TABLE upload.run ADD COLUMN IF NOT EXISTS import_batch_id uuid",
+    # grade changes found by the preview (one row per student and section on both sides), with the value it saw
+    "CREATE TABLE IF NOT EXISTS upload.grade_update (run_id uuid NOT NULL, grade_id uuid NOT NULL, row_number integer NOT NULL, old_grade text, old_score text)",
+    # every grade change applied, with old and new values (kept permanently)
+    """CREATE TABLE IF NOT EXISTS upload.grade_change_log (applied_at timestamptz NOT NULL DEFAULT now(), run_id uuid NOT NULL,
+       import_batch_id uuid, grade_id uuid NOT NULL, old_grade text, old_score numeric, new_grade text, new_score numeric)""",
     # '5', '5.0', ' 5 ' compare equal; numbers compare to 6 decimals; ISO date-times with T or space compare equal;
     # surrounding spaces/line breaks are ignored and Windows/Unix line breaks compare equal; blank = NULL
     r"""CREATE OR REPLACE FUNCTION upload.norm(t text) RETURNS text LANGUAGE sql IMMUTABLE AS $$
@@ -183,7 +188,7 @@ def compare(cur, run_id, ds, headers):
         compared = ["Official Grade", "Final Score"]
         ex = lambda c: f"e.{src[c]}"
         exist_from = "core.grade e"
-        exist_payload = "jsonb_build_object('Official Grade', e.official_grade_code, 'Final Score', e.final_score::text)"
+        exist_payload = "jsonb_build_object('Official Grade', e.official_grade_code, 'Final Score', e.final_score::text, 'grade_id', e.grade_id::text)"
         exj = lambda c: f"er.j ->> {lit(c)}"
     elif kind == "course_list":
         compared = ds["compared"]
@@ -254,6 +259,11 @@ def compare(cur, run_id, ds, headers):
                           FROM cmp_file_rows r WHERE r.k = f.k) n ON true
             JOIN LATERAL (SELECT string_agg(coalesce(r.j ->> 'Official Grade', '(blank)') || ' (' || coalesce(upload.norm(r.j ->> 'Final Score'), 'no score') || ')', ', ' ORDER BY r.h) AS g
                           FROM cmp_exist_rows r WHERE r.k = f.k) o ON true""", p)
+        # changes to apply: exactly one row for the student and section on both sides (decided 3 Nov 2026: apply all grade changes)
+        cur.execute("""INSERT INTO upload.grade_update
+            SELECT %(run)s, (er.j ->> 'grade_id')::uuid, fr.row_number, er.j ->> 'Official Grade', er.j ->> 'Final Score'
+            FROM cmp_file f JOIN cmp_exist x ON x.k = f.k AND x.h <> f.h AND f.n = 1 AND x.n = 1
+            JOIN cmp_file_rows fr ON fr.k = f.k JOIN cmp_exist_rows er ON er.k = f.k""", p)
     else:
         diff = " || ".join(f"CASE WHEN upload.norm(fr.j ->> {lit(c)}) IS DISTINCT FROM upload.norm({exj(c)}) THEN {lit(c + ', ')} ELSE '' END"
                            for c in compared)
@@ -275,12 +285,17 @@ def write_report(cur, run_id, twbx, digest):
     n = lambda v: f"{v or 0:,}"
     lines = [f"# Upload preview: {twbx.name}", "",
              f"Run `{run_id}` · file SHA-256 `{digest[:16]}` · {datetime.now():%Y-%m-%d %H:%M}", "",
-             "Nothing has been added yet. **New** rows are added when the upload is applied. **Changed** rows are listed "
-             "only and never applied. Rows missing from the file are kept.", "",
+             "Nothing has been added yet. **New** rows are added when the upload is applied. **Changed grades** are applied "
+             "too (old values are kept in `upload.grade_change_log`); other changed rows are listed only. Rows missing from the file are kept.", "",
              "| Dataset | Rows in file | New keys (rows) | Unchanged | Changed | Missing from file (kept) | Repeated keys in file |",
              "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"]
     lines += [f"| {s['dataset']} | {n(s['file_rows'])} | {n(s['new_keys'])} ({n(s['new_rows'])}) | {n(s['unchanged_keys'])} | "
               f"{n(s['changed_keys'])} | {n(s['missing_from_file_keys'])} | {n(s['repeated_keys_in_file'])} |" for s in summary]
+    cur.execute("SELECT count(*) FROM upload.grade_update WHERE run_id = %s", (run_id,))
+    to_apply = cur.fetchone()[0]
+    grades_changed = next((s["changed_keys"] or 0 for s in summary if s["dataset"] == "grades"), 0)
+    lines += [f"\nGrade changes: {to_apply:,} will be applied when the upload is applied"
+              + (f"; {grades_changed - to_apply:,} (students with several rows in a section) stay listed only." if grades_changed > to_apply else ".")]
     lines += [f"\n{s['dataset']}: {s['new_rows_skipped']:,} of the new rows will not be added (blank {', '.join(d.get('skip_blank', []))})."
               for s in summary for d in DATASETS if d["name"] == s["dataset"] and s.get("new_rows_skipped")]
     drift = [s for s in summary if s["headers_added"] or s["headers_missing"]]
@@ -290,7 +305,7 @@ def write_report(cur, run_id, twbx, digest):
               if drift else ["None: every sheet has the same columns as the existing data."])
     cur.execute("SELECT dataset, key_label, detail FROM upload.change WHERE run_id = %s ORDER BY dataset, key_label", (run_id,))
     changes = cur.fetchall()
-    lines += ["", f"## Changed rows: {len(changes):,} (listed only, not applied)", ""]
+    lines += ["", f"## Changed rows: {len(changes):,} (grade changes are applied; the rest are listed only)", ""]
     cell = lambda v: v.replace("|", "\\|")
     lines += (["| Dataset | Key | What changed |", "| --- | --- | --- |"] + [f"| {d} | {cell(k)} | {cell(t)} |" for d, k, t in changes]
               if changes else ["None."])
@@ -320,7 +335,7 @@ def preview():
             for stmt in SETUP_SQL:
                 cur.execute(stmt)
             old = "(SELECT run_id FROM upload.run WHERE status = 'previewed')"
-            for t in ("change", "summary", "new_row", "row", "workbook"):
+            for t in ("change", "summary", "new_row", "grade_update", "row", "workbook"):
                 cur.execute(f"DELETE FROM upload.{t} WHERE run_id IN {old}")
             cur.execute("DELETE FROM upload.run WHERE status = 'previewed'")
             cur.execute("INSERT INTO upload.run (run_id, twbx_name, twbx_sha256, status) VALUES (%s, %s, %s, 'previewing')",
@@ -462,6 +477,23 @@ def add_new_rows(cur, run_id, twbx_name, batch_id):
                    FROM core.course_offering_section ORDER BY 1, 2, course_offering_id) o
                ON l.course_id IS NOT NULL AND o.source_section_identifier = l.vals ->> 'Course_Section' AND o.term_id = l.term_id""", p)
     added["grades"] = cur.rowcount
+    # grade changes: log old and new values, but only where the grade still has the value the preview saw
+    cur.execute("""INSERT INTO upload.grade_change_log (run_id, import_batch_id, grade_id, old_grade, old_score, new_grade, new_score)
+        SELECT gu.run_id, %(batch)s, g.grade_id, g.official_grade_code, g.final_score, u.vals ->> 'Official Grade',
+               CASE WHEN btrim(u.vals ->> 'Final Score') ~ '^-?[0-9]+(\\.[0-9]+)?$' THEN btrim(u.vals ->> 'Final Score')::numeric END
+        FROM upload.grade_update gu
+        JOIN core.grade g ON g.grade_id = gu.grade_id
+        JOIN upload.row u ON u.run_id = gu.run_id AND u.dataset = 'grades' AND u.row_number = gu.row_number
+        WHERE gu.run_id = %(run)s
+          AND g.official_grade_code IS NOT DISTINCT FROM gu.old_grade AND g.final_score::text IS NOT DISTINCT FROM gu.old_score""", p)
+    logged = cur.rowcount
+    cur.execute("SELECT count(*) FROM upload.grade_update WHERE run_id = %(run)s", p)
+    expected = cur.fetchone()[0]
+    if logged != expected:
+        raise SystemExit(f"{expected - logged} grade(s) changed since the preview. Run the preview again.")
+    cur.execute("""UPDATE core.grade g SET official_grade_code = l.new_grade, final_score = l.new_score
+                   FROM upload.grade_change_log l WHERE l.run_id = %(run)s AND l.grade_id = g.grade_id""", p)
+    added["grade changes"] = cur.rowcount
 
     # course list: same row layout as the Excel loader (load_excel.py), on the existing Master Course sheet
     cur.execute("""SELECT r.source_sheet_id FROM phase2_staging.staging_row r JOIN phase2_staging.source_sheet s ON s.id = r.source_sheet_id

@@ -157,7 +157,7 @@ Put the new `.twbx` in `imports_hold/` (the file name can change; the newest `.t
 docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload preview
 ```
 
-The preview unpacks the workbook, compares every dataset with the existing data by its key, and writes a report to `upload_reports/`: new rows, unchanged rows, changed rows, rows missing from the file, and any added or missing columns. It changes nothing in the live tables. Changed rows are only listed, never applied, and rows missing from the file are kept.
+The preview unpacks the workbook, compares every dataset with the existing data by its key, and writes a report to `upload_reports/`: new rows, unchanged rows, changed rows, rows missing from the file, and any added or missing columns. It changes nothing in the live tables. Rows missing from the file are kept.
 
 After reviewing the report, back up the database, run `check` (does everything, then rolls it back), and then `apply`:
 
@@ -171,7 +171,7 @@ docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload ap
 
 To rebuild only the reporting tables from the data already loaded (no upload), run `upload refresh` the same way.
 
-`apply` only works on the file that was previewed. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. Grade section names with a middle code (e.g. `ENGL222_OL_0006`) are stored under the plain name (`ENGL222_0006`), the form all other sections use. A preview run after an apply should show nothing left to add.
+`apply` only works on the file that was previewed. It applies **grade changes** (a different grade or score for the same student and section, e.g. a resolved Incomplete), logging each old and new value in `upload.grade_change_log`; it re-checks every grade still has the value the preview saw, and stops otherwise. A student with several rows in one section stays listed only. Other changed rows (surveys, schedules) are listed only. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. Grade section names with a middle code (e.g. `ENGL222_OL_0006`) are stored under the plain name (`ENGL222_0006`), the form all other sections use. A preview run after an apply should show nothing left to add.
 
 ## Exporting data as JSON
 
