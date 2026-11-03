@@ -613,9 +613,10 @@ def apply(save):
             run_id, name, digest = runs[0]
             if (name, digest) != (twbx.name, h.hexdigest()):
                 raise SystemExit(f"{twbx.name} is not the file that was previewed ({name}). Run the preview again.")
-            cur.execute("SELECT to_regclass('upload.new_row') IS NOT NULL")
-            if not cur.fetchone()[0] or not cur.execute("SELECT 1 FROM upload.new_row WHERE run_id = %s LIMIT 1", (run_id,)).fetchone():
-                raise SystemExit("This preview has no new rows recorded (or was made by an older version). Run the preview again.")
+            # a preview made by this version marks every dataset (new_rows_skipped is filled); older previews can't be applied
+            cur.execute("SELECT count(*) FROM upload.summary WHERE run_id = %s AND new_rows_skipped IS NOT NULL", (run_id,))
+            if cur.fetchone()[0] != len(DATASETS) or cur.execute("SELECT to_regclass('upload.grade_update') IS NULL").fetchone()[0]:
+                raise SystemExit("This preview was made by an older version of the uploader. Run the preview again.")
             print(("APPLY: " if save else "CHECK (nothing will be saved): ") + twbx.name)
             batch_id = str(uuid.uuid4())
             added = add_new_rows(cur, run_id, twbx.name, batch_id)
