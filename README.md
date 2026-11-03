@@ -100,6 +100,7 @@ All are `GET` requests and return JSON with a `request_id`.
 | `/api/data-status` | Row count and last rebuild time for each data area (shown in the UI's Data status panel) |
 | `/api/export` | List of exported datasets (from `exports/manifest.json`), each with rows, checksum and URL |
 | `/api/export/:dataset` | One whole dataset as JSON, exactly as written to `exports/` (see Exporting data as JSON) |
+| `/api/v1/openapi.json` | OpenAPI 3.0 description of every endpoint and field |
 | `/api/courses/:course_id/grades` | Grade summary |
 | `/api/courses/:course_id/enrollment` | Enrollment summary |
 | `/api/courses/:course_id/dfwi` | DFWI summary |
@@ -115,6 +116,30 @@ All are `GET` requests and return JSON with a `request_id`.
 Each endpoint reads from a matching `*_api` collection in the `reporting` schema (for example, `course_grade_summary_api`).
 
 Responses are gzip-compressed for clients that send `Accept-Encoding: gzip`.
+
+### For other tools: `/api/v1` and API keys
+
+Tools should call **`/api/v1/...`** (the same endpoints as `/api/...`). In `/api/v1`, numeric fields are JSON numbers (in `/api` some come through as text, e.g. `"67"`). The full description is at `/api/v1/openapi.json`.
+
+Every `/api` and `/api/v1` call needs an **`X-API-Key`** header; `/health` does not. Each tool gets its own key. Only a SHA-256 fingerprint of each key is kept, in `.secrets/api_keys.json`. The web app's key is added by nginx (from `UI_API_KEY` in `.env`), so the browser never sees it and the app needs no key of its own. If the key file is missing, the API refuses all calls.
+
+Manage keys with `src/keys.js` (the key is printed once; copy it then):
+
+```
+docker compose run --rm --no-deps -v "${PWD}\.secrets:/keys" --entrypoint node middleware src/keys.js add n8n
+docker compose run --rm --no-deps -v "${PWD}\.secrets:/keys" --entrypoint node middleware src/keys.js list
+docker compose run --rm --no-deps -v "${PWD}\.secrets:/keys" --entrypoint node middleware src/keys.js revoke n8n
+```
+
+A revoked key stops working within seconds, without a restart. A tool calls, for example:
+
+```
+curl.exe -H "X-API-Key: <key>" http://127.0.0.1:3001/api/v1/data-status
+```
+
+**Setting up the web app's key** (once, or after replacing it): run `keys.js add ui`, then open `.env` in Notepad and add the key on **a new line of its own** as `UI_API_KEY=air_...`, save, and run `docker compose up -d`. Don't append it with `Add-Content`: if `.env` doesn't end with a line break, the key is glued onto the previous setting.
+
+The API is still reachable only from this computer (ports bound to `127.0.0.1`).
 
 ## Importing Excel data (optional)
 

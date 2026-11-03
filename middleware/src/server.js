@@ -1,6 +1,6 @@
 ﻿import express from "express";
 import compression from "compression";
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -12,6 +12,7 @@ const tokenPath = path.resolve(__dirname, "../../.secrets/wwairml_directus_stati
 const directusUrl = (process.env.DIRECTUS_URL || "http://127.0.0.1:8066").replace(/\/+$/, "");
 const directusToken = readFileSync(tokenPath, "utf8").trim();
 const exportDir = path.resolve(process.env.EXPORT_DIR || "/exports");
+const apiKeysFile = path.resolve(process.env.API_KEYS_FILE || path.resolve(__dirname, "../../.secrets/api_keys.json"));
 const approvedFields = ["course_id","university_course_id","course_code","course_title","college_name","department_name","source_system_code","report_refresh_run_id","report_as_of_utc"];
 const detailFields = ["course_id","university_course_id","course_code","course_title","college_name","department_name","course_description","course_goals","course_learning_outcomes"];
 const allowedParams = new Set(["page","limit","course_code","course_title","college_name","department_name","sort"]);
@@ -25,6 +26,47 @@ app.use((req, res, next) => {
   const supplied = req.get("x-request-id");
   req.requestId = supplied && /^[A-Za-z0-9._:-]{1,128}$/.test(supplied) ? supplied : crypto.randomUUID();
   res.set("x-request-id", req.requestId);
+  next();
+});
+
+// /api/v1/... is the versioned path for tools; it serves the same routes as /api/... (numbers converted, see toNumbers).
+app.use((req, res, next) => {
+  if (req.url === "/api/v1" || req.url.startsWith("/api/v1/") || req.url.startsWith("/api/v1?")) {
+    req.apiVersion = 1;
+    req.url = "/api" + req.url.slice("/api/v1".length);
+  }
+  next();
+});
+
+// API keys: every /api call needs X-API-Key (the web app's key is added by nginx). Keys are kept as SHA-256
+// fingerprints in .secrets/api_keys.json (managed with src/keys.js) and re-read when the file changes.
+let apiKeys = { mtimeMs: -1, byHash: null };
+function loadApiKeys() {
+  try {
+    const { mtimeMs } = statSync(apiKeysFile);
+    if (mtimeMs !== apiKeys.mtimeMs) {
+      const doc = JSON.parse(readFileSync(apiKeysFile, "utf8"));
+      apiKeys = { mtimeMs, byHash: new Map((doc.keys || []).map((k) => [k.sha256, k.name])) };
+    }
+    return apiKeys.byHash;
+  } catch {
+    apiKeys = { mtimeMs: -1, byHash: null };
+    return null;
+  }
+}
+
+app.use("/api", (req, res, next) => {
+  const deny = (status, code, message) => {
+    console.log(JSON.stringify({ event: "request", request_id: req.requestId, method: req.method, path: req.originalUrl.split("?")[0], status, duration_ms: 0 }));
+    return res.status(status).json({ ok: false, request_id: req.requestId, error: { code, message } });
+  };
+  const keys = loadApiKeys();
+  if (!keys) return deny(503, "API_KEYS_NOT_CONFIGURED", "API keys are not set up on this server.");
+  const provided = req.get("x-api-key");
+  const client = provided ? keys.get(crypto.createHash("sha256").update(provided).digest("hex")) : undefined;
+  if (!client) return deny(401, "UNAUTHORIZED", "A valid X-API-Key header is required.");
+  req.apiClient = client;
+  console.log(JSON.stringify({ event: "api_client", request_id: req.requestId, client, version: req.apiVersion || 0, path: req.originalUrl.split("?")[0] }));
   next();
 });
 
@@ -356,7 +398,8 @@ for (const section of courseSections) {
       const payload = await upstream.json();
       if (!Array.isArray(payload.data)) return fail(500, "INTERNAL_ERROR", "The request could not be completed.");
 
-      const data = payload.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null])));
+      let data = payload.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null])));
+      if (req.apiVersion === 1) data = toNumbers(data, await numericFields(section.collection));
       log(200, { returned: data.length });
       return res.status(200).json({
         ok: true,
@@ -381,6 +424,68 @@ for (const section of courseSections) {
     }
   });
 }
+
+// Directus sends big whole numbers and decimals as text ("67"). In /api/v1 those fields become JSON numbers.
+// Which fields are numeric comes from Directus's own field types, so text IDs such as term_code "2983" stay text.
+const numericFieldCache = new Map();
+async function numericFields(collection) {
+  if (numericFieldCache.has(collection)) return numericFieldCache.get(collection);
+  try {
+    const upstream = await fetch(`${directusUrl}/fields/${collection}`, { headers: { Authorization: `Bearer ${directusToken}`, Accept: "application/json" } });
+    if (!upstream.ok) return new Set();
+    const payload = await upstream.json();
+    const set = new Set((payload.data || []).filter((f) => ["integer", "bigInteger", "float", "decimal"].includes(f.type)).map((f) => f.field));
+    numericFieldCache.set(collection, set);
+    return set;
+  } catch {
+    return new Set();
+  }
+}
+function toNumbers(rows, numeric) {
+  if (numeric.size === 0) return rows;
+  return rows.map((row) => {
+    const out = { ...row };
+    for (const field of numeric) {
+      const value = out[field];
+      if (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value))) out[field] = Number(value);
+    }
+    return out;
+  });
+}
+
+// OpenAPI description of /api/v1, generated from the same configuration the endpoints use.
+function openApiSpec() {
+  const ok = (description, dataSchema) => ({ description, content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, request_id: { type: "string" }, data: dataSchema, meta: { type: "object" } } } } } });
+  const err = { description: "Error", content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } } };
+  const errors = { 400: err, 401: err, 404: err, 502: err, 503: err, 504: err };
+  const rowsOf = (fields) => ({ type: "array", items: { type: "object", properties: Object.fromEntries(fields.map((f) => [f, {}])) } });
+  const courseId = { name: "course_id", in: "path", required: true, schema: { type: "string", format: "uuid" } };
+  const paths = {
+    "/courses": { get: { summary: "Course catalog list", parameters: ["page", "limit", "course_code", "course_title", "college_name", "department_name", "sort"].map((name) => ({ name, in: "query", required: false, schema: { type: "string" } })), responses: { 200: ok("Courses", rowsOf(approvedFields)), ...errors } } },
+    "/courses/{course_id}": { get: { summary: "Course detail", parameters: [courseId], responses: { 200: ok("Course", { type: "object", properties: Object.fromEntries(detailFields.map((f) => [f, {}])) }), ...errors } } },
+    "/courses/{course_id}/all": { get: { summary: "Course detail plus every section in one call", description: "data.course, data.sections.<section> (null if that section was unavailable); meta.sections and meta.unavailable report each section's status.", parameters: [courseId], responses: { 200: ok("Course and sections", { type: "object" }), ...errors } } },
+    "/filter-options": { get: { summary: "College and department pairs for filters", responses: { 200: ok("Pairs", rowsOf(["college_name", "department_name"])), ...errors } } },
+    "/data-status": { get: { summary: "Row count and last rebuild time per data area", responses: { 200: ok("Status", rowsOf(["section", "collection", "available", "rows", "last_refreshed_utc"])), ...errors } } },
+    "/export": { get: { summary: "List of exported datasets (manifest)", responses: { 200: ok("Datasets", rowsOf(["dataset", "file", "rows", "sha256", "report_as_of_utc", "url"])), ...errors } } },
+    "/export/{dataset}": { get: { summary: "One whole exported dataset", description: 'Returns the export file as written: {"meta": {...}, "data": [...]}. Headers X-Export-Sha256 and X-Export-Rows.', parameters: [{ name: "dataset", in: "path", required: true, schema: { type: "string" } }], responses: { 200: { description: "Dataset file", content: { "application/json": { schema: { type: "object" } } } }, ...errors } } }
+  };
+  for (const section of courseSections) {
+    paths[`/courses/{course_id}/${section.path}`] = { get: { summary: section.label, parameters: [courseId], responses: { 200: ok(section.label, rowsOf(section.fields)), ...errors } } };
+  }
+  return {
+    openapi: "3.0.3",
+    info: { title: "AIR Course Development Master Hub API", version: "1", description: "Read-only course data. Every call needs an X-API-Key header. Numeric fields are JSON numbers in /api/v1. Responses are gzip-compressed when requested." },
+    servers: [{ url: "/api/v1" }],
+    components: {
+      securitySchemes: { ApiKey: { type: "apiKey", in: "header", name: "X-API-Key" } },
+      schemas: { Error: { type: "object", properties: { ok: { type: "boolean" }, request_id: { type: "string" }, error: { type: "object", properties: { code: { type: "string" }, message: { type: "string" } } } } } }
+    },
+    security: [{ ApiKey: [] }],
+    paths
+  };
+}
+
+app.get("/api/openapi.json", (req, res) => res.status(200).json(openApiSpec()));
 
 // One Directus read: { ok, data } or { ok: false, timedOut }.
 async function directusItems(collection, params, requestId) {
@@ -437,12 +542,14 @@ app.get("/api/courses/:course_id/all", async (req, res) => {
     if (detail.data.length === 0) return fail(404, "NOT_FOUND", "The requested course was not found.");
 
     const course = Object.fromEntries(detailFields.map((field) => [field, detail.data[0][field] ?? null]));
+    const numeric = req.apiVersion === 1 ? await Promise.all(courseSections.map((section) => numericFields(section.collection))) : null;
     const sections = {};
     const sectionMeta = {};
     courseSections.forEach((section, i) => {
       const key = section.path.replaceAll("/", "-");
       const result = results[i];
-      const rows = result.ok ? result.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null]))) : null;
+      let rows = result.ok ? result.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null]))) : null;
+      if (rows && numeric) rows = toNumbers(rows, numeric[i]);
       sections[key] = rows;
       sectionMeta[key] = {
         label: section.label,

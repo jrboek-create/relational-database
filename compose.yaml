@@ -114,6 +114,9 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:8080:80"
+    environment:
+      # the web app's API key (create it with src/keys.js, put it in .env; see README)
+      UI_API_KEY: ${UI_API_KEY:-}
     networks:
       - frontend
     depends_on:
