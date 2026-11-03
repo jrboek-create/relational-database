@@ -17,9 +17,26 @@
     <h1>Course Development Master Hub</h1>
     <p>Course catalog, performance, survey, and design data</p>
   </div>
+  <div id="userBox" class="user-box" hidden>
+    <span><span id="userName"></span><span id="userRole" class="user-role"></span></span>
+    <button id="signOut" type="button">Sign out</button>
+  </div>
 </header>
 
-<main class="layout">
+<section id="signIn" class="panel sign-in" aria-labelledby="signInTitle" hidden>
+  <h2 id="signInTitle">Sign in</h2>
+  <p>Use your Course Development Master Hub account.</p>
+  <form id="signInForm">
+    <label for="signInEmail">Email</label>
+    <input id="signInEmail" type="email" autocomplete="username" required>
+    <label for="signInPassword">Password</label>
+    <input id="signInPassword" type="password" autocomplete="current-password" required>
+    <p id="signInError" class="error" role="alert" hidden></p>
+    <button class="primary" type="submit">Sign in</button>
+  </form>
+</section>
+
+<main id="appMain" class="layout" hidden>
   <aside class="panel filters" aria-labelledby="filter-title">
     <div class="heading-row">
       <h2 id="filter-title">Find a course</h2>
@@ -66,7 +83,7 @@
       </div>
     </form>
 
-    <details id="dataStatus" class="data-status">
+    <details id="dataStatus" class="data-status" data-permission="admin">
       <summary>Data status</summary>
       <p id="dataStatusMessage" class="unavailable">Loading data status...</p>
       <table id="dataStatusTable" hidden>
@@ -163,7 +180,7 @@
       <article><h4>Learning outcomes</h4><p id="detailOutcomes"></p></article>
     </section>
 
-    <section>
+    <section data-permission="performance.grades performance.enrollment performance.dfwi">
       <h3>Course performance</h3>
       <div class="chart-range">
         <label for="chartRange">Trend charts show</label>
@@ -173,7 +190,7 @@
         </select>
       </div>
       <div class="card-stack">
-        <article id="gradesCard" class="grades-card chart-card">
+        <article id="gradesCard" class="grades-card chart-card" data-permission="performance.grades">
   <h4>Grades</h4>
 
   <p id="gradesStatus" class="unavailable" role="status">
@@ -199,7 +216,7 @@
 
   <div class="chart-wrap" hidden><p class="chart-title">Grade distribution</p><div id="gradesChart"></div></div>
 </article>
-        <article class="chart-card">
+        <article class="chart-card" data-permission="performance.enrollment">
   <h4>Enrollment</h4>
 
   <p id="enrollmentStatus" class="unavailable">
@@ -232,7 +249,7 @@
 
   <div class="chart-wrap" hidden><p class="chart-title">Enrollment by term</p><div id="enrollmentChart"></div></div>
 </article>
-<article class="chart-card">
+<article class="chart-card" data-permission="performance.dfwi">
   <h4>DFWI</h4>
 
   <p id="dfwiStatus" class="unavailable">
@@ -276,10 +293,10 @@
       </div>
     </section>
 
-    <section>
+    <section data-permission="feedback.faculty_survey feedback.student_survey">
       <h3>Feedback and evaluation</h3>
       <div class="card-stack">
-<article class="chart-card">
+<article class="chart-card" data-permission="feedback.faculty_survey">
   <h4>Faculty survey results</h4>
 
   <p id="facultySurveyStatus" class="unavailable">
@@ -320,7 +337,7 @@
 
   <div class="chart-wrap" hidden><p class="chart-title">Faculty survey averages by term</p><div id="facultySurveyChart"></div></div>
 </article>
-        <article class="chart-card">
+        <article class="chart-card" data-permission="feedback.student_survey">
           <h4>Student survey results</h4>
 
           <p id="studentSurveyStatus" class="unavailable">
@@ -380,10 +397,10 @@
           <div class="chart-wrap" hidden><p class="chart-title">Student survey averages by term</p><div id="studentSurveyChart"></div></div>
         </article>
       </div>
-      <article class="chart-wrap chart-row" hidden><h4>Student survey questions by term</h4><div id="studentSurveyHeatmap"></div></article>
+      <article class="chart-wrap chart-row" data-permission="feedback.student_survey" hidden><h4>Student survey questions by term</h4><div id="studentSurveyHeatmap"></div></article>
     </section>
 
-    <section>
+    <section data-permission="feedback.ai_production">
       <h3>AI in this course</h3>
       <article>
         <p id="aiProductionStatus" class="unavailable">Loading AI in this course...</p>
@@ -394,7 +411,7 @@
       </article>
     </section>
 
-    <section>
+    <section data-permission="feedback.integrations">
       <h3>Integrations</h3>
       <article>
         <p id="integrationsStatus" class="unavailable">Loading Integrations...</p>
@@ -404,7 +421,7 @@
       </article>
     </section>
 
-    <section>
+    <section data-permission="feedback.redeveloped">
       <h3>Redeveloped course feedback</h3>
       <article>
         <p id="redevelopedStatus" class="unavailable">Loading Redeveloped course feedback...</p>
@@ -415,7 +432,7 @@
       </article>
     </section>
 
-    <section>
+    <section data-permission="feedback.observations">
       <h3>Faculty observations</h3>
       <article>
         <p id="observationsStatus" class="unavailable">Loading Faculty observations...</p>

@@ -20,14 +20,115 @@
     studentSurveyController: null, studentSurvey: [],
     studentSurveyQuestionController: null, studentSurveyQuestions: [],
     instructionalDesignDevelopmentController: null, instructionalDesignDevelopment: [],
-    aiProductionController: null, integrationsController: null, redevelopedController: null, observationsController: null
+    aiProductionController: null, integrationsController: null, redevelopedController: null, observationsController: null,
+    access: null
   };
 
   const $ = id => document.getElementById(id);
   const unavailable = "Not available";
 
+  // ---- Sign-in and permissions -------------------------------------------
+  // The server only sends what the signed-in role may see; the page also hides the matching cards.
+  const can = key => key === "admin" ? state.access?.role?.is_admin === true : (state.access?.permissions || []).includes(key);
+
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = async (...args) => {   // a session that ends while the page is open brings back the sign-in screen
+    const response = await nativeFetch(...args);
+    if (response.status === 401 && !String(args[0]).includes("/api/auth/")) showSignIn("Your session has ended. Please sign in again.");
+    return response;
+  };
+
+  function applyAccess() {
+    document.querySelectorAll("[data-permission]").forEach(element =>
+      element.classList.toggle("no-access", !element.dataset.permission.split(" ").some(can)));
+    const user = state.access?.user;
+    $("userBox").hidden = !user;
+    $("userName").textContent = user ? user.display_name || user.email : "";
+    $("userRole").textContent = user ? state.access.role.name : "";
+  }
+
+  function showSignIn(message) {
+    $("courseDetailDialog").open && $("courseDetailDialog").close();
+    $("appMain").hidden = true;
+    $("userBox").hidden = true;
+    $("signIn").hidden = false;
+    $("signInError").textContent = message || "";
+    $("signInError").hidden = !message;
+    $("signInPassword").value = "";
+    $("signInEmail").focus();
+  }
+
+  function showApp() {
+    applyAccess();
+    $("signIn").hidden = true;
+    $("appMain").hidden = false;
+  }
+
+  // Returns true when someone is signed in (or sign-in is switched off on the server).
+  async function startSession() {
+    try {
+      const response = await nativeFetch("/api/auth/me", { headers: { Accept: "application/json" }, credentials: "same-origin" });
+      const payload = await json(response);
+      if (response.ok && payload.ok !== false && payload.data) {
+        state.access = payload.data;
+        showApp();
+        return true;
+      }
+      showSignIn(response.status === 401 ? "" : "The sign-in service is temporarily unavailable.");
+    } catch {
+      showSignIn("The sign-in service is temporarily unavailable.");
+    }
+    return false;
+  }
+
+  async function signIn(event) {
+    event.preventDefault();
+    $("signInError").hidden = true;
+    try {
+      const response = await nativeFetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ email: $("signInEmail").value, password: $("signInPassword").value })
+      });
+      const payload = await json(response);
+      if (!response.ok || payload.ok === false || !payload.data) {
+        showSignIn(payload?.error?.message || "Sign-in failed. Please try again.");
+        return;
+      }
+      state.access = payload.data;
+      $("signInPassword").value = "";
+      showApp();
+      loadApp();
+    } catch {
+      showSignIn("The sign-in service is temporarily unavailable.");
+    }
+  }
+
+  async function signOut() {
+    try {
+      await nativeFetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+    } finally {
+      window.location.reload();
+    }
+  }
+
+  async function loadApp() {
+    if (can("admin")) loadDataStatus();
+    try {
+      await loadFilterOptions();
+      $("collegeFilter").disabled = false;
+      $("departmentFilter").disabled = false;
+    } catch {
+      $("collegeFilter").disabled = true;
+      $("departmentFilter").disabled = true;
+    }
+    loadCourses();
+  }
+
   document.addEventListener("DOMContentLoaded", async () => {
-    loadDataStatus();
+    $("signInForm").addEventListener("submit", signIn);
+    $("signOut").addEventListener("click", signOut);
     $("filterForm").addEventListener("submit", event => {
       event.preventDefault();
       state.page = 1;
@@ -105,14 +206,7 @@
       populateDepartments();
     });
 
-    try {
-      await loadFilterOptions();
-    } catch {
-      $("collegeFilter").disabled = true;
-      $("departmentFilter").disabled = true;
-    }
-
-    loadCourses();
+    if (await startSession()) loadApp();
   });
 
   async function loadCourses() {
@@ -202,17 +296,20 @@
   async function openDetail(course) {
     resetDetail(course);
     $("courseDetailDialog").showModal();
-    loadGrades(course);
-    loadEnrollment(course);
-    loadDfwi(course);
-    loadFacultySurvey(course);
-    loadStudentSurvey(course);
-    loadStudentSurveyQuestions(course);
+    // only what the signed-in role may see is requested
+    if (can("performance.grades")) loadGrades(course);
+    if (can("performance.enrollment")) loadEnrollment(course);
+    if (can("performance.dfwi")) loadDfwi(course);
+    if (can("feedback.faculty_survey")) loadFacultySurvey(course);
+    if (can("feedback.student_survey")) {
+      loadStudentSurvey(course);
+      loadStudentSurveyQuestions(course);
+    }
     loadInstructionalDesignDevelopment(course);
-    loadAiProduction(course);
-    loadIntegrations(course);
-    loadRedeveloped(course);
-    loadObservations(course);
+    if (can("feedback.ai_production")) loadAiProduction(course);
+    if (can("feedback.integrations")) loadIntegrations(course);
+    if (can("feedback.redeveloped")) loadRedeveloped(course);
+    if (can("feedback.observations")) loadObservations(course);
     drawCharts();
     if (!course.course_id) {
       notice("This course has no identifier, so details can't be loaded.");
@@ -382,7 +479,12 @@
     const selector = $(selectId);
     const previousTermId = selector.value;
     selector.replaceChildren();
-    state.enrollment.forEach((row, index) => {
+    // Terms come from Enrollment; a role without Enrollment uses the survey's own terms.
+    const own = selectId === "facultySurveyTerm" ? state.facultySurvey : state.studentSurvey;
+    const seen = new Set();
+    const source = state.enrollment.length > 0 ? state.enrollment
+      : own.filter(row => !seen.has(row.term_id) && seen.add(row.term_id));
+    source.forEach((row, index) => {
       const option = document.createElement("option");
       option.value = row.term_id || "";
       option.textContent = termLabel(row, index);
@@ -676,7 +778,7 @@
     try {
       state.studentSurvey = await fetchCourseRows(course, "student-survey", state.studentSurveyController);
 
-      if (state.enrollment.length > 0) {
+      if (state.enrollment.length > 0 || !can("performance.enrollment")) {
         populateSurveyTerms("studentSurveyTerm");
         renderSelectedStudentSurveyTerm();
         populateStudentSurveyInstruments();

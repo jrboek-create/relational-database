@@ -98,7 +98,7 @@ services:
       DIRECTUS_URL: http://directus:8055
       PORT: 3000
       # sign-in for the web app: turned on in stage 2, when the sign-in screen is deployed
-      SIGN_IN_REQUIRED: "false"
+      SIGN_IN_REQUIRED: "true"
     volumes:
       - ./.secrets:/.secrets:ro
       - ./exports:/exports:ro

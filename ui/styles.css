@@ -125,3 +125,12 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .observation-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:.5rem 0}
 .observation-table th,.observation-table td{padding:.3rem .4rem;border-bottom:1px solid #d9e2e9;text-align:center}
 .observation-table th:first-child,.observation-table td:first-child{text-align:left}
+/* sign-in and permissions */
+.no-access{display:none !important}
+.sign-in{max-width:26rem;margin:2.5rem auto;padding:1.5rem}
+.sign-in label{display:block;margin-top:.9rem;font-weight:700}
+.sign-in input{width:100%;box-sizing:border-box;margin-top:.3rem}
+.sign-in button{margin-top:1.2rem}
+.user-box{margin-left:auto;display:flex;align-items:center;gap:.9rem;color:#fff}
+.user-role{display:block;font-size:.8rem;opacity:.85}
+#appMain[hidden],#userBox[hidden],.sign-in[hidden]{display:none}

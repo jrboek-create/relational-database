@@ -141,6 +141,29 @@ curl.exe -H "X-API-Key: <key>" http://127.0.0.1:3001/api/v1/data-status
 
 The API is still reachable only from this computer (ports bound to `127.0.0.1`).
 
+### Sign-in and roles
+
+The web app asks everyone to sign in with their Directus account (email and password). Each person is linked to one app role in `public.app_user`. A role's ticked items are in `public.app_role_permission`, and the full list of items is in `middleware/src/permissions.js`.
+
+- **Everyone** sees Find a course, the course catalog, Course identity, Organizational context, Curriculum, and Instructional design and development.
+- **Admin** sees everything, including the Data status panel. `/api/data-status`, `/api/export` and `/api/openapi.json` are Admin-only.
+- **Other roles** (ID Level 1–3, ID Director) see only the items ticked for them. The server refuses anything else, and the page hides those sections completely. If a group (for example Course performance) is unticked, everything inside it is hidden.
+- **Tools** that use an API key keep full access.
+
+Details:
+
+- Sessions end after 4 hours idle or 12 hours in total.
+- After 5 wrong passwords, that email is locked for 15 minutes. Restarting the middleware clears the lock.
+- Role changes apply within 30 seconds.
+
+Sign-in is controlled by `SIGN_IN_REQUIRED` in `compose.yaml` (middleware). Set it to `"false"` and run `docker compose up -d middleware` to open the app again without sign-in, for example if you are locked out.
+
+To reset a Directus password (replace the text in quotes with the new password):
+
+```
+docker compose exec directus node /directus/cli.js users passwd --email someone@erau.edu --password 'new-password'
+```
+
 ## Importing Excel data (optional)
 
 The loader reads every `.xlsx` file in `imports/`, skipping any with "old" in the name. It stores each row as raw JSON in the `phase2_staging` tables and records the batch, file, and checksum. It only stages data; it does not change the reporting tables.
