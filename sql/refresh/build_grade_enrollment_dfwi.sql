@@ -6,6 +6,8 @@
 --   DFWI:       (changed 3 Nov 2026 to follow Tableau) one row per course + term with grades; D + F + W + I (WF excluded)
 --               over grades in Tableau's 12 codes (A B C D F W I AU NS NTG P WF), pooled across sections, rounded to 2
 --               decimals. Enrollment is attached for reference only. (Before: over enrollment, one row per enrollment row.)
+--               COIN courses are never part of DFWI (as in Tableau, whose DFWI data source filters them out; confirmed 3 Nov 2026).
+--               Their grades and enrollment are still reported.
 --   Course and term labels come from reporting.course_current_catalog_api and core.term.
 
 CREATE TEMP TABLE tmp_grade_summary ON COMMIT DROP AS
@@ -72,4 +74,5 @@ FROM (
   FROM tmp_grade_summary g
 ) x
 LEFT JOIN tmp_enrollment_summary e ON e.course_id = x.course_id AND e.term_id = x.term_id
-WHERE x.tableau_grades > 0;
+WHERE x.tableau_grades > 0
+  AND coalesce(upper(x.course_code), '') NOT LIKE 'COIN %';
