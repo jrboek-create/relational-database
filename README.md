@@ -95,6 +95,7 @@ All are `GET` requests and return JSON with a `request_id`.
 |---|---|
 | `/api/courses` | Course catalog list. Query params: `page`, `limit`, `course_code`, `course_title`, `college_name`, `department_name`, `sort` (`course_code` or `-course_code`) |
 | `/api/courses/:course_id` | Course detail |
+| `/api/courses/:course_id/all` | Course detail plus every section below in one call (`data.course`, `data.sections`; `meta.sections` says which sections were available) |
 | `/api/filter-options` | Distinct college and department pairs for the filter dropdowns |
 | `/api/data-status` | Row count and last rebuild time for each data area (shown in the UI's Data status panel) |
 | `/api/export` | List of exported datasets (from `exports/manifest.json`), each with rows, checksum and URL |

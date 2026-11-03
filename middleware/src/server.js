@@ -382,6 +382,83 @@ for (const section of courseSections) {
   });
 }
 
+// One Directus read: { ok, data } or { ok: false, timedOut }.
+async function directusItems(collection, params, requestId) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const upstream = await fetch(`${directusUrl}/items/${collection}?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${directusToken}`, Accept: "application/json", "x-request-id": requestId },
+      signal: controller.signal
+    });
+    if (!upstream.ok) return { ok: false, timedOut: false };
+    const payload = await upstream.json();
+    return Array.isArray(payload.data) ? { ok: true, data: payload.data } : { ok: false, timedOut: false };
+  } catch (error) {
+    return { ok: false, timedOut: error?.name === "AbortError" };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// Everything about one course in one call: the course detail plus every section, fetched in parallel.
+// Each section uses the same fields, filter, sort and limit as its own endpoint. A section whose data service
+// fails comes back as null with available: false in meta; the rest are still returned.
+app.get("/api/courses/:course_id/all", async (req, res) => {
+  const started = Date.now();
+  const log = (status, extra = {}) => console.log(JSON.stringify({ event: "request", request_id: req.requestId, method: req.method, path: req.path, status, ...extra, duration_ms: Date.now() - started }));
+  const fail = (status, code, message) => {
+    log(status);
+    return res.status(status).json({ ok: false, request_id: req.requestId, error: { code, message } });
+  };
+  try {
+    if (Object.keys(req.query).length !== 0) return fail(400, "INVALID_QUERY", "The request contains an unsupported parameter.");
+    const courseId = typeof req.params.course_id === "string" ? req.params.course_id.trim() : "";
+    if (!uuidPattern.test(courseId)) return fail(400, "INVALID_QUERY", "course_id must be a valid UUID.");
+
+    const detailParams = new URLSearchParams();
+    detailParams.set("fields", detailFields.join(","));
+    detailParams.set("filter[course_id][_eq]", courseId);
+    detailParams.set("limit", "1");
+
+    const [detail, ...results] = await Promise.all([
+      directusItems("course_catalog_detail_api", detailParams, req.requestId),
+      ...courseSections.map((section) => {
+        const params = new URLSearchParams();
+        params.set("fields", section.fields.join(","));
+        params.set("filter[course_id][_eq]", courseId);
+        params.set("sort", section.sort);
+        params.set("limit", String(section.limit));
+        return directusItems(section.collection, params, req.requestId);
+      })
+    ]);
+
+    if (!detail.ok) return fail(detail.timedOut ? 504 : 502, "DIRECTUS_UNAVAILABLE", "The course data service is unavailable.");
+    if (detail.data.length === 0) return fail(404, "NOT_FOUND", "The requested course was not found.");
+
+    const course = Object.fromEntries(detailFields.map((field) => [field, detail.data[0][field] ?? null]));
+    const sections = {};
+    const sectionMeta = {};
+    courseSections.forEach((section, i) => {
+      const key = section.path.replaceAll("/", "-");
+      const result = results[i];
+      const rows = result.ok ? result.data.map((row) => Object.fromEntries(section.fields.map((field) => [field, row[field] ?? null]))) : null;
+      sections[key] = rows;
+      sectionMeta[key] = {
+        label: section.label,
+        available: result.ok,
+        returned: rows ? rows.length : null,
+        report_as_of_utc: rows?.[0]?.report_as_of_utc ?? null
+      };
+    });
+    const unavailable = Object.keys(sectionMeta).filter((key) => !sectionMeta[key].available);
+    log(200, { sections: Object.keys(sections).length, unavailable: unavailable.length });
+    return res.status(200).json({ ok: true, request_id: req.requestId, data: { course, sections }, meta: { course_id: courseId, sections: sectionMeta, unavailable } });
+  } catch {
+    return fail(500, "INTERNAL_ERROR", "The request could not be completed.");
+  }
+});
+
 // Data status: row count and last rebuild time of each reporting collection (one Directus aggregate call each).
 app.get("/api/data-status", async (req, res) => {
   const started = Date.now();
