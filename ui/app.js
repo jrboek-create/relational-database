@@ -45,11 +45,13 @@
     $("userBox").hidden = !user;
     $("userName").textContent = user ? user.display_name || user.email : "";
     $("userRole").textContent = user ? state.access.role.name : "";
+    $("adminToggle").hidden = !(user && can("admin"));
   }
 
   function showSignIn(message) {
     $("courseDetailDialog").open && $("courseDetailDialog").close();
     $("appMain").hidden = true;
+    $("adminPage").hidden = true;
     $("userBox").hidden = true;
     $("signIn").hidden = false;
     $("signInError").textContent = message || "";
@@ -126,9 +128,194 @@
     loadCourses();
   }
 
+  // ---- Admin page: roles and what each one sees ----------------------------------------------------
+  const admin = { roles: [], items: [], selectedId: null, dirty: false };
+
+  function adminMessage(text, isError) {
+    $("adminMessage").textContent = text || "";
+    $("adminMessage").hidden = !text;
+    $("adminMessage").className = isError ? "error" : "notice";
+  }
+
+  async function adminRequest(method, url, body) {
+    const response = await fetch(url, {
+      method,
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: body === undefined ? undefined : JSON.stringify(body)
+    });
+    const payload = await json(response);
+    if (!response.ok || payload.ok === false) throw new Error(payload?.error?.message || "The request failed. Please try again.");
+    return payload.data;
+  }
+
+  function showAdminPage(show) {
+    if (!show && admin.dirty && !confirm("Discard unsaved changes to this role?")) return;
+    admin.dirty = false;
+    $("adminPage").hidden = !show;
+    $("appMain").hidden = show;
+    $("adminToggle").textContent = show ? "Back to courses" : "Admin";
+    if (show) loadAdmin(admin.selectedId);
+  }
+
+  async function loadAdmin(selectId) {
+    try {
+      const data = await adminRequest("GET", "/api/admin/roles");
+      admin.roles = data.roles;
+      admin.items = data.items;
+      admin.dirty = false;
+      selectRole(admin.roles.some(r => r.id === selectId) ? selectId : null);
+    } catch (error) {
+      adminMessage(error.message, true);
+    }
+  }
+
+  function renderRoleList() {
+    $("adminRoleList").replaceChildren(...admin.roles.map(role => {
+      const item = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = role.name;
+      const count = document.createElement("small");
+      count.textContent = `${role.user_count} user${role.user_count === 1 ? "" : "s"}`;
+      button.append(count);
+      button.setAttribute("aria-current", String(role.id === admin.selectedId));
+      button.addEventListener("click", () => selectRole(role.id));
+      item.append(button);
+      return item;
+    }));
+  }
+
+  function selectRole(id) {
+    if (admin.dirty && id !== admin.selectedId && !confirm("Discard unsaved changes to this role?")) return;
+    admin.selectedId = id;
+    admin.dirty = false;
+    renderRoleList();
+    const role = admin.roles.find(r => r.id === id);
+    $("adminEditor").hidden = !role;
+    $("adminRoleTitle").textContent = role ? role.name : "Choose a role";
+    if (!role) return adminMessage("");
+    $("adminRoleName").value = role.name;
+    $("adminRoleName").disabled = role.is_admin;
+    $("adminSave").disabled = role.is_admin;
+    $("adminDelete").disabled = role.is_admin || role.built_in;
+    renderTree(role);
+    adminMessage(role.is_admin ? "The Admin role always sees everything and can't be changed."
+      : `${role.user_count} user${role.user_count === 1 ? " has" : "s have"} this role.`);
+  }
+
+  // Nested checkboxes built from the server's item list. Groups get All / None buttons for what's inside them.
+  function renderTree(role) {
+    const ticked = new Set(role.permissions);
+    const build = parent => {
+      const children = admin.items.filter(item => item.parent === parent);
+      if (!children.length) return null;
+      const list = document.createElement("ul");
+      children.forEach(item => {
+        const row = document.createElement("li");
+        const label = document.createElement("label");
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.dataset.key = item.key;
+        box.checked = role.is_admin || ticked.has(item.key);
+        box.disabled = role.is_admin;
+        label.append(box, " ", item.label);
+        if (item.title) {
+          const title = document.createElement("span");
+          title.className = "admin-question";
+          title.textContent = item.title;
+          label.append(title);
+        }
+        row.append(label);
+        const inner = build(item.key);
+        if (inner) {
+          if (!role.is_admin) {
+            [["All", true], ["None", false]].forEach(([text, value]) => {
+              const button = document.createElement("button");
+              button.type = "button";
+              button.className = "admin-small";
+              button.textContent = text;
+              button.setAttribute("aria-label", `${text}: everything in ${item.label}`);
+              button.addEventListener("click", () => {
+                inner.querySelectorAll("input[type=checkbox]").forEach(b => { b.checked = value; });
+                treeChanged();
+              });
+              row.append(" ", button);
+            });
+          }
+          row.append(inner);
+        }
+        list.append(row);
+      });
+      return list;
+    };
+    $("adminTree").replaceChildren(build(null));
+    $("adminTree").onchange = treeChanged;
+    markHiddenGroups();
+  }
+
+  // Items inside an unticked group are greyed out, because they are hidden anyway.
+  function markHiddenGroups() {
+    $("adminTree").querySelectorAll("li").forEach(row => {
+      const box = row.querySelector(":scope > label > input");
+      row.classList.toggle("admin-off", !box.checked);
+    });
+  }
+
+  function treeChanged() {
+    admin.dirty = true;
+    markHiddenGroups();
+  }
+
+  async function saveRole() {
+    const role = admin.roles.find(r => r.id === admin.selectedId);
+    if (!role) return;
+    const permissions = [...$("adminTree").querySelectorAll("input[type=checkbox]:checked")].map(box => box.dataset.key);
+    try {
+      await adminRequest("PATCH", `/api/admin/roles/${encodeURIComponent(role.id)}`, { name: $("adminRoleName").value, permissions });
+      admin.dirty = false;
+      await loadAdmin(role.id);
+      adminMessage("Saved. People with this role see the change on their next click.");
+    } catch (error) {
+      adminMessage(error.message, true);
+    }
+  }
+
+  async function deleteRole() {
+    const role = admin.roles.find(r => r.id === admin.selectedId);
+    if (!role || !confirm(`Delete the role "${role.name}"? This can't be undone.`)) return;
+    try {
+      await adminRequest("DELETE", `/api/admin/roles/${encodeURIComponent(role.id)}`);
+      admin.dirty = false;
+      await loadAdmin(null);
+      adminMessage(`Deleted "${role.name}".`);
+    } catch (error) {
+      adminMessage(error.message, true);
+    }
+  }
+
+  async function addRole(event) {
+    event.preventDefault();
+    if (admin.dirty && !confirm("Discard unsaved changes to this role?")) return;
+    try {
+      const created = await adminRequest("POST", "/api/admin/roles", { name: $("adminNewRoleName").value });
+      $("adminNewRoleName").value = "";
+      admin.dirty = false;
+      await loadAdmin(created.id);
+      adminMessage("Role added. Tick what it sees, then Save changes.");
+    } catch (error) {
+      adminMessage(error.message, true);
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", async () => {
     $("signInForm").addEventListener("submit", signIn);
     $("signOut").addEventListener("click", signOut);
+    $("adminToggle").addEventListener("click", () => showAdminPage($("adminPage").hidden));
+    $("adminNewRole").addEventListener("submit", addRole);
+    $("adminSave").addEventListener("click", saveRole);
+    $("adminDelete").addEventListener("click", deleteRole);
+    $("adminRoleName").addEventListener("input", () => { admin.dirty = true; });
     $("filterForm").addEventListener("submit", event => {
       event.preventDefault();
       state.page = 1;

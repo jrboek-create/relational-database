@@ -19,6 +19,7 @@
   </div>
   <div id="userBox" class="user-box" hidden>
     <span><span id="userName"></span><span id="userRole" class="user-role"></span></span>
+    <button id="adminToggle" type="button" hidden>Admin</button>
     <button id="signOut" type="button">Sign out</button>
   </div>
 </header>
@@ -35,6 +36,34 @@
     <button class="primary" type="submit">Sign in</button>
   </form>
 </section>
+
+<main id="adminPage" class="layout" hidden>
+  <section class="panel" aria-labelledby="adminRolesTitle">
+    <h2 id="adminRolesTitle">Roles</h2>
+    <ul id="adminRoleList" class="admin-role-list"></ul>
+    <form id="adminNewRole">
+      <label for="adminNewRoleName">New role</label>
+      <input id="adminNewRoleName" maxlength="60" required>
+      <button type="submit">Add role</button>
+    </form>
+  </section>
+  <section class="panel" aria-labelledby="adminRoleTitle">
+    <h2 id="adminRoleTitle">Choose a role</h2>
+    <p id="adminMessage" class="notice" role="status" hidden></p>
+    <div id="adminEditor" hidden>
+      <label for="adminRoleName">Role name</label>
+      <input id="adminRoleName" maxlength="60">
+      <p class="admin-note">Everyone signed in always sees Find a course, the course catalog, Course identity,
+        Organizational context, Curriculum, and Instructional design and development. Tick what else this role sees.
+        When a group is unticked, everything inside it is hidden.</p>
+      <div id="adminTree" class="admin-tree"></div>
+      <div class="admin-actions">
+        <button id="adminSave" class="primary" type="button">Save changes</button>
+        <button id="adminDelete" type="button">Delete role</button>
+      </div>
+    </div>
+  </section>
+</main>
 
 <main id="appMain" class="layout" hidden>
   <aside class="panel filters" aria-labelledby="filter-title">

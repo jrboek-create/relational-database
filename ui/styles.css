@@ -133,4 +133,18 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .sign-in button{margin-top:1.2rem}
 .user-box{margin-left:auto;display:flex;align-items:center;gap:.9rem;color:#fff}
 .user-role{display:block;font-size:.8rem;opacity:.85}
-#appMain[hidden],#userBox[hidden],.sign-in[hidden]{display:none}
+#appMain[hidden],#adminPage[hidden],#userBox[hidden],.sign-in[hidden]{display:none}
+/* Admin page */
+.admin-role-list{list-style:none;margin:0 0 1.2rem;padding:0}
+.admin-role-list button{display:flex;justify-content:space-between;gap:1rem;width:100%;margin-bottom:.4rem;text-align:left;background:white}
+.admin-role-list button[aria-current="true"]{background:#e5f3f4;border-color:var(--teal);font-weight:700}
+.admin-role-list small{color:var(--muted);font-weight:400}
+#adminNewRole input,#adminRoleName{width:100%;margin:.3rem 0 .6rem}
+.admin-note{color:var(--muted)}
+.admin-tree ul{list-style:none;margin:0;padding-left:1.4rem}
+.admin-tree>ul{padding-left:0}
+.admin-tree li{margin:.35rem 0}
+.admin-question{display:block;margin-left:1.6rem;color:var(--muted);font-size:.85rem}
+.admin-small{min-height:0;padding:.1rem .5rem;font-size:.8rem}
+.admin-off>ul{opacity:.45}
+.admin-actions{display:flex;gap:.8rem;margin-top:1.2rem}

@@ -156,6 +156,21 @@ Details:
 - After 5 wrong passwords, that email is locked for 15 minutes. Restarting the middleware clears the lock.
 - Role changes apply within 30 seconds.
 
+**Admin page.** A signed-in Admin sees an **Admin** button in the header. It opens the list of roles. There you can:
+
+- add, rename or delete a role;
+- tick what each role sees, with the wording shown next to each survey question and All/None buttons for each group.
+
+The Admin role can't be changed. A role can't be deleted while users have it. Every change is logged by the middleware as an `admin_change` line that names who made it.
+
+Changes are saved with a separate Directus admin token in `.secrets/directus_admin_token.txt`. It is not the read-only token the rest of the app uses. To set it up (once):
+
+1. In Directus (<http://localhost:8066>), open **User Directory** and create a user, for example *AIR Hub service*, with the **Administrator** role and no password.
+2. In that user's **Token** field, generate a token, copy it, and click **Save**. The token only works after you save.
+3. In PowerShell, from the repository folder: `Set-Content -NoNewline .secrets\directus_admin_token.txt 'paste-the-token-here'`
+
+The token is read on each change, so no restart is needed. Without it, the Admin page still lists roles but says changes can't be saved yet.
+
 Sign-in is controlled by `SIGN_IN_REQUIRED` in `compose.yaml` (middleware). Set it to `"false"` and run `docker compose up -d middleware` to open the app again without sign-in, for example if you are locked out.
 
 To reset a Directus password (replace the text in quotes with the new password):

@@ -4,7 +4,7 @@ import { readFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import crypto from "node:crypto";
-import { effectivePermissions, SECTION_PERMISSION, questionKey } from "./permissions.js";
+import { effectivePermissions, SECTION_PERMISSION, questionKey, PERMISSIONS } from "./permissions.js";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -228,6 +228,128 @@ app.use(["/api/data-status", "/api/export", "/api/openapi.json"], (req, res, nex
   if (req.access?.admin) return next();
   return res.status(403).json({ ok: false, request_id: req.requestId, error: { code: "FORBIDDEN", message: "Only the Admin can use this." } });
 });
+
+// ---- Admin page: roles and their ticked items ------------------------------------------------------
+// Only a signed-in Admin may use these. Changes are written with a separate Directus admin token
+// (.secrets/directus_admin_token.txt); it is read on each change, so adding it needs no restart.
+const adminTokenPath = path.resolve(__dirname, "../../.secrets/directus_admin_token.txt");
+const permissionKeys = new Set(PERMISSIONS.map((p) => p.key));
+const isUuid = (value) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value));
+
+async function directusWrite(method, pathAndQuery, body) {
+  let token;
+  try { token = readFileSync(adminTokenPath, "utf8").trim(); } catch { token = ""; }
+  if (!token) throw Object.assign(new Error("admin token missing"), { code: "ADMIN_TOKEN_MISSING" });
+  const upstream = await fetch(`${directusUrl}${pathAndQuery}`, {
+    method,
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/json", "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+  if (!upstream.ok) throw Object.assign(new Error(`Directus ${method} ${upstream.status}`), { code: "DIRECTUS_WRITE_FAILED", status: upstream.status });
+  return upstream.status === 204 ? null : (await upstream.json()).data;
+}
+
+async function loadRoles() {
+  const [roles, ticked, users] = await Promise.all([
+    directusJson("/items/app_role?fields=id,name,is_admin,built_in&sort=name&limit=-1"),
+    directusJson("/items/app_role_permission?fields=id,role_id,permission_key&limit=-1"),
+    directusJson("/items/app_user?fields=role_id,active&limit=-1")
+  ]);
+  if (roles === null || ticked === null || users === null) throw Object.assign(new Error("roles unavailable"), { code: "DIRECTUS_UNAVAILABLE" });
+  return roles.map((role) => ({
+    id: role.id, name: role.name, is_admin: role.is_admin === true, built_in: role.built_in === true,
+    user_count: users.filter((u) => u.role_id === role.id && u.active).length,
+    permissions: ticked.filter((t) => t.role_id === role.id).map((t) => t.permission_key),
+    ticked_rows: ticked.filter((t) => t.role_id === role.id)
+  }));
+}
+
+app.use("/api/admin", (req, res, next) => {
+  if (req.access?.admin && req.access.user) return next();
+  return res.status(403).json({ ok: false, request_id: req.requestId, error: { code: "FORBIDDEN", message: "Only a signed-in Admin can use this." } });
+});
+
+function adminRoute(handler) {
+  return async (req, res) => {
+    const reply = (status, body) => res.status(status).json({ ok: status < 300, request_id: req.requestId, ...body });
+    const fail = (status, code, message) => reply(status, { error: { code, message } });
+    try {
+      await handler(req, reply, fail);
+    } catch (error) {
+      console.log(JSON.stringify({ event: "admin_error", request_id: req.requestId, path: req.path, code: error.code, status: error.status }));
+      if (error.code === "ADMIN_TOKEN_MISSING") return fail(503, "ADMIN_TOKEN_MISSING", "Changes can't be saved yet: the Directus admin token isn't set up (see the README).");
+      return fail(503, "DIRECTUS_UNAVAILABLE", "The change could not be saved. Please reload and try again.");
+    }
+  };
+}
+
+const logChange = (req, action, detail) =>
+  console.log(JSON.stringify({ event: "admin_change", request_id: req.requestId, by: req.access.user.email, action, ...detail }));
+
+const cleanName = (value) => (typeof value === "string" ? value.replace(/\s+/g, " ").trim() : "");
+
+// Roles with their ticked items, plus the list of items (with question wording) for the checkboxes.
+app.get("/api/admin/roles", adminRoute(async (req, reply) => {
+  const roles = (await loadRoles()).map(({ ticked_rows, ...role }) => role);
+  reply(200, { data: { roles, items: PERMISSIONS.map(({ key, label, title, parent }) => ({ key, label, title: title || null, parent })) } });
+}));
+
+app.post("/api/admin/roles", adminRoute(async (req, reply, fail) => {
+  const name = cleanName(req.body?.name);
+  if (!name || name.length > 60) return fail(400, "INVALID_NAME", "Enter a role name (up to 60 characters).");
+  const roles = await loadRoles();
+  if (roles.some((r) => r.name.toLowerCase() === name.toLowerCase())) return fail(409, "NAME_TAKEN", "A role with that name already exists.");
+  const id = crypto.randomUUID();
+  await directusWrite("POST", "/items/app_role", { id, name, is_admin: false, built_in: false });
+  logChange(req, "role_created", { role: name });
+  reply(201, { data: { id } });
+}));
+
+// Body: { name?, permissions? } — permissions is the full list of ticked keys for the role.
+app.patch("/api/admin/roles/:id", adminRoute(async (req, reply, fail) => {
+  if (!isUuid(req.params.id)) return fail(404, "NOT_FOUND", "Role not found.");
+  const roles = await loadRoles();
+  const role = roles.find((r) => r.id === req.params.id);
+  if (!role) return fail(404, "NOT_FOUND", "Role not found.");
+  if (role.is_admin) return fail(403, "ADMIN_LOCKED", "The Admin role always sees everything and can't be changed.");
+  const changes = {};
+  if (req.body?.name !== undefined) {
+    const name = cleanName(req.body.name);
+    if (!name || name.length > 60) return fail(400, "INVALID_NAME", "Enter a role name (up to 60 characters).");
+    if (roles.some((r) => r.id !== role.id && r.name.toLowerCase() === name.toLowerCase())) return fail(409, "NAME_TAKEN", "A role with that name already exists.");
+    if (name !== role.name) changes.name = name;
+  }
+  let add = [], remove = [];
+  if (req.body?.permissions !== undefined) {
+    const wanted = req.body.permissions;
+    if (!Array.isArray(wanted) || !wanted.every((k) => permissionKeys.has(k))) return fail(400, "INVALID_PERMISSIONS", "The list of ticked items is not valid.");
+    const want = new Set(wanted);
+    add = [...want].filter((k) => !role.permissions.includes(k));
+    remove = role.ticked_rows.filter((t) => !want.has(t.permission_key));
+  }
+  if (changes.name) await directusWrite("PATCH", `/items/app_role/${role.id}`, { name: changes.name });
+  for (const row of remove) await directusWrite("DELETE", `/items/app_role_permission/${row.id}`);
+  if (add.length) await directusWrite("POST", "/items/app_role_permission", add.map((permission_key) => ({ id: crypto.randomUUID(), role_id: role.id, permission_key })));
+  accessCache.clear();   // signed-in users get the change on their next request
+  logChange(req, "role_updated", { role: changes.name || role.name, renamed_from: changes.name ? role.name : undefined, added: add, removed: remove.map((r) => r.permission_key) });
+  reply(200, { data: { id: role.id } });
+}));
+
+app.delete("/api/admin/roles/:id", adminRoute(async (req, reply, fail) => {
+  if (!isUuid(req.params.id)) return fail(404, "NOT_FOUND", "Role not found.");
+  const roles = await loadRoles();
+  const role = roles.find((r) => r.id === req.params.id);
+  if (!role) return fail(404, "NOT_FOUND", "Role not found.");
+  if (role.is_admin || role.built_in) return fail(403, "ADMIN_LOCKED", "The Admin role can't be deleted.");
+  const assigned = await directusJson(`/items/app_user?filter[role_id][_eq]=${role.id}&fields=directus_user_id&limit=-1`);
+  if (assigned === null) throw Object.assign(new Error("users unavailable"), { code: "DIRECTUS_UNAVAILABLE" });
+  if (assigned.length) return fail(409, "ROLE_IN_USE", `${assigned.length} user${assigned.length === 1 ? " has" : "s have"} this role. Give them another role first.`);
+  for (const row of role.ticked_rows) await directusWrite("DELETE", `/items/app_role_permission/${row.id}`);
+  await directusWrite("DELETE", `/items/app_role/${role.id}`);
+  accessCache.clear();
+  logChange(req, "role_deleted", { role: role.name });
+  reply(200, { data: { id: role.id } });
+}));
 
 app.get("/health", (_req, res) => {
   res.status(200).json({
