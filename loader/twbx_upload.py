@@ -10,7 +10,7 @@ Rules (agreed 2 Nov 2026, see the "AIR Hub data input map" doc): rows are matche
 added, unchanged keys skipped, changed keys listed (never applied), keys missing from the file are kept.
 Cell values are read as calculated values, not formulas.
 """
-import hashlib, json, os, sys, uuid, zipfile, tempfile
+import hashlib, json, os, re, sys, uuid, zipfile, tempfile
 from datetime import datetime, date, time, timezone
 from pathlib import Path
 
@@ -26,10 +26,22 @@ ROW_LIMIT = int(os.getenv("UPLOAD_ROW_LIMIT", "0"))  # testing only; 0 = all row
 ONLINE_OLD = ["raw_master_online_part_s01_online_31fb6e24", "raw_master_online_part_s01_online_3417e822",
               "raw_master_online_part_s01_online_324dd997", "raw_master_online_part_s01_online_6164ddea"]
 # existing: ("grades",) = core.grade · ("course_list",) = phase2 Master Course rows · ("raw", tables) = staging tables
+# Section names with a middle code (ENGL222_OL_0006, ENGL222_EV_2751) are stored as the plain name (ENGL222_0006),
+# the form every other section uses and the survey builds match on (decided 3 Nov 2026).
+SECTION_WITH_CODE = re.compile(r"^([^_]+)_[A-Za-z]+_([^_]+)$")
+
+
+def plain_section(vals):
+    m = SECTION_WITH_CODE.match((vals.get("Course_Section") or "").strip())
+    if m:
+        vals["Course_Section"] = f"{m[1]}_{m[2]}"
+    return vals
+
+
 # key "*" = match on the whole row (used where the ID column is mostly blank)
 DATASETS = [
     dict(name="grades", file="SSBI_Worldwide Canvas Final Course Grades.xlsx", sheet="Final Grades",
-         key=["Month of Start", "Course_Section", "Userid"], existing=("grades",), private=["Userid"]),
+         key=["Month of Start", "Course_Section", "Userid"], existing=("grades",), private=["Userid"], clean=plain_section),
     dict(name="course_list", file="Master_CourseList.xlsx", sheet="Master Course", key=["Term", "Course Code", "Section"],
          existing=("course_list",), compared=["Enrollment Count", "Course Title", "College", "Department", "Modality"]),
     dict(name="student_survey_old", file="Master_Online.xlsx", sheet="Online", key=["ResponseUniqueId"], existing=("raw", ONLINE_OLD)),
@@ -323,6 +335,8 @@ def preview():
                 count = 0
                 with cur.copy("COPY upload.row (run_id, dataset, row_number, vals) FROM STDIN") as cp:
                     for rownum, vals in rows:
+                        if ds.get("clean"):
+                            vals = ds["clean"](vals)
                         cp.write_row((run_id, ds["name"], rownum, json.dumps(vals)))
                         count += 1
                 with open(path, "rb") as f:

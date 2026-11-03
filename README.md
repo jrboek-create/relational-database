@@ -171,7 +171,7 @@ docker compose -f compose.yaml -f compose.upload.yaml run --rm --build upload ap
 
 To rebuild only the reporting tables from the data already loaded (no upload), run `upload refresh` the same way.
 
-`apply` only works on the file that was previewed. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. A preview run after an apply should show nothing left to add.
+`apply` only works on the file that was previewed. It adds the new rows (grades with any new terms and sections, the Master Course rows, and the survey and schedule rows) under one new import batch, then rebuilds the reporting tables and their API copies with the `sql/refresh` builds, all in one transaction. Old faculty survey rows with no `UniqueID` are skipped. Grade section names with a middle code (e.g. `ENGL222_OL_0006`) are stored under the plain name (`ENGL222_0006`), the form all other sections use. A preview run after an apply should show nothing left to add.
 
 ## Exporting data as JSON
 
