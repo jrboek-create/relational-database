@@ -21,7 +21,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
+      start_period: 180s   # after an unclean shutdown, Postgres checks its files first (took ~75 s on 3 Nov 2026)
  
   cache:
     image: redis:7

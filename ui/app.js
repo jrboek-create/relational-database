@@ -50,6 +50,7 @@
 
   function showSignIn(message) {
     $("courseDetailDialog").open && $("courseDetailDialog").close();
+    $("passwordDialog").open && $("passwordDialog").close();
     $("appMain").hidden = true;
     $("adminPage").hidden = true;
     $("userBox").hidden = true;
@@ -104,6 +105,38 @@
       loadApp();
     } catch {
       showSignIn("The sign-in service is temporarily unavailable.");
+    }
+  }
+
+  // Change my password (anyone signed in)
+  function openPasswordDialog() {
+    ["currentPassword", "newPassword", "newPassword2"].forEach(id => { $(id).value = ""; });
+    $("passwordMessage").hidden = true;
+    $("passwordDialog").showModal();
+    $("currentPassword").focus();
+  }
+
+  async function changePassword(event) {
+    event.preventDefault();
+    const show = (text, ok) => {
+      $("passwordMessage").textContent = text;
+      $("passwordMessage").className = ok ? "notice" : "error";
+      $("passwordMessage").hidden = false;
+    };
+    if ($("newPassword").value !== $("newPassword2").value) return show("The two new passwords don't match.");
+    try {
+      const response = await fetch("/api/auth/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ current_password: $("currentPassword").value, new_password: $("newPassword").value })
+      });
+      const payload = await json(response);
+      if (!response.ok || payload.ok === false) return show(payload?.error?.message || "The password could not be changed.");
+      ["currentPassword", "newPassword", "newPassword2"].forEach(id => { $(id).value = ""; });
+      show("Your password has been changed. Use it next time you sign in.", true);
+    } catch {
+      show("The password could not be changed. Please try again.");
     }
   }
 
@@ -468,6 +501,9 @@
   document.addEventListener("DOMContentLoaded", async () => {
     $("signInForm").addEventListener("submit", signIn);
     $("signOut").addEventListener("click", signOut);
+    $("passwordOpen").addEventListener("click", openPasswordDialog);
+    $("passwordCancel").addEventListener("click", () => $("passwordDialog").close());
+    $("passwordForm").addEventListener("submit", changePassword);
     $("adminToggle").addEventListener("click", () => showAdminPage($("adminPage").hidden));
     $("adminNewRole").addEventListener("submit", addRole);
     $("adminSave").addEventListener("click", saveRole);

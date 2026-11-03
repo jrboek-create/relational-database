@@ -152,9 +152,10 @@ The web app asks everyone to sign in with their Directus account (email and pass
 
 Details:
 
-- Sessions end after 4 hours idle or 12 hours in total.
+- Sessions end after 4 hours idle or 12 hours in total. The session is a signed cookie, so people stay signed in when the middleware restarts or is rebuilt. Replacing the read-only Directus token (`.secrets/wwairml_directus_static_token.txt`) signs everyone out.
+- Anyone signed in can change their own password with **Change password** in the header. They type their current password first; wrong tries count toward the lockout below.
 - After 5 wrong passwords, that email is locked for 15 minutes. Restarting the middleware clears the lock.
-- Role changes apply within 30 seconds.
+- Role and user changes made on the Admin page apply on the person's next click.
 
 **Admin page.** A signed-in Admin sees an **Admin** button in the header. It opens the list of roles. There you can:
 

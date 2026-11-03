@@ -160,3 +160,7 @@ width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 #addUserForm label{display:block;margin-top:.7rem}
 #addUserForm input,#addUserForm select{width:100%;margin-top:.3rem}
 #addUserForm button{margin-top:1rem}
+.password-dialog{max-width:26rem;width:calc(100% - 2rem);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem}
+.password-dialog::backdrop{background:#0f274466}
+.password-dialog label{display:block;margin-top:.8rem;font-weight:700}
+.password-dialog input{width:100%;margin-top:.3rem}

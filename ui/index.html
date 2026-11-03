@@ -19,6 +19,7 @@
   </div>
   <div id="userBox" class="user-box" hidden>
     <span><span id="userName"></span><span id="userRole" class="user-role"></span></span>
+    <button id="passwordOpen" type="button">Change password</button>
     <button id="adminToggle" type="button" hidden>Admin</button>
     <button id="signOut" type="button">Sign out</button>
   </div>
@@ -36,6 +37,23 @@
     <button class="primary" type="submit">Sign in</button>
   </form>
 </section>
+
+<dialog id="passwordDialog" class="password-dialog" aria-labelledby="passwordTitle">
+  <form id="passwordForm">
+    <h2 id="passwordTitle">Change your password</h2>
+    <label for="currentPassword">Current password</label>
+    <input id="currentPassword" type="password" autocomplete="current-password" required>
+    <label for="newPassword">New password (at least 12 characters)</label>
+    <input id="newPassword" type="password" autocomplete="new-password" minlength="12" required>
+    <label for="newPassword2">New password again</label>
+    <input id="newPassword2" type="password" autocomplete="new-password" minlength="12" required>
+    <p id="passwordMessage" class="error" role="alert" hidden></p>
+    <div class="admin-actions">
+      <button class="primary" type="submit">Change password</button>
+      <button id="passwordCancel" type="button">Cancel</button>
+    </div>
+  </form>
+</dialog>
 
 <main id="adminPage" class="admin-page" hidden>
   <nav class="admin-tabs" aria-label="Admin">

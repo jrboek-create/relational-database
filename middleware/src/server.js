@@ -73,7 +73,7 @@ app.use("/api", (req, res, next) => {
 
 // ---------------------------------------------------------------- sign-in, roles and permissions (stage 1)
 // People use the web app (nginx adds the "ui" key) and must sign in; tools with their own keys keep full access.
-// Passwords are checked by Directus; the session lives here (memory) as an HttpOnly cookie. Roles and ticked items come
+// Passwords are checked by Directus. The session is a signed HttpOnly cookie, so sign-ins survive a middleware restart. Roles and ticked items come
 // from app_role / app_role_permission / app_user, read with the read-only token and cached briefly.
 const UI_KEY_NAME = process.env.UI_KEY_NAME || "ui";
 const SESSION_COOKIE = "air_session";
@@ -81,11 +81,11 @@ const SESSION_IDLE_MS = 4 * 60 * 60 * 1000;   // signed out after 4 hours withou
 const SESSION_MAX_MS = 12 * 60 * 60 * 1000;   // and after 12 hours in any case
 const ACCESS_CACHE_MS = 30 * 1000;            // role changes apply within 30 seconds
 const LOGIN_FAILURE_LIMIT = 5;                // per email, per 15 minutes
-const sessions = new Map();                   // sha256(token) -> { userId, created, lastSeen }
+const SESSION_REFRESH_MS = 5 * 60 * 1000;     // the cookie's "last seen" time is renewed at most every 5 minutes
+const signedOut = new Map();                  // "userId:created" -> time the session would end anyway (sign-outs since start)
 const accessCache = new Map();                // userId -> { at, access }
 const loginFailures = new Map();              // email -> { count, first }
 const TOOL_ACCESS = { tool: true, admin: true, user: null, role: { name: "API key", is_admin: true }, permissions: effectivePermissions([], true) };
-const sha256 = (value) => crypto.createHash("sha256").update(value).digest("hex");
 
 function readCookie(req, name) {
   for (const part of (req.get("cookie") || "").split(";")) {
@@ -95,23 +95,38 @@ function readCookie(req, name) {
   return null;
 }
 
-function currentSession(req) {
-  const token = readCookie(req, SESSION_COOKIE);
-  if (!token) return null;
-  const hash = sha256(token);
-  const s = sessions.get(hash);
-  const now = Date.now();
-  if (!s || now - s.lastSeen > SESSION_IDLE_MS || now - s.created > SESSION_MAX_MS) {
-    sessions.delete(hash);
-    return null;
-  }
-  s.lastSeen = now;
-  return { hash, ...s };
+// Cookie = base64url({u: user id, c: created, s: last seen}) + "." + HMAC signature. The signing key is derived from
+// the read-only Directus token in .secrets, so replacing that token signs everyone out.
+const sessionKey = crypto.createHash("sha256").update("air-session-v1:" + directusToken).digest();
+const sign = (payload) => crypto.createHmac("sha256", sessionKey).update(payload).digest("base64url");
+
+function setSessionCookie(res, userId, created, lastSeen) {
+  const payload = Buffer.from(JSON.stringify({ u: userId, c: created, s: lastSeen })).toString("base64url");
+  const maxAge = Math.max(0, Math.floor((created + SESSION_MAX_MS - Date.now()) / 1000));
+  res.append("Set-Cookie", `${SESSION_COOKIE}=${payload}.${sign(payload)}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=${maxAge}`);
 }
 
-setInterval(() => {   // forget expired sessions and old login failures
+function currentSession(req, res) {
+  const token = readCookie(req, SESSION_COOKIE) || "";
+  const [payload, signature = ""] = token.split(".");
+  if (!payload) return null;
+  const expected = Buffer.from(sign(payload)), given = Buffer.from(signature);
+  if (expected.length !== given.length || !crypto.timingSafeEqual(expected, given)) return null;
+  let data;
+  try { data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")); } catch { return null; }
+  const { u: userId, c: created, s: lastSeen } = data || {};
   const now = Date.now();
-  for (const [hash, s] of sessions) if (now - s.lastSeen > SESSION_IDLE_MS || now - s.created > SESSION_MAX_MS) sessions.delete(hash);
+  if (typeof userId !== "string" || !Number.isFinite(created) || !Number.isFinite(lastSeen)) return null;
+  if (now - lastSeen > SESSION_IDLE_MS || now - created > SESSION_MAX_MS || signedOut.has(`${userId}:${created}`)) return null;
+  if (res && now - lastSeen > SESSION_REFRESH_MS) setSessionCookie(res, userId, created, now);
+  return { userId, created };
+}
+
+const endSession = (session) => signedOut.set(`${session.userId}:${session.created}`, session.created + SESSION_MAX_MS);
+
+setInterval(() => {   // forget sign-outs of sessions that have ended anyway, and old login failures
+  const now = Date.now();
+  for (const [key, until] of signedOut) if (until < now) signedOut.delete(key);
   for (const [email, f] of loginFailures) if (now - f.first > 15 * 60 * 1000) loginFailures.delete(email);
 }, 10 * 60 * 1000).unref();
 
@@ -159,12 +174,13 @@ app.use("/api", async (req, res, next) => {
   }
   if (req.path === "/auth/login" || req.path === "/auth/logout") return next();
   const deny = (status, code, message) => res.status(status).json({ ok: false, request_id: req.requestId, error: { code, message } });
-  const session = currentSession(req);
+  const session = currentSession(req, res);
   if (!session) return deny(401, "SIGN_IN_REQUIRED", "Please sign in.");
   try {
     const access = await loadAccess(session.userId);
     if (!access) {
-      sessions.delete(session.hash);
+      endSession(session);
+      res.set("Set-Cookie", `${SESSION_COOKIE}=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0`);
       return deny(401, "NO_ACCESS", "This account no longer has access. Ask the Admin.");
     }
     req.access = access;
@@ -205,9 +221,8 @@ app.post("/api/auth/login", async (req, res) => {
     const access = await loadAccess(userId, true);
     if (!access) return reply(403, { error: { code: "NO_ACCESS", message: "This account has no access to the app. Ask the Admin." } });
     loginFailures.delete(email);
-    const token = crypto.randomBytes(32).toString("base64url");
-    sessions.set(sha256(token), { userId, created: Date.now(), lastSeen: Date.now() });
-    res.set("Set-Cookie", `${SESSION_COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=${SESSION_MAX_MS / 1000}`);
+    const now = Date.now();
+    setSessionCookie(res, userId, now, now);
     return reply(200, { data: describeAccess(access) });
   } catch {
     return reply(503, { error: { code: "DIRECTUS_UNAVAILABLE", message: "The sign-in service is unavailable." } });
@@ -216,12 +231,53 @@ app.post("/api/auth/login", async (req, res) => {
 
 app.post("/api/auth/logout", (req, res) => {
   const session = currentSession(req);
-  if (session) sessions.delete(session.hash);
+  if (session) endSession(session);
   res.set("Set-Cookie", `${SESSION_COOKIE}=; HttpOnly; SameSite=Strict; Path=/api; Max-Age=0`);
   return res.status(200).json({ ok: true, request_id: req.requestId });
 });
 
 app.get("/api/auth/me", (req, res) => res.status(200).json({ ok: true, request_id: req.requestId, data: describeAccess(req.access) }));
+
+// Anyone signed in can change their own password. Body: { current_password, new_password }.
+// The current password is checked with Directus (and counts toward the sign-in lockout); the new one is set with the admin token.
+app.post("/api/auth/password", async (req, res) => {
+  const reply = (status, body) => {
+    console.log(JSON.stringify({ event: "password_change", request_id: req.requestId, status, user: req.access?.user?.email || null }));
+    return res.status(status).json({ ok: status === 200, request_id: req.requestId, ...body });
+  };
+  const fail = (status, code, message) => reply(status, { error: { code, message } });
+  const user = req.access?.user;
+  if (!user) return fail(403, "FORBIDDEN", "Sign in to change your password.");
+  const email = String(user.email).toLowerCase();
+  const current = req.body?.current_password, next = req.body?.new_password;
+  if (typeof current !== "string" || !current) return fail(400, "INVALID_QUERY", "Enter your current password.");
+  const problem = passwordProblem(next);
+  if (problem) return fail(400, "WEAK_PASSWORD", problem);
+  if (next === current) return fail(400, "WEAK_PASSWORD", "The new password must be different from the current one.");
+  const failures = loginFailures.get(email);
+  if (failures && failures.count >= LOGIN_FAILURE_LIMIT && Date.now() - failures.first < 15 * 60 * 1000) {
+    return fail(429, "TOO_MANY_ATTEMPTS", "Too many wrong passwords. Try again in 15 minutes.");
+  }
+  try {
+    const check = await fetch(`${directusUrl}/auth/login`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ email, password: current }) });
+    if (check.status >= 500) return fail(503, "DIRECTUS_UNAVAILABLE", "The sign-in service is unavailable.");
+    if (!check.ok) {
+      const f = loginFailures.get(email);
+      loginFailures.set(email, f && Date.now() - f.first < 15 * 60 * 1000 ? { count: f.count + 1, first: f.first } : { count: 1, first: Date.now() });
+      return fail(400, "WRONG_PASSWORD", "Your current password is incorrect.");
+    }
+    const tokens = (await check.json()).data || {};
+    if (tokens.refresh_token) {
+      fetch(`${directusUrl}/auth/logout`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: tokens.refresh_token }) }).catch(() => {});
+    }
+    await directusWrite("PATCH", `/users/${user.id}`, { password: next });
+    loginFailures.delete(email);
+    return reply(200, { data: { changed: true } });
+  } catch (error) {
+    if (error.code === "ADMIN_TOKEN_MISSING") return fail(503, "ADMIN_TOKEN_MISSING", "Passwords can't be changed yet. Ask the Admin.");
+    return fail(503, "DIRECTUS_UNAVAILABLE", "The password could not be changed. Please try again.");
+  }
+});
 
 // Exports, data status and the OpenAPI description: Admin (and tools with keys) only.
 app.use(["/api/data-status", "/api/export", "/api/openapi.json"], (req, res, next) => {
@@ -442,7 +498,6 @@ app.delete("/api/admin/users/:id", adminRoute(async (req, reply, fail) => {
   await directusWrite("DELETE", `/items/app_user/${user.directus_user_id}`);
   const deleteAccount = Boolean(account) && !account.role;
   if (deleteAccount) await directusWrite("DELETE", `/users/${user.directus_user_id}`);
-  for (const [hash, session] of sessions) if (session.userId === user.directus_user_id) sessions.delete(hash);
   accessCache.clear();
   logChange(req, "user_deleted", { user: user.email, directus_account_deleted: deleteAccount });
   reply(200, { data: { id: user.directus_user_id, directus_account_deleted: deleteAccount } });
